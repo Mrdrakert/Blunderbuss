@@ -6,9 +6,8 @@
 #include <intrin.h> 
 #include <chrono>
 #include <array>
-
  
-//consts
+//globals
 const int NUM_LINES = 64;
 uint64_t rook_moves[NUM_LINES];
 uint64_t bishop_moves[NUM_LINES];
@@ -30,14 +29,15 @@ uint64_t pawn_white_moves[NUM_LINES];
 uint64_t pawn_black_moves[NUM_LINES];
 uint64_t pawn_white_capture_moves[NUM_LINES];
 uint64_t pawn_black_capture_moves[NUM_LINES];
-//end consts
+//end globals
 
 struct Move 
 {
     int from;
     int to;
     int piece_type;
-    int type; //0 - normal, 1 - capture, 2 - castling, 3 - enpassant, 4 - pawn promotion, 5 - pawn double move
+    int type; //0 - normal, 1 - capture, 2 - castling, 3 - enpassant, 4 - pawn queening, 
+              //5 - pawn double move, 6 - pawn knighting, 7 - pawn bishoping, 8 - pawn rooking
 
     Move(int the_from, int the_to, int pc_type, int the_type)
         : from(the_from), to(the_to), piece_type(pc_type), type(the_type) {}
@@ -45,24 +45,26 @@ struct Move
 
 struct AntiMove
 {
-    int where_was;
-    int where_is;
-    int piece_type;
-    bool piece_color;
+    uint64_t white_pieces[6];
+    uint64_t black_pieces[6];
 
-    int captured_from;
-    int captured_type;
-    //bool captured_color;
-
-    int move_type;
-
-    uint64_t prev_en_passant;
+    uint64_t en_passant = 0;
     bool castling[4];
 
-    AntiMove(int was, int is, int pctype, bool pccolor, int capfrom, int captype, int type, uint64_t enpass, bool cstl1, bool cstl2, bool cstl3, bool cstl4)
-        : where_was(was), where_is(is), piece_type(pctype), piece_color(pccolor), captured_from(capfrom),
-        captured_type(captype), move_type(type),
-        prev_en_passant(enpass), castling{ cstl1, cstl2, cstl3, cstl4 } {}
+    bool turn = 0;
+
+    AntiMove(const uint64_t wht_pieces[6], const uint64_t blk_pieces[6], uint64_t enpass, const bool cstling[4], bool trn) {
+        for (int i = 0; i < 6; ++i) {
+            white_pieces[i] = wht_pieces[i];
+            black_pieces[i] = blk_pieces[i];
+        }
+        for (int i = 0; i < 4; ++i) {
+            castling[i] = cstling[i];
+        }
+
+        turn = trn;
+        en_passant = enpass;
+    }
 };
 
 struct PieceAndBoard 
@@ -112,7 +114,6 @@ struct Board
     //black_queens - 10
     //black_king - 11
 
-    // Constructor to initialize the bitboards with the standard starting position
     Board()
         :white_pieces{ 0x00FF000000000000, 0x4200000000000000, 0x2400000000000000,
                        0x8100000000000000, 0x1000000000000000, 0x0800000000000000 },
@@ -131,13 +132,11 @@ struct Board
         {
             if (white_pieces[i] & bit) return PieceAndBoard(i, bit);
         }
-
         for (int i = 0; i < 6; i++)
         {
             if (black_pieces[i] & bit) return PieceAndBoard(6+i, bit);
         }
-
-        return PieceAndBoard(-1, bit); // No piece on this square
+        return PieceAndBoard(-1, bit);
     }
 
     uint64_t combine_white()
@@ -168,9 +167,7 @@ struct Board
             captures = result & all_white;
         }
 
-        //std::vector<Move> moves;
         create_moves(or_moves, result, square, captures, color, 1);
-        //or_moves.insert(or_moves.end(), moves.begin(), moves.end());
     }
 
     void get_king_moves(std::vector<Move>& or_moves, int square, bool color) //0 = white, 1 = black
@@ -191,9 +188,7 @@ struct Board
             captures = result & all_white;
         }
 
-        //std::vector<Move> moves;
         create_moves(or_moves, result, square, captures, color, 5);
-        //or_moves.insert(or_moves.end(), moves.begin(), moves.end());
     }
 
     void get_pawn_moves(std::vector<Move>& or_moves, int square, bool color) //0 = white, 1 = black
@@ -228,9 +223,8 @@ struct Board
                 forwards = (forwards | block_mask) - block_mask;
             }
         }
-        //std::vector<Move> moves;
+
         create_moves(or_moves, captures | forwards, square, all_pieces, color, 0);
-        //or_moves.insert(or_moves.end(), moves.begin(), moves.end());
     }
 
     void get_rook_moves(std::vector<Move>& or_moves, int square, bool color, bool is_queen = 0)
@@ -264,9 +258,7 @@ struct Board
         rook_attacks = color == 0 ? (rook_attacks & ~all_white) : (rook_attacks & ~all_black);
         uint64_t captures = color == 0 ? (rook_attacks & all_black) : (rook_attacks & all_white);
 
-        //std::vector<Move> moves;
         create_moves(or_moves, rook_attacks, square, captures, color, 3+is_queen);
-        //or_moves.insert(or_moves.end(), moves.begin(), moves.end());
     }
 
     void get_bishop_moves(std::vector<Move>& or_moves, int square, bool color, bool is_queen = 0) 
@@ -300,20 +292,13 @@ struct Board
         bishop_attacks = color == 0 ? (bishop_attacks & ~all_white) : (bishop_attacks & ~all_black);
         uint64_t captures = color == 0 ? (bishop_attacks & all_black) : (bishop_attacks & all_white);
 
-        //std::vector<Move> moves;
         create_moves(or_moves, bishop_attacks, square, captures, color, 2+2*is_queen);
-        //or_moves.insert(or_moves.end(), moves.begin(), moves.end());
     }
 
     void get_queen_moves(std::vector<Move>& or_moves, int square, bool color)
     {
-        //std::vector<Move> rooklike_moves;
         this->get_rook_moves(or_moves, square, color, 1);
-        //std::vector<Move> bishoplike_moves = 
         this->get_bishop_moves(or_moves, square, color, 1);
-
-        //rooklike_moves.insert(rooklike_moves.end(), bishoplike_moves.begin(), bishoplike_moves.end());
-        //or_moves.insert(or_moves.end(), rooklike_moves.begin(), rooklike_moves.end());
     }
 
     void print_chessboard() 
@@ -353,7 +338,6 @@ struct Board
         {
             this->castling[i] = 0;
         }
-        
     }
 
     void setup_board_from_fen(const std::string& fen) 
@@ -430,7 +414,7 @@ struct Board
         }
         else 
         {
-            this->en_passant = 0;  // No en passant square
+            this->en_passant = 0;
         }
     }
 
@@ -448,8 +432,6 @@ struct Board
 
     void create_moves(std::vector<Move>& or_moves, uint64_t dests_board, int from, uint64_t capture_mask, bool color, int piece_type)
     {
-        //std::vector<int> dests;
-        //std::vector<int> captures;
         std::array<int, 64> dests;
         std::array<int, 64> captures;
         int count = 0;
@@ -457,19 +439,12 @@ struct Board
         unsigned long en_passant_index;
         _BitScanForward64(&en_passant_index, this->en_passant);
 
-        //dests.reserve(64);
-        //captures.reserve(64);
-
         unsigned long index;
 
         while (dests_board != 0)
         {
             if (_BitScanForward64(&index, dests_board))
             {
-                //dests.push_back(static_cast<int>(index));
-                //captures.push_back((capture_mask >> index) & 1);
-                //dests_board &= (dests_board - 1);
-
                 dests[count] = static_cast<int>(index);
                 captures[count] = (capture_mask >> index) & 1;
                 dests_board &= (dests_board - 1);
@@ -492,6 +467,9 @@ struct Board
                 else if (dests[i] / 8 == 0 || dests[i] / 8 == 7)
                 {
                     or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 4));
+                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 6));
+                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 7));
+                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 8));
                 }
                 else if (en_passant_index == dests[i])
                 {
@@ -516,7 +494,7 @@ struct Board
                         or_moves.emplace_back(Move(from, 2, piece_type + color_bonus, 2));  // White queen-side castling
                     }
                 }
-                else if (color == 1 && from == 60 && did_white_castles == 0) // Black king castling
+                else if (color == 1 && from == 60 && did_black_castles == 0) // Black king castling
                 { 
                     did_black_castles = 1;
                     uint64_t check = ((this->combine_white() | this->combine_black()) & ((1ULL << 61) | (1ULL << 62)));
@@ -529,14 +507,12 @@ struct Board
                         or_moves.emplace_back(Move(from, 58, piece_type + color_bonus, 2));  // Black queen-side castling
                     }
                 }
-
                 or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, captures[i]));
             }
             else
             {
                 or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, captures[i]));
             }
-            
         }
     }
 
@@ -552,11 +528,15 @@ struct Board
         uint64_t pieces[6];
         if (color == 0) 
         {
-            std::copy(std::begin(white_pieces), std::end(white_pieces), std::begin(pieces));
+            for (int i = 0; i < 6; ++i) {
+                pieces[i] = white_pieces[i];
+            }
         }
         else 
         {
-            std::copy(std::begin(black_pieces), std::end(black_pieces), std::begin(pieces));
+            for (int i = 0; i < 6; ++i) {
+                pieces[i] = black_pieces[i];
+            }
         }
 
         for (int piece_type = 0; piece_type < 6; piece_type++) {
@@ -592,8 +572,6 @@ struct Board
         while(it < pseudo_legal.size())
         {
             this->make_move(pseudo_legal[it]);
-            //std::cout << "after made move:" << std::endl;
-            //this->print_chessboard();
             if (this->if_check(!turn))
             {
                 std::swap(pseudo_legal[it], pseudo_legal.back());
@@ -603,8 +581,6 @@ struct Board
             it++;
             
             this->unmake_move();
-            //std::cout << "after unmake:" << std::endl;
-            //this->print_chessboard();
         }
 
         return pseudo_legal;
@@ -622,9 +598,7 @@ struct Board
         }
         else
             king_square = square;
-        
 
-        //find moves
         uint64_t knight_captures;
         uint64_t king_captures;
         uint64_t pawn_captures;
@@ -744,6 +718,8 @@ struct Board
 
     void make_move(Move move)
     {
+        this->anti_moves.emplace_back(AntiMove(this->white_pieces, this->black_pieces, this->en_passant, this->castling, this->turn));
+
         int from_square = move.from;
         int to_square = move.to;
         int piece_type = move.piece_type;
@@ -762,7 +738,7 @@ struct Board
 
         uint64_t* piece_board = color == 0 ? &white_pieces[piece_type] : &black_pieces[piece_type - 6];
 
-        if (move.type == 1 || move.type == 4) // Capture
+        if (move.type == 1 || move.type == 4 || move.type == 6 || move.type == 7 || move.type == 8) // Capture
         { 
             PieceAndBoard captured_piece = get_piece_bitboard(to_square);
             if (captured_piece.type != -1) 
@@ -788,19 +764,18 @@ struct Board
             this->en_passant = (1ULL << en_passant_square);
         }
 
-        //Set things
         *piece_board &= ~(1ULL << from_square);
         *piece_board |= (1ULL << to_square);
 
-        // Handle pawn promotion
-        if (move.type == 4)  // Pawn promotion
+        if (move.type == 4 || move.type == 6 || move.type == 7 || move.type == 8)  // Pawn promotion
         {
+            int pc_board = move.type == 4 ? 4 : move.type - 5;
             uint64_t* promotion_board = color == 0 ? &white_pieces[move.piece_type] : &black_pieces[move.piece_type - 6];
             *promotion_board &= ~(1ULL << to_square);
             if (color == 0) 
-                white_pieces[4] |= (1ULL << to_square); // Promote to queen for white
+                white_pieces[pc_board] |= (1ULL << to_square); // Promote to queen for white
             else 
-                black_pieces[4] |= (1ULL << to_square); // Promote to queen for black
+                black_pieces[pc_board] |= (1ULL << to_square); // Promote to queen for black
         }
 
         if (move.type == 2) { // Castling
@@ -822,13 +797,18 @@ struct Board
             }
         }
 
-        // Update castling rights
-        if (piece_type == 5)  // King moved
+        if (piece_type == 5 || piece_type == 11)  // King moved
         {
-            if (color == 0)
-                castling[0] = castling[1] = 0; // White loses both castling rights
-            else
-                castling[2] = castling[3] = 0; // Black loses both castling rights
+            if (color == 0) // White loses both castling rights
+            {
+                castling[0] = 0;
+                castling[1] = 0;
+            }
+            else // Black loses both castling rights
+            {
+                castling[2] = 0;
+                castling[3] = 0; 
+            }
         }
         if (from_square == 0 || to_square == 0) castling[1] = 0; // White queenside rook moved/captured
         if (from_square == 7 || to_square == 7) castling[0] = 0; // White kingside rook moved/captured
@@ -836,107 +816,47 @@ struct Board
         if (from_square == 63 || to_square == 63) castling[2] = 0; // Black kingside rook moved/captured
 
         this->turn = !turn;
-        
-        AntiMove tempmove = AntiMove(
-            from_square,                // where_was
-            to_square,                  // where_is
-            piece_type,                // piece_type
-            color,                    // piece_color
-            captured_from,            // captured_from
-            captured_type,            // captured_type
-            move.type,                  // move_type
-            enpass,
-            cstl1, cstl2, cstl3, cstl4
-        );
-        this->anti_moves.push_back(tempmove);
-        
     }
 
     void unmake_move()
     {
         AntiMove move = this->anti_moves.back();
-        anti_moves.pop_back();
+        this->anti_moves.pop_back();
 
-        int to_square = move.where_is;
-        int from_square = move.where_was;
-        int piece_type = move.piece_type;
-        bool color = move.piece_color;
-
-        this->en_passant = move.prev_en_passant;
-        //std::copy(std::begin(move.castling), std::end(move.castling), std::begin(this->castling));
-        this->turn = !turn;
-
-        if (move.move_type == 2)  // Castling
-        {
-            if (to_square == 6) // White kingside castling
-            { 
-                white_pieces[3] &= ~(1ULL << 5);
-                white_pieces[3] |= (1ULL << 7);
-
-                white_pieces[5] &= ~(1ULL << 6);
-                white_pieces[5] |= (1ULL << 4);
-            }
-            else if (to_square == 2) // White queenside castling
-            { 
-                white_pieces[3] &= ~(1ULL << 3);
-                white_pieces[3] |= (1ULL << 0);
-
-                white_pieces[5] &= ~(1ULL << 2);
-                white_pieces[5] |= (1ULL << 4);
-            }
-            else if (to_square == 62) // Black kingside castling
-            { 
-                black_pieces[3] &= ~(1ULL << 61);
-                black_pieces[3] |= (1ULL << 63);
-
-                black_pieces[5] &= ~(1ULL << 62);
-                black_pieces[5] |= (1ULL << 60);
-            }
-            else if (to_square == 58)  // Black queenside castling
-            {
-                black_pieces[3] &= ~(1ULL << 59);
-                black_pieces[3] |= (1ULL << 56);
-
-                black_pieces[5] &= ~(1ULL << 58);
-                black_pieces[5] |= (1ULL << 60);
-            }
+        for (int i = 0; i < 6; ++i) {
+            this->white_pieces[i] = move.white_pieces[i];
+            this->black_pieces[i] = move.black_pieces[i];
         }
-        else
-        {
-            if (color == 0)
-            {
-                white_pieces[piece_type] &= ~(1ULL << to_square);
-                white_pieces[piece_type] |= (1ULL << from_square);
-
-                if (move.captured_type != -1)
-                    black_pieces[move.captured_type-6] |= (1ULL << move.captured_from);
-            }
-            else
-            {
-                black_pieces[piece_type-6] &= ~(1ULL << to_square);
-                black_pieces[piece_type-6] |= (1ULL << from_square);
-
-                if (move.captured_type != -1)
-                    white_pieces[move.captured_type] |= (1ULL << move.captured_from);
-            }
-
-            if (move.move_type == 4)
-            {
-                if (color == 0)
-                {
-                    white_pieces[4] &= ~(1ULL << to_square);
-                }
-                else
-                {
-                    black_pieces[4] &= ~(1ULL << to_square);
-                }
-            }
+        for (int i = 0; i < 4; ++i) {
+            this->castling[i] = move.castling[i];
         }
+        this->turn = move.turn;
+        this->en_passant = move.en_passant;
+    }
+
+    int evaluate_position()
+    {
+        uint64_t num = this->black_pieces[0];
+        int black_values[6];
+        int white_values[6];
+
+        int values[6] = { 100, 300, 300, 500, 900, 10000 };
+        int result = 0;
+
+        for (int i = 0; i < 6; i++)
+        {
+            white_values[i] = __popcnt64(this->white_pieces[i]);
+            black_values[i] = __popcnt64(this->black_pieces[i]);
+            
+            result += white_values[i] * values[i];
+            result -= black_values[i] * values[i];
+        }
+
+        return result;
     }
 
 };
 
-// Utility function to print a bitboard (for debugging)
 void print_bitboard(uint64_t bitboard) 
 {
     for (int rank = 7; rank >= 0; --rank) 
@@ -950,7 +870,6 @@ void print_bitboard(uint64_t bitboard)
     }
     std::cout << '\n';
 }
-
 
 void load_data(uint64_t* values, std::string file_name)
 {
@@ -1020,7 +939,7 @@ int findMostSignificantBitIndex(uint64_t value)
     {
         return static_cast<int>(index);
     }
-    return -1; // Return -1 if no bits are set
+    return -1;
 }
 int findLeastSignificantBitIndex(uint64_t value) 
 {
@@ -1029,9 +948,8 @@ int findLeastSignificantBitIndex(uint64_t value)
     {
         return static_cast<int>(index);
     }
-    return -1; // Return -1 if no bits are set
+    return -1;
 }
-
 
 void time_stuff() 
 {
@@ -1049,7 +967,6 @@ void time_stuff()
         //board.make_move(moves[14]);
         //board.unmake_move();
 
-
         //board.if_check(0);
         //board.if_check(1);
         ++count;
@@ -1066,20 +983,24 @@ void time_stuff()
     return;
 }
 
-int count_legal_moves_at_depth(Board& board, int depth) {
-    if (depth == 0) {
-        return 1;  // Base case: only one "move" at depth 0 (the current position itself)
-    }
-
+uint64_t count_legal_moves_at_depth(Board& board, int depth)
+{
     std::vector<Move> moves = board.get_legal_moves();
-    int total_moves = 0;
+    uint64_t total_moves = 0;
 
-    for (Move move : moves) {
-        board.make_move(move);  // Apply the move
-        total_moves += count_legal_moves_at_depth(board, depth - 1);  // Recursively calculate for the next depth
-        board.unmake_move();  // Revert the move
+    if (depth == 1)
+    {
+        return moves.size();
     }
-
+    else
+    {
+        for (Move move : moves)
+        {
+            board.make_move(move);
+            total_moves += count_legal_moves_at_depth(board, depth - 1);
+            board.unmake_move();
+        }
+    }
     return total_moves;
 }
 
@@ -1089,13 +1010,9 @@ int main()
     Board board;
     board.setup_board_from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
-
     board.print_chessboard();
 
-    int depth = 5; 
-    int total_moves = count_legal_moves_at_depth(board, depth);
-
-    std::cout << "Total moves at depth " << depth << ": " << total_moves << std::endl;
+    std::cout << "evaluated: " << board.evaluate_position() << std::endl;
 
     return 0;
 }
