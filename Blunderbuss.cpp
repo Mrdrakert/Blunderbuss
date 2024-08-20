@@ -6,8 +6,13 @@
 #include <intrin.h> 
 #include <chrono>
 #include <array>
- 
+#include <algorithm>
+
+
 //globals
+uint64_t positions_evaluated = 0;
+uint64_t positions_generated = 0;
+const int INF = std::numeric_limits<int>::max();
 const int NUM_LINES = 64;
 uint64_t rook_moves[NUM_LINES];
 uint64_t bishop_moves[NUM_LINES];
@@ -36,11 +41,11 @@ struct Move
     int from;
     int to;
     int piece_type;
-    int type; //0 - normal, 1 - capture, 2 - castling, 3 - enpassant, 4 - pawn queening, 
-              //5 - pawn double move, 6 - pawn knighting, 7 - pawn bishoping, 8 - pawn rooking
+    int type; //0 - normal, 1 - capture, 2 - castling, 3 - enpassant, 4 - pawn queening, 5 - pawn double move, 6 - pawn knighting, 7 - pawn bishoping, 8 - pawn rooking
+    int capture_value;
 
-    Move(int the_from, int the_to, int pc_type, int the_type)
-        : from(the_from), to(the_to), piece_type(pc_type), type(the_type) {}
+    Move(int the_from, int the_to, int pc_type, int the_type, int cap_val = 0)
+        : from(the_from), to(the_to), piece_type(pc_type), type(the_type), capture_value(cap_val) {}
 };
 
 struct AntiMove
@@ -85,6 +90,8 @@ void load_bitboards();
 std::vector<int> get_set_bit_indices(uint64_t board);
 int findMostSignificantBitIndex(uint64_t value);
 int findLeastSignificantBitIndex(uint64_t value);
+bool compare_moves(const Move& a, const Move& b);
+int get_piece_value(int piece);
 //end functions
 
 
@@ -456,28 +463,38 @@ struct Board
         bool did_black_castles = 0;
         bool did_white_castles = 0;
 
+        
+
         for (int i = 0; i < count; i++)
         {
+            PieceAndBoard captured_piece = get_piece_bitboard(dests[i]);
+            int capture_value = 0;
+            if (captured_piece.type != -1)
+            {
+                captured_piece.type = (captured_piece.type > 5) ? captured_piece.type - 6 : captured_piece.type;
+                capture_value = 10 * get_piece_value(captured_piece.type) - get_piece_value(piece_type);
+            }
+
             if (piece_type == 0)
             {
                 if (abs(dests[i] - from) == 16)
                 {
-                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 5));
+                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 5, capture_value));
                 }
                 else if (dests[i] / 8 == 0 || dests[i] / 8 == 7)
                 {
-                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 4));
-                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 6));
-                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 7));
-                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 8));
+                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 4, capture_value));
+                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 6, capture_value));
+                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 7, capture_value));
+                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 8, capture_value));
                 }
                 else if (en_passant_index == dests[i])
                 {
-                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 3));
+                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, 3, 900));
                 }
                 else
                 {
-                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, captures[i]));
+                    or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, captures[i], capture_value));
                 }
             }
             else if (piece_type == 5)
@@ -507,11 +524,11 @@ struct Board
                         or_moves.emplace_back(Move(from, 58, piece_type + color_bonus, 2));  // Black queen-side castling
                     }
                 }
-                or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, captures[i]));
+                or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, captures[i], capture_value));
             }
             else
             {
-                or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, captures[i]));
+                or_moves.emplace_back(Move(from, dests[i], piece_type + color_bonus, captures[i], capture_value));
             }
         }
     }
@@ -582,6 +599,8 @@ struct Board
             
             this->unmake_move();
         }
+
+        std::sort(pseudo_legal.begin(), pseudo_legal.end(), compare_moves);
 
         return pseudo_legal;
     }
@@ -834,13 +853,13 @@ struct Board
         this->en_passant = move.en_passant;
     }
 
-    int evaluate_position()
+    int evaluate_position(bool color)
     {
+        int who_to_move = -((this->turn * 2) - 1);
         uint64_t num = this->black_pieces[0];
         int black_values[6];
         int white_values[6];
 
-        int values[6] = { 100, 300, 300, 500, 900, 10000 };
         int result = 0;
 
         for (int i = 0; i < 6; i++)
@@ -848,11 +867,66 @@ struct Board
             white_values[i] = __popcnt64(this->white_pieces[i]);
             black_values[i] = __popcnt64(this->black_pieces[i]);
             
-            result += white_values[i] * values[i];
-            result -= black_values[i] * values[i];
+            result += white_values[i] * get_piece_value(i);
+            result -= black_values[i] * get_piece_value(i);
         }
 
-        return result;
+        return result * who_to_move;
+    }
+
+
+    int negamax(int depth, int alpha, int beta) {
+        if (depth == 0) {
+            positions_evaluated += 1;
+            return this->evaluate_position(this->turn);
+        }
+
+        int maxEval = -INF;
+        std::vector<Move> moves = this->get_legal_moves();
+
+        if (depth == 1)
+        {
+            positions_generated += moves.size();
+        }
+
+        if (moves.empty()) {
+            positions_evaluated += 1;
+            return evaluate_position(this->turn); // This should return a large negative value if checkmate, or 0 if stalemate
+        }
+
+        for (const Move& move : moves) {
+            this->make_move(move);
+            int eval = -negamax(depth - 1, -beta, -alpha);
+            this->unmake_move();
+
+            maxEval = std::max(maxEval, eval);
+            alpha = std::max(alpha, eval);
+
+            if (alpha >= beta) {
+                break;
+            }
+        }
+
+        return maxEval;
+    }
+
+    Move find_best_move(int max_depth) {
+        int bestValue = -INF;
+        Move best_move = Move(-1, -1, -1, -1);
+        std::vector<Move> moves = this->get_legal_moves();
+
+        for (const Move& move : moves) {
+            this->make_move(move);
+            int eval = -negamax(max_depth - 1, -INF, INF);
+            this->unmake_move();
+
+            if (eval > bestValue) {
+                bestValue = eval;
+                best_move = move;
+            }
+        }
+
+        return best_move;
     }
 
 };
@@ -994,9 +1068,9 @@ uint64_t count_legal_moves_at_depth(Board& board, int depth)
     }
     else
     {
-        for (Move move : moves)
+        for (int i = 0; i < moves.size(); i++)
         {
-            board.make_move(move);
+            board.make_move(moves[i]);
             total_moves += count_legal_moves_at_depth(board, depth - 1);
             board.unmake_move();
         }
@@ -1004,15 +1078,34 @@ uint64_t count_legal_moves_at_depth(Board& board, int depth)
     return total_moves;
 }
 
+int get_piece_value(int piece)
+{
+    int values[6] = { 100, 300, 300, 500, 900, 100000 };
+    return values[piece];
+}
+
+bool compare_moves(const Move& a, const Move& b)
+{
+    bool result = (a.capture_value > b.capture_value);
+    return result;
+    
+}
+
 int main()
 {
     load_bitboards();
     Board board;
-    board.setup_board_from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    //board.setup_board_from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    board.setup_board_from_fen("rnbqkb1r/pppppppp/8/4n3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 1");
 
     board.print_chessboard();
 
-    std::cout << "evaluated: " << board.evaluate_position() << std::endl;
+    Move bestMove = board.find_best_move(6);
+
+    std::cout << "From: " << bestMove.from << " to: " << bestMove.to << std::endl;
+    std::cout << "Positions generated: " << positions_generated << std::endl;
+    std::cout << "Positions evaluated: " << positions_evaluated << std::endl;
+
 
     return 0;
 }
