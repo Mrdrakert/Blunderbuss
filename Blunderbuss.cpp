@@ -7,12 +7,31 @@
 #include <chrono>
 #include <array>
 #include <algorithm>
+#include <random>
+#include <unordered_map>
+#include <cmath>
 
 
 //globals
+const int MAX_DEPTH = 20;
+const int BOARD_SIZE = 64;
+const int PIECE_TYPES = 12;
+const int CASTLING_RIGHTS = 4;
+const int EN_PASSANT = 64;
+const int SIDE_TO_MOVE = 1;
+
+uint64_t zobrist_table[BOARD_SIZE][PIECE_TYPES];
+uint64_t zobrist_castling[CASTLING_RIGHTS];
+uint64_t zobrist_en_passant[EN_PASSANT];
+uint64_t zobrist_side_is_black;
+
+bool timeLimitReached = false;
+
+
 uint64_t positions_evaluated = 0;
 uint64_t positions_generated = 0;
 const int INF = std::numeric_limits<int>::max();
+const int MATE_VALUE = 1000000;
 const int NUM_LINES = 64;
 uint64_t rook_moves[NUM_LINES];
 uint64_t bishop_moves[NUM_LINES];
@@ -46,6 +65,19 @@ struct Move
 
     Move(int the_from, int the_to, int pc_type, int the_type, int cap_val = 0)
         : from(the_from), to(the_to), piece_type(pc_type), type(the_type), capture_value(cap_val) {}
+
+    Move() 
+    {
+        from = -1;
+        to = -1;
+        piece_type = -1;
+        type = -1;
+        capture_value = -1;
+    }
+
+    bool operator==(const Move& other) const {
+        return from == other.from && to == other.to && piece_type == other.piece_type && type == other.piece_type && capture_value == other.capture_value; // Add other necessary comparisons
+    }
 };
 
 struct AntiMove
@@ -81,6 +113,30 @@ struct PieceAndBoard
         : type(the_type), board(the_board) {}
 };
 
+enum class NodeType {
+    EXACT,
+    LOWERBOUND,
+    UPPERBOUND
+};
+
+struct TranspositionTableEntry {
+    //uint64_t zobrist_key;
+    int depth;
+    int value;
+    NodeType type;
+    Move best_move;
+
+    //TranspositionTableEntry(int dpth, int vl, NodeType tp, Move move)
+    //    : depth(dpth), value(vl), type(tp), best_move(move) {}
+    TranspositionTableEntry() 
+    {
+        depth = -1;
+        value = -1;
+        type = NodeType::EXACT;
+        best_move = Move();
+    }
+};
+
 
 //functions
 void print_bitboard(uint64_t bitboard);
@@ -91,7 +147,11 @@ std::vector<int> get_set_bit_indices(uint64_t board);
 int findMostSignificantBitIndex(uint64_t value);
 int findLeastSignificantBitIndex(uint64_t value);
 bool compare_moves(const Move& a, const Move& b);
-int get_piece_value(int piece);
+int get_piece_value(int piece); 
+void prioritize_best_move(std::vector<Move>& moves, const Move& bestMove);
+int store_correct_mate_score(int value, int depth);
+int retrieve_correct_mate_score(int value, int depth);
+bool is_mate_score(int value);
 //end functions
 
 
@@ -106,6 +166,8 @@ struct Board
     bool turn = 0; //0 - white, 1 - black
 
     std::vector<AntiMove> anti_moves;
+
+    std::unordered_map<uint64_t, TranspositionTableEntry> transposition_table;
 
     //white_pawns - 0
     //white_knights - 1
@@ -138,10 +200,7 @@ struct Board
         for (int i = 0; i < 6; i++)
         {
             if (white_pieces[i] & bit) return PieceAndBoard(i, bit);
-        }
-        for (int i = 0; i < 6; i++)
-        {
-            if (black_pieces[i] & bit) return PieceAndBoard(6+i, bit);
+            if (black_pieces[i] & bit) return PieceAndBoard(6 + i, bit);
         }
         return PieceAndBoard(-1, bit);
     }
@@ -600,8 +659,6 @@ struct Board
             this->unmake_move();
         }
 
-        std::sort(pseudo_legal.begin(), pseudo_legal.end(), compare_moves);
-
         return pseudo_legal;
     }
 
@@ -874,62 +931,268 @@ struct Board
         return result * who_to_move;
     }
 
+    int evaluate_end(bool color, int depth)
+    {
+        if (this->if_check(color))
+        {
+            int checkmate_value = -MATE_VALUE + depth;
+            return checkmate_value;
+        }
+        return 0;
+    }
 
-    int negamax(int depth, int alpha, int beta) {
-        if (depth == 0) {
+
+    int negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point endTime)
+    {
+        if (depth == 0 || timeLimitReached)
+        {
             positions_evaluated += 1;
             return this->evaluate_position(this->turn);
         }
 
-        int maxEval = -INF;
+        uint64_t zobrist_key = this->compute_zobrist_hash();
+        int value;
+        int originalAlpha = alpha;
+        Move best_move;
+
+        if (this->probe_transposition_table(zobrist_key, depth, ply, alpha, beta, value, best_move))
+        {
+            return value;
+        }
+            
         std::vector<Move> moves = this->get_legal_moves();
 
         if (depth == 1)
-        {
             positions_generated += moves.size();
-        }
 
-        if (moves.empty()) {
+        if (moves.empty())
+        {
             positions_evaluated += 1;
-            return evaluate_position(this->turn); // This should return a large negative value if checkmate, or 0 if stalemate
+            return this->evaluate_end(this->turn, ply);
         }
 
-        for (const Move& move : moves) {
+        std::sort(moves.begin(), moves.end(), compare_moves);
+        prioritize_best_move(moves, best_move);
+
+        NodeType evaluation_bound = NodeType::UPPERBOUND;
+
+        for (const Move& move : moves) 
+        {
             this->make_move(move);
-            int eval = -negamax(depth - 1, -beta, -alpha);
+            int eval = -negamax(ply + 1, depth - 1, -beta, -alpha, endTime);
             this->unmake_move();
 
-            maxEval = std::max(maxEval, eval);
-            alpha = std::max(alpha, eval);
+            if (eval >= beta) 
+            {
+                this->store_transposition_table_entry(zobrist_key, depth, ply, beta, NodeType::LOWERBOUND, move);
+                return beta;
+            }
 
-            if (alpha >= beta) {
+            if (eval > alpha)
+            {
+                evaluation_bound = NodeType::EXACT;
+                best_move = move;
+                alpha = eval;
+            }
+
+
+            if (std::chrono::steady_clock::now() >= endTime) {
+                timeLimitReached = true;
                 break;
             }
         }
 
-        return maxEval;
+        this->store_transposition_table_entry(zobrist_key, depth, ply, alpha, evaluation_bound, best_move);
+        return alpha;
     }
 
-    Move find_best_move(int max_depth) {
+    Move find_best_move_with_time_limit(int time_limit_ms) 
+    {
         int bestValue = -INF;
         Move best_move = Move(-1, -1, -1, -1);
         std::vector<Move> moves = this->get_legal_moves();
 
-        for (const Move& move : moves) {
-            this->make_move(move);
-            int eval = -negamax(max_depth - 1, -INF, INF);
-            this->unmake_move();
+        auto start_time = std::chrono::steady_clock::now();
+        auto end_time = start_time + std::chrono::milliseconds(time_limit_ms);
 
-            if (eval > bestValue) {
-                bestValue = eval;
-                best_move = move;
+        int depths_searched = 0;
+
+        for (int depth = 2; depth <= MAX_DEPTH; depth++) 
+        {
+            int current_best_value = -INF;
+            Move current_best_move;
+
+            for (const Move& move : moves) 
+            {
+                this->make_move(move);
+                int eval = -negamax(1, depth - 1, -INF, INF, end_time);
+
+                if (depth == 14)
+                {
+                    //std::cout << "val: " << eval << " from: " << move.from << " to: " << move.to << std::endl;
+                }
+
+                this->unmake_move();
+
+                if (eval > current_best_value) 
+                {
+                    current_best_value = eval;
+                    current_best_move = move;
+                }
+
+                if (timeLimitReached) 
+                {
+                    break;
+                }
             }
+
+            if (timeLimitReached) 
+            {
+                depths_searched = depth;
+                break;
+            }
+
+            bestValue = current_best_value;
+            best_move = current_best_move;
         }
 
+        std::cout << "Stopped while searching depth " << depths_searched << std::endl;
+        std::cout << "Evaluation: " << bestValue << std::endl;
         return best_move;
     }
 
+    uint64_t compute_zobrist_hash() 
+    {
+        uint64_t hash = 0;
+
+        for (int square = 0; square < BOARD_SIZE; ++square) 
+        {
+            PieceAndBoard piece_board = this->get_piece_bitboard(square);
+            if (piece_board.type != -1)
+            {
+                hash ^= zobrist_table[square][piece_board.type];
+            }
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (this->castling[i]) 
+            {
+                hash ^= zobrist_castling[this->castling[i]];
+            }
+        }
+        
+        if (this->en_passant != -1) 
+        {
+            unsigned long index;
+            _BitScanForward64(&index, this->en_passant);
+            hash ^= zobrist_en_passant[index];
+        }
+
+        if (this->turn == 1) 
+        {
+            hash ^= zobrist_side_is_black;
+        }
+
+        return hash;
+    }
+
+    void store_transposition_table_entry(uint64_t zobrist_key, int ply, int depth, int score, NodeType type, Move best_move) {
+        TranspositionTableEntry entry;
+        entry.depth = depth;
+        entry.best_move = best_move;
+
+        entry.type = type;
+
+        entry.value = store_correct_mate_score(score, ply);
+        transposition_table[zobrist_key] = entry;
+    }
+
+
+    bool probe_transposition_table(uint64_t zobrist_key, int depth, int ply, int alpha, int beta, int& value, Move& best_move)
+    {
+        if (this->transposition_table.find(zobrist_key) != transposition_table.end()) 
+        {
+            TranspositionTableEntry entry = transposition_table[zobrist_key];
+            best_move = entry.best_move;
+            int corrected = retrieve_correct_mate_score(entry.value, ply);
+            if (entry.depth >= depth) 
+            {
+                if (entry.type == NodeType::EXACT)
+                {
+                    value = corrected;
+                    return true;
+                }
+                if (entry.type == NodeType::UPPERBOUND && entry.value <= alpha)
+                {
+                    value = corrected;
+                    return true;
+                }
+                if (entry.type == NodeType::LOWERBOUND && entry.value >= beta) 
+                {
+                    value = corrected;
+                    return true;
+                }
+                
+                
+            }
+        }
+        return false;
+    }
+
+    void clear_transposition_table() {
+        transposition_table.clear();
+    }
+
+    void print_checks()
+    {
+        std::cout << "Is white in check: " << this->if_check(0) << std::endl;
+        std::cout << "Is black in check: " << this->if_check(1) << std::endl;
+    }
 };
+
+bool is_mate_score(int value)
+{
+    if (abs(value - MATE_VALUE) < 100)
+    {
+        return true;
+    }
+    return false;
+}
+
+int retrieve_correct_mate_score(int value, int depth)
+{
+    if (is_mate_score(value))
+    {
+        int sign = 0;
+        if (value > 0)
+            int sign = 1;
+        else if (value < 0)
+            int sign = -1;
+        return (value * sign - depth) * sign;
+    }
+    return value;
+}
+
+int store_correct_mate_score(int value, int depth)
+{
+    if (is_mate_score(value))
+    {
+        int sign = 0;
+        if (value > 0)
+            int sign = 1;
+        else if (value < 0)
+            int sign = -1;
+        return (value * sign + depth) * sign;
+    }
+    return value;
+}
+
+void prioritize_best_move(std::vector<Move>& moves, const Move& bestMove) {
+    std::partition(moves.begin(), moves.end(), [&bestMove](const Move& move) {
+        return move == bestMove;
+        });
+}
 
 void print_bitboard(uint64_t bitboard) 
 {
@@ -1043,6 +1306,7 @@ void time_stuff()
 
         //board.if_check(0);
         //board.if_check(1);
+        uint64_t hash = board.compute_zobrist_hash();
         ++count;
 
         auto now = high_resolution_clock::now();
@@ -1091,21 +1355,40 @@ bool compare_moves(const Move& a, const Move& b)
     
 }
 
+void initialize_zobrist_table()
+{
+    std::mt19937_64 rng(12345); // Seed for reproducibility
+    std::uniform_int_distribution<uint64_t> dist(0, UINT64_MAX);
+
+    for (int square = 0; square < BOARD_SIZE; ++square) 
+        for (int piece = 0; piece < PIECE_TYPES; ++piece) 
+            zobrist_table[square][piece] = dist(rng);
+
+    for (int i = 0; i < CASTLING_RIGHTS; ++i) 
+        zobrist_castling[i] = dist(rng);
+
+    for (int i = 0; i < EN_PASSANT; ++i) 
+        zobrist_en_passant[i] = dist(rng);
+
+    zobrist_side_is_black = dist(rng);
+}
+
+
 int main()
 {
     load_bitboards();
+    initialize_zobrist_table();
     Board board;
-    //board.setup_board_from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-    board.setup_board_from_fen("rnbqkb1r/pppppppp/8/4n3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 1");
+    //board.setup_board_from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); // starting position
+    //board.setup_board_from_fen("r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"); // default check
+    board.setup_board_from_fen("8/5k2/8/4K3/3Q4/8/8/8 w - - 0 1"); // checkmate check
 
     board.print_chessboard();
 
-    Move bestMove = board.find_best_move(6);
+    Move bestMove = board.find_best_move_with_time_limit(5000);
 
     std::cout << "From: " << bestMove.from << " to: " << bestMove.to << std::endl;
-    std::cout << "Positions generated: " << positions_generated << std::endl;
     std::cout << "Positions evaluated: " << positions_evaluated << std::endl;
-
 
     return 0;
 }
