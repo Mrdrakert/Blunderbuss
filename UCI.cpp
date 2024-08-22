@@ -106,8 +106,16 @@ private:
         }
         else if (sub_command == "fen") 
         {
+            std::string parsing;
             std::string fen;
-            std::getline(iss, fen);
+
+            for (int i = 0; i < 6 && iss >> parsing; ++i) {
+                if (i > 0) {
+                    fen += " ";
+                }
+                fen += parsing;
+            }
+
             board.setup_board_from_fen(fen);
             log("Set up board from FEN: " + fen);
         }
