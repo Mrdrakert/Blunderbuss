@@ -10,6 +10,8 @@
 #include <random>
 #include <unordered_map>
 #include <cmath>
+#include <limits>
+
 
 
 //globals
@@ -25,7 +27,7 @@ uint64_t zobrist_castling[CASTLING_RIGHTS];
 uint64_t zobrist_en_passant[EN_PASSANT];
 uint64_t zobrist_side_is_black;
 
-bool timeLimitReached = false;
+bool time_limit_reached = false;
 
 
 uint64_t positions_evaluated = 0;
@@ -910,6 +912,95 @@ struct Board
         this->en_passant = move.en_passant;
     }
 
+    uint64_t compute_zobrist_hash()
+    {
+        uint64_t hash = 0;
+
+        for (int square = 0; square < BOARD_SIZE; ++square)
+        {
+            PieceAndBoard piece_board = this->get_piece_bitboard(square);
+            if (piece_board.type != -1)
+            {
+                hash ^= zobrist_table[square][piece_board.type];
+            }
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (this->castling[i])
+            {
+                hash ^= zobrist_castling[this->castling[i]];
+            }
+        }
+
+        if (this->en_passant != -1)
+        {
+            unsigned long index;
+            _BitScanForward64(&index, this->en_passant);
+            hash ^= zobrist_en_passant[index];
+        }
+
+        if (this->turn == 1)
+        {
+            hash ^= zobrist_side_is_black;
+        }
+
+        return hash;
+    }
+
+    void store_transposition_table_entry(uint64_t zobrist_key, int ply, int depth, int score, NodeType type, Move best_move) {
+        TranspositionTableEntry entry;
+        entry.depth = depth;
+        entry.best_move = best_move;
+
+        entry.type = type;
+
+        entry.value = store_correct_mate_score(score, ply);
+        transposition_table[zobrist_key] = entry;
+    }
+
+
+    bool probe_transposition_table(uint64_t zobrist_key, int depth, int ply, int alpha, int beta, int& value, Move& best_move)
+    {
+        if (this->transposition_table.find(zobrist_key) != transposition_table.end())
+        {
+            TranspositionTableEntry entry = transposition_table[zobrist_key];
+            best_move = entry.best_move;
+            int corrected = retrieve_correct_mate_score(entry.value, ply);
+            if (entry.depth >= depth)
+            {
+                if (entry.type == NodeType::EXACT)
+                {
+                    value = corrected;
+                    return true;
+                }
+                if (entry.type == NodeType::UPPERBOUND && entry.value <= alpha)
+                {
+                    value = corrected;
+                    return true;
+                }
+                if (entry.type == NodeType::LOWERBOUND && entry.value >= beta)
+                {
+                    value = corrected;
+                    return true;
+                }
+
+
+            }
+        }
+        return false;
+    }
+
+    void clear_transposition_table() {
+        transposition_table.clear();
+    }
+
+    void print_checks()
+    {
+        std::cout << "Is white in check: " << this->if_check(0) << std::endl;
+        std::cout << "Is black in check: " << this->if_check(1) << std::endl;
+    }
+
     int evaluate_position(bool color)
     {
         int who_to_move = -((this->turn * 2) - 1);
@@ -941,13 +1032,60 @@ struct Board
         return 0;
     }
 
-
-    int negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point endTime)
+    int quiescence_search(int alpha, int beta, std::chrono::steady_clock::time_point end_time)
     {
-        if (depth == 0 || timeLimitReached)
+        positions_evaluated += 1;
+        int stand_pat = this->evaluate_position(this->turn);
+
+        if (stand_pat >= beta) 
+        {
+            return beta;
+        }
+        if (stand_pat > alpha) 
+        {
+            alpha = stand_pat;
+        }
+
+        std::vector<Move> moves = this->get_legal_moves();
+
+        moves.erase(std::remove_if(moves.begin(), moves.end(), [](const Move& m) 
+                { return m.capture_value <= 0;  }), moves.end() );
+
+        std::sort(moves.begin(), moves.end(), compare_moves);
+
+        for (const Move& move : moves)
+        {
+            this->make_move(move);
+            int eval = -quiescence_search(-beta, -alpha, end_time);
+            this->unmake_move();
+
+            if (eval >= beta)
+            {
+                return beta;
+            }
+
+            if (eval > alpha)
+            {
+                alpha = eval;
+            }
+
+            if (std::chrono::steady_clock::now() >= end_time) {
+                time_limit_reached = true;
+                break;
+            }
+        }
+
+        return alpha;
+    }
+
+
+    int negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time)
+    {
+        if (depth == 0 || time_limit_reached)
         {
             positions_evaluated += 1;
-            return this->evaluate_position(this->turn);
+            return quiescence_search(alpha, beta, end_time);
+            //return this->evaluate_position(this->turn);
         }
 
         uint64_t zobrist_key = this->compute_zobrist_hash();
@@ -979,7 +1117,7 @@ struct Board
         for (const Move& move : moves) 
         {
             this->make_move(move);
-            int eval = -negamax(ply + 1, depth - 1, -beta, -alpha, endTime);
+            int eval = -negamax(ply + 1, depth - 1, -beta, -alpha, end_time);
             this->unmake_move();
 
             if (eval >= beta) 
@@ -996,8 +1134,8 @@ struct Board
             }
 
 
-            if (std::chrono::steady_clock::now() >= endTime) {
-                timeLimitReached = true;
+            if (std::chrono::steady_clock::now() >= end_time) {
+                time_limit_reached = true;
                 break;
             }
         }
@@ -1027,7 +1165,7 @@ struct Board
                 this->make_move(move);
                 int eval = -negamax(1, depth - 1, -INF, INF, end_time);
 
-                if (depth == 14)
+                if (depth == 15)
                 {
                     //std::cout << "val: " << eval << " from: " << move.from << " to: " << move.to << std::endl;
                 }
@@ -1040,13 +1178,13 @@ struct Board
                     current_best_move = move;
                 }
 
-                if (timeLimitReached) 
+                if (time_limit_reached)
                 {
                     break;
                 }
             }
 
-            if (timeLimitReached) 
+            if (time_limit_reached)
             {
                 depths_searched = depth;
                 break;
@@ -1061,99 +1199,12 @@ struct Board
         return best_move;
     }
 
-    uint64_t compute_zobrist_hash() 
-    {
-        uint64_t hash = 0;
-
-        for (int square = 0; square < BOARD_SIZE; ++square) 
-        {
-            PieceAndBoard piece_board = this->get_piece_bitboard(square);
-            if (piece_board.type != -1)
-            {
-                hash ^= zobrist_table[square][piece_board.type];
-            }
-        }
-
-        for (int i = 0; i < 4; i++)
-        {
-            if (this->castling[i]) 
-            {
-                hash ^= zobrist_castling[this->castling[i]];
-            }
-        }
-        
-        if (this->en_passant != -1) 
-        {
-            unsigned long index;
-            _BitScanForward64(&index, this->en_passant);
-            hash ^= zobrist_en_passant[index];
-        }
-
-        if (this->turn == 1) 
-        {
-            hash ^= zobrist_side_is_black;
-        }
-
-        return hash;
-    }
-
-    void store_transposition_table_entry(uint64_t zobrist_key, int ply, int depth, int score, NodeType type, Move best_move) {
-        TranspositionTableEntry entry;
-        entry.depth = depth;
-        entry.best_move = best_move;
-
-        entry.type = type;
-
-        entry.value = store_correct_mate_score(score, ply);
-        transposition_table[zobrist_key] = entry;
-    }
-
-
-    bool probe_transposition_table(uint64_t zobrist_key, int depth, int ply, int alpha, int beta, int& value, Move& best_move)
-    {
-        if (this->transposition_table.find(zobrist_key) != transposition_table.end()) 
-        {
-            TranspositionTableEntry entry = transposition_table[zobrist_key];
-            best_move = entry.best_move;
-            int corrected = retrieve_correct_mate_score(entry.value, ply);
-            if (entry.depth >= depth) 
-            {
-                if (entry.type == NodeType::EXACT)
-                {
-                    value = corrected;
-                    return true;
-                }
-                if (entry.type == NodeType::UPPERBOUND && entry.value <= alpha)
-                {
-                    value = corrected;
-                    return true;
-                }
-                if (entry.type == NodeType::LOWERBOUND && entry.value >= beta) 
-                {
-                    value = corrected;
-                    return true;
-                }
-                
-                
-            }
-        }
-        return false;
-    }
-
-    void clear_transposition_table() {
-        transposition_table.clear();
-    }
-
-    void print_checks()
-    {
-        std::cout << "Is white in check: " << this->if_check(0) << std::endl;
-        std::cout << "Is black in check: " << this->if_check(1) << std::endl;
-    }
+    
 };
 
 bool is_mate_score(int value)
 {
-    if (abs(value - MATE_VALUE) < 100)
+    if (abs(value - MATE_VALUE) < 1000)
     {
         return true;
     }
@@ -1166,9 +1217,9 @@ int retrieve_correct_mate_score(int value, int depth)
     {
         int sign = 0;
         if (value > 0)
-            int sign = 1;
+            sign = 1;
         else if (value < 0)
-            int sign = -1;
+            sign = -1;
         return (value * sign - depth) * sign;
     }
     return value;
@@ -1180,10 +1231,10 @@ int store_correct_mate_score(int value, int depth)
     {
         int sign = 0;
         if (value > 0)
-            int sign = 1;
+            sign = 1;
         else if (value < 0)
-            int sign = -1;
-        return (value * sign + depth) * sign;
+            sign = -1;
+        //return (value * sign + depth) * sign;
     }
     return value;
 }
@@ -1381,11 +1432,11 @@ int main()
     Board board;
     //board.setup_board_from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); // starting position
     //board.setup_board_from_fen("r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"); // default check
-    board.setup_board_from_fen("8/5k2/8/4K3/3Q4/8/8/8 w - - 0 1"); // checkmate check
+    board.setup_board_from_fen("8/4k3/8/5K2/3Q4/8/8/8 w - - 6 4"); // checkmate check
 
     board.print_chessboard();
 
-    Move bestMove = board.find_best_move_with_time_limit(5000);
+    Move bestMove = board.find_best_move_with_time_limit(2000);
 
     std::cout << "From: " << bestMove.from << " to: " << bestMove.to << std::endl;
     std::cout << "Positions evaluated: " << positions_evaluated << std::endl;
