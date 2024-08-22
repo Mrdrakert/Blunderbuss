@@ -5,6 +5,14 @@
 #include <string>
 #include <chrono>
 #include <unordered_map>
+#include <array>
+#include <algorithm>
+#include <random>
+#include <sstream>
+#include <iostream>
+#include <fstream>
+
+
 
 class Board;
 struct Move;
@@ -114,9 +122,19 @@ struct TranspositionTableEntry {
 };
 
 
+void initialize_zobrist_table();
+void print_bitboard(uint64_t bitboard);
 void load_data(uint64_t* values, std::string file_name);
 void load_bitboards();
-void initialize_zobrist_table();
+std::vector<int> get_set_bit_indices(uint64_t board);
+int findMostSignificantBitIndex(uint64_t value);
+int findLeastSignificantBitIndex(uint64_t value);
+bool compare_moves(const Move& a, const Move& b);
+int get_piece_value(int piece);
+void prioritize_best_move(std::vector<Move>& moves, const Move& bestMove);
+int store_correct_mate_score(int value, int depth);
+int retrieve_correct_mate_score(int value, int depth);
+bool is_mate_score(int value);
 
 const int MAX_DEPTH = 20;
 

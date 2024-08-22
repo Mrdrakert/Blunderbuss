@@ -1,19 +1,5 @@
 ﻿#include "Blunderbuss.h"
-#include <iostream>
-#include <fstream>
-#include <cstdint>
-#include <sstream>
-#include <vector>
-#include <intrin.h> 
-#include <chrono>
-#include <array>
-#include <algorithm>
-#include <random>
-#include <unordered_map>
-#include <cmath>
-#include <limits>
-
-
+#include "SquareTables.h"
 
 const int BOARD_SIZE = 64;
 const int PIECE_TYPES = 12;
@@ -98,22 +84,6 @@ TranspositionTableEntry::TranspositionTableEntry()
     best_move = Move();
 }
 
-
-
-//functions
-void print_bitboard(uint64_t bitboard);
-void load_data(uint64_t* values, std::string file_name);
-void load_bitboards();
-std::vector<int> get_set_bit_indices(uint64_t board);
-int findMostSignificantBitIndex(uint64_t value);
-int findLeastSignificantBitIndex(uint64_t value);
-bool compare_moves(const Move& a, const Move& b);
-int get_piece_value(int piece); 
-void prioritize_best_move(std::vector<Move>& moves, const Move& bestMove);
-int store_correct_mate_score(int value, int depth);
-int retrieve_correct_mate_score(int value, int depth);
-bool is_mate_score(int value);
-//end functions
 
 
 
@@ -967,13 +937,34 @@ int Board::evaluate_position(bool color)
 
     int result = 0;
 
-    for (int i = 0; i < 6; i++)
+    int piece_strengh_score = 0;
+    for (int i = 1; i < 5; i++)
     {
         white_values[i] = __popcnt64(this->white_pieces[i]);
         black_values[i] = __popcnt64(this->black_pieces[i]);
-            
-        result += white_values[i] * get_piece_value(i);
-        result -= black_values[i] * get_piece_value(i);
+
+        piece_strengh_score += white_values[i] * get_piece_value(i);
+        piece_strengh_score += black_values[i] * get_piece_value(i);
+    }
+
+    for (int i = 0; i < 6; i++)
+    {
+        uint64_t white_bitboard = this->white_pieces[i];
+        uint64_t black_bitboard = this->black_pieces[i];
+
+        while (white_bitboard) {
+            int sq = _tzcnt_u64(white_bitboard);
+            result += get_piece_square_value(i, sq, piece_strengh_score, 0);
+            result += get_piece_value(i);
+            white_bitboard &= white_bitboard - 1;
+        }
+
+        while (black_bitboard) {
+            int sq = _tzcnt_u64(black_bitboard);
+            result -= get_piece_square_value(i, sq, piece_strengh_score, 1);
+            result -= get_piece_value(i);;
+            black_bitboard &= black_bitboard - 1;
+        }
     }
 
     return result * who_to_move;
@@ -1151,8 +1142,8 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
         best_move = current_best_move;
     }
 
-    //std::cout << "Stopped while searching depth " << depths_searched << std::endl;
-    //std::cout << "Evaluation: " << bestValue << std::endl;
+    std::cout << "Stopped while searching depth " << depths_searched << std::endl;
+    std::cout << "Evaluation: " << bestValue << std::endl;
     return best_move;
 }
 
