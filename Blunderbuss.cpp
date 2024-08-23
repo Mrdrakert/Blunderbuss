@@ -710,8 +710,20 @@ void Board::make_move_opponent(Move move)
     {
         if (moves[i].from == move.from && moves[i].to == move.to)
         {
-            this->make_move(moves[i]);
-            return;
+            if (move.type == 4 || move.type == 6 || move.type == 7 || move.type == 8)
+            {
+                if (move.type == moves[i].type)
+                {
+                    this->make_move(moves[i]);
+                    return;
+                }
+            }
+            else
+            {
+                this->make_move(moves[i]);
+                return;
+            }
+            
         }
     }
 

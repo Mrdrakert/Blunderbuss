@@ -142,7 +142,20 @@ private:
         int from = (move_str[1] - '1') * 8 + (move_str[0] - 'a');
         int to = (move_str[3] - '1') * 8 + (move_str[2] - 'a');
         int piece_type = board.get_piece_bitboard(from).type;
-        return Move(from, to, piece_type, 0);
+        int move_type = 0;
+
+        if (move_str.length() == 5)
+        {
+            if (move_str[4] == 'q')
+                move_type = 4;
+            else if (move_str[4] == 'n')
+                move_type = 6;
+            else if (move_str[4] == 'b')
+                move_type = 7;
+            else if (move_str[4] == 'r')
+                move_type = 8;
+        }
+        return Move(from, to, piece_type, move_type);
     }
 
     void handle_go_command(std::istringstream& iss) 
@@ -171,6 +184,16 @@ private:
         move_str += (move.from / 8) + '1';
         move_str += (move.to % 8) + 'a';
         move_str += (move.to / 8) + '1';
+
+        if (move.type == 4)
+            move_str += 'q';
+        else if (move.type == 6)
+            move_str += 'n';
+        else if (move.type == 7)
+            move_str += 'b';
+        else if (move.type == 8)
+            move_str += 'r';
+
         return move_str;
     }
 
