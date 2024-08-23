@@ -168,7 +168,7 @@ int get_polynomial_value(int value, float c0, float c1, float c2)
 int get_piece_value(int piece)
 {
     //pawn // knight // bishop // rook // queen // king
-    int values[6] = { 100, 290, 310, 500, 900, 100000 };
+    int values[6] = { 100, 290, 300, 500, 900, 100000 };
     return values[piece];
 }
 
@@ -221,7 +221,7 @@ int get_bishop_pair_value(int empty_squares)
 {
     int alpha = get_polynomial_value(empty_squares, 4140.8, -132.6, 1.06);
 
-    return interpolate(20, 60, alpha);
+    return interpolate(10, 40, alpha);
 }
 
 

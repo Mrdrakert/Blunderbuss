@@ -14,12 +14,30 @@
 
 
 class Board;
-struct Move;
 enum class NodeType;
 struct AntiMove;
 struct PieceAndBoard;
 struct TranspositionTableEntry;
 struct DumbHash;
+
+
+const int MAX_DEPTH = 32;
+
+
+
+struct Move
+{
+    int from;
+    int to;
+    int piece_type;
+    int type; //0 - normal, 1 - capture, 2 - castling, 3 - enpassant, 4 - pawn queening, 5 - pawn double move, 6 - pawn knighting, 7 - pawn bishoping, 8 - pawn rooking
+    int capture_value;
+
+    Move();
+    Move(int the_from, int the_to, int pc_type, int the_type = 0, int cap_val = 0);
+
+    bool operator==(const Move& other) const;
+};
 
 class Board 
 {
@@ -72,6 +90,9 @@ private:
 
     std::unordered_map<uint64_t, TranspositionTableEntry> transposition_table;
 
+    bool killer_moves_check[MAX_DEPTH][2];
+    Move killer_moves[MAX_DEPTH][2];
+
     bool now_searching_for;
 };
 
@@ -84,20 +105,6 @@ struct DumbHash
     bool castling[4] = { 1, 1, 1, 1 };
 
     bool operator==(const DumbHash& other) const;
-};
-
-struct Move 
-{
-    int from;
-    int to;
-    int piece_type;
-    int type; //0 - normal, 1 - capture, 2 - castling, 3 - enpassant, 4 - pawn queening, 5 - pawn double move, 6 - pawn knighting, 7 - pawn bishoping, 8 - pawn rooking
-    int capture_value;
-
-    Move();
-    Move(int the_from, int the_to, int pc_type, int the_type = 0, int cap_val = 0);
-
-    bool operator==(const Move& other) const;
 };
 
 struct AntiMove
@@ -151,7 +158,6 @@ int store_correct_mate_score(int value, int depth);
 int retrieve_correct_mate_score(int value, int depth);
 bool is_mate_score(int value);
 bool exists_more_than_once(const std::vector<DumbHash>& vec, DumbHash value);
-
-const int MAX_DEPTH = 20;
+void sort_moves(std::vector<Move>& moves, const Move& best_move, const Move& killer_move, const Move& killer_move_2);
 
 #endif  // BLUNDERBUSS_H

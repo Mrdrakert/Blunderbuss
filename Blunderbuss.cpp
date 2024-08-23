@@ -117,6 +117,7 @@ Board::Board()
                     0x0000000000000081, 0x0000000000000010, 0x0000000000000008 },
     en_passant(0x0000000000000000)
 {
+    this->clear();
     clear_anti_moves();
     clear_transposition_table();
     this->anti_moves.reserve(10);
@@ -337,6 +338,12 @@ void Board::clear()
     for (int i = 0; i < 4; i++)
     {
         this->castling[i] = 0;
+    }
+
+    for (int i = 0; i < MAX_DEPTH; i++)
+    {
+        this->killer_moves_check[i][0] = 0;
+        this->killer_moves_check[i][1] = 0;
     }
 }
 
@@ -1004,6 +1011,7 @@ int Board::evaluate_position(bool color)
             int sq = _tzcnt_u64(white_bitboard);
             result += get_piece_square_value(i, sq, piece_strengh_score, 0);
             result += get_piece_value(i);
+
             white_bitboard &= white_bitboard - 1;
         }
 
@@ -1011,6 +1019,7 @@ int Board::evaluate_position(bool color)
             int sq = _tzcnt_u64(black_bitboard);
             result -= get_piece_square_value(i, sq, piece_strengh_score, 1);
             result -= get_piece_value(i);;
+
             black_bitboard &= black_bitboard - 1;
         }
     }
@@ -1084,9 +1093,7 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
 {
     if (depth == 0 || time_limit_reached)
     {
-        //positions_evaluated += 1;
         return quiescence_search(alpha, beta, end_time);
-        //return this->evaluate_position(this->turn);
     }
 
     uint64_t zobrist_key = this->compute_zobrist_hash();
@@ -1119,8 +1126,13 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
         return this->evaluate_end(this->turn, ply);
     }
 
-    std::sort(moves.begin(), moves.end(), compare_moves);
-    prioritize_best_move(moves, best_move);
+    if (killer_moves_check[ply][0])
+        if (killer_moves_check[ply][1])
+            sort_moves(moves, best_move, killer_moves[ply][0], killer_moves[ply][1]);
+        else
+            sort_moves(moves, best_move, killer_moves[ply][0], Move());
+    else
+        sort_moves(moves, best_move, Move(), Move());
 
     NodeType evaluation_bound = NodeType::UPPERBOUND;
 
@@ -1133,6 +1145,29 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
         if (eval >= beta) 
         {
             this->store_transposition_table_entry(zobrist_key, depth, ply, beta, NodeType::LOWERBOUND, move);
+
+            if (move.capture_value <= 0)
+            {
+                if (this->killer_moves_check[ply][0] == 1)
+                {
+                    if (this->killer_moves[ply][0] == move)
+                    {
+                        
+                    }
+                    else
+                    {
+                        this->killer_moves[ply][1] = this->killer_moves[ply][0];
+                        this->killer_moves[ply][0] = move;
+                        this->killer_moves_check[ply][1] = 1;
+                    }
+                }
+                else
+                {
+                    this->killer_moves[ply][0] = move;
+                    this->killer_moves_check[ply][0] = 1;
+                }
+            }
+
             return beta;
         }
 
@@ -1387,6 +1422,26 @@ bool compare_moves(const Move& a, const Move& b)
     bool result = (a.capture_value > b.capture_value);
     return result;
     
+}
+
+void sort_moves(std::vector<Move>& moves, const Move& best_move, const Move& killer_move, const Move& killer_move_2) {
+    std::sort(moves.begin(), moves.end(), [&](const Move& a, const Move& b) {
+        if (a.from == best_move.from && a.to == best_move.to && a.piece_type == best_move.piece_type && a.type == best_move.type) return true;
+        if (b.from == best_move.from && b.to == best_move.to && b.piece_type == best_move.piece_type && b.type == best_move.type) return false;
+
+        if (a.capture_value > 0 && b.capture_value > 0) {
+            return a.capture_value > b.capture_value;  // Sort captures by value
+        }
+        if (a.capture_value > 0) return true;
+        if (a.capture_value > 0) return false;
+
+        if (a.from == killer_move.from && a.to == killer_move.to && a.piece_type == killer_move.piece_type && a.type == killer_move.type) return true;
+        if (a.from == killer_move_2.from && a.to == killer_move_2.to && a.piece_type == killer_move_2.piece_type && a.type == killer_move_2.type) return true;
+        if (a.from == killer_move.from && a.to == killer_move.to && a.piece_type == killer_move.piece_type && a.type == killer_move.type) return false;
+        if (a.from == killer_move_2.from && a.to == killer_move_2.to && a.piece_type == killer_move_2.piece_type && a.type == killer_move_2.type) return false;
+
+        return false;
+        });
 }
 
 void initialize_zobrist_table()
