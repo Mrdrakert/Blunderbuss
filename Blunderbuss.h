@@ -20,13 +20,14 @@ enum class NodeType;
 struct AntiMove;
 struct PieceAndBoard;
 struct TranspositionTableEntry;
+struct DumbHash;
 
 class Board 
 {
 public:
     Board();
     void setup_board_from_fen(const std::string& fen);
-    void make_move(Move move);
+    void make_move(Move move, bool for_sure = 0);
     void make_move_opponent(Move move);
     void unmake_move();
     PieceAndBoard get_piece_bitboard(int square) const;
@@ -56,6 +57,7 @@ public:
     int negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time);
     uint64_t count_legal_moves_at_depth(int depth);
     void clear_anti_moves();
+    DumbHash compute_dumb_hash();
 
 private:
     uint64_t white_pieces[6];
@@ -68,7 +70,22 @@ private:
 
     std::vector<AntiMove> anti_moves;
 
+    std::vector<DumbHash> repetition_table;
+
     std::unordered_map<uint64_t, TranspositionTableEntry> transposition_table;
+
+    bool now_searching_for;
+};
+
+struct DumbHash
+{
+    uint64_t white_pieces[6];
+    uint64_t black_pieces[6];
+
+    uint64_t en_passant = 0;
+    bool castling[4] = { 1, 1, 1, 1 };
+
+    bool operator==(const DumbHash& other) const;
 };
 
 struct Move 
@@ -135,6 +152,7 @@ void prioritize_best_move(std::vector<Move>& moves, const Move& bestMove);
 int store_correct_mate_score(int value, int depth);
 int retrieve_correct_mate_score(int value, int depth);
 bool is_mate_score(int value);
+bool exists_more_than_once(const std::vector<DumbHash>& vec, DumbHash value);
 
 const int MAX_DEPTH = 20;
 

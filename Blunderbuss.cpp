@@ -40,6 +40,27 @@ uint64_t pawn_black_moves[NUM_LINES];
 uint64_t pawn_white_capture_moves[NUM_LINES];
 uint64_t pawn_black_capture_moves[NUM_LINES];
 
+bool DumbHash::operator==(const DumbHash& other) const
+{
+    for (int i = 0; i < 6; ++i)
+        if (white_pieces[i] != other.white_pieces[i])
+            return false;
+
+
+    for (int i = 0; i < 6; ++i)
+        if (black_pieces[i] != other.black_pieces[i])
+            return false;
+
+    if (en_passant != other.en_passant)
+        return false;
+
+    for (int i = 0; i < 4; ++i)
+        if (castling[i] != other.castling[i])
+            return false;
+
+    return true;
+}
+
 
 Move::Move(int the_from, int the_to, int pc_type, int the_type, int cap_val)
     : from(the_from), to(the_to), piece_type(pc_type), type(the_type), capture_value(cap_val) {}
@@ -95,7 +116,11 @@ Board::Board()
                     0x0000000000000081, 0x0000000000000010, 0x0000000000000008 },
     en_passant(0x0000000000000000)
 {
+    clear_anti_moves();
+    clear_transposition_table();
     this->anti_moves.reserve(10);
+    this->repetition_table.reserve(30);
+    
     load_bitboards();
     initialize_zobrist_table();
 }
@@ -316,6 +341,7 @@ void Board::clear()
 
 void Board::setup_board_from_fen(const std::string& fen)
 {
+    this->repetition_table.clear();
     this->clear_anti_moves();
     this->clear_transposition_table();
     this->clear();
@@ -714,13 +740,13 @@ void Board::make_move_opponent(Move move)
             {
                 if (move.type == moves[i].type)
                 {
-                    this->make_move(moves[i]);
+                    this->make_move(moves[i], 1);
                     return;
                 }
             }
             else
             {
-                this->make_move(moves[i]);
+                this->make_move(moves[i], 1);
                 return;
             }
             
@@ -729,9 +755,10 @@ void Board::make_move_opponent(Move move)
 
 }
 
-void Board::make_move(Move move)
+void Board::make_move(Move move, bool for_sure)
 {
-    this->anti_moves.emplace_back(AntiMove(this->white_pieces, this->black_pieces, this->en_passant, this->castling, this->turn));
+    if (!for_sure)
+        this->anti_moves.emplace_back(AntiMove(this->white_pieces, this->black_pieces, this->en_passant, this->castling, this->turn));
 
     int from_square = move.from;
     int to_square = move.to;
@@ -753,6 +780,8 @@ void Board::make_move(Move move)
 
     if (move.type == 1 || move.type == 4 || move.type == 6 || move.type == 7 || move.type == 8) // Capture
     { 
+        if (for_sure)
+            this->repetition_table.clear();
         PieceAndBoard captured_piece = get_piece_bitboard(to_square);
         if (captured_piece.type != -1) 
         {
@@ -829,12 +858,15 @@ void Board::make_move(Move move)
     if (from_square == 63 || to_square == 63) castling[2] = 0; // Black kingside rook moved/captured
 
     this->turn = !turn;
+
+    this->repetition_table.push_back(this->compute_dumb_hash());
 }
 
 void Board::unmake_move()
 {
     AntiMove move = this->anti_moves.back();
     this->anti_moves.pop_back();
+    this->repetition_table.pop_back();
 
     for (int i = 0; i < 6; ++i) {
         this->white_pieces[i] = move.white_pieces[i];
@@ -947,6 +979,9 @@ int Board::evaluate_position(bool color)
     int black_values[6];
     int white_values[6];
 
+    uint64_t all_pieces = this->combine_black() | this->combine_white();
+    int empty_squares = 64 - __popcnt64(all_pieces);
+
     int result = 0;
 
     int piece_strengh_score = 0;
@@ -977,6 +1012,11 @@ int Board::evaluate_position(bool color)
             result -= get_piece_value(i);;
             black_bitboard &= black_bitboard - 1;
         }
+    }
+
+    if (white_values[2] >= 2)
+    {
+        result += get_bishop_pair_value(empty_squares);
     }
 
     return result * who_to_move;
@@ -1043,7 +1083,7 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
 {
     if (depth == 0 || time_limit_reached)
     {
-        positions_evaluated += 1;
+        //positions_evaluated += 1;
         return quiescence_search(alpha, beta, end_time);
         //return this->evaluate_position(this->turn);
     }
@@ -1052,6 +1092,15 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
     int value;
     int originalAlpha = alpha;
     Move best_move;
+
+    DumbHash dumb_hash = this->compute_dumb_hash();
+    if (exists_more_than_once(this->repetition_table, dumb_hash))
+    {
+        if (now_searching_for == this->turn)
+            return -50;
+        else
+            return 50;
+    }
 
     if (this->probe_transposition_table(zobrist_key, depth, ply, alpha, beta, value, best_move))
     {
@@ -1113,10 +1162,12 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
     auto start_time = std::chrono::steady_clock::now();
     auto end_time = start_time + std::chrono::milliseconds(time_limit_ms);
 
-    int depths_searched = 0;
+    int depths_searched = 1;
+    now_searching_for = this->turn;
 
     for (int depth = 2; depth <= MAX_DEPTH; depth++) 
     {
+        depths_searched += 1;
         int current_best_value = -INF;
         Move current_best_move;
 
@@ -1146,7 +1197,6 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
 
         if (time_limit_reached)
         {
-            depths_searched = depth;
             break;
         }
 
@@ -1156,6 +1206,7 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
 
     std::cout << "Stopped while searching depth " << depths_searched << std::endl;
     std::cout << "Evaluation: " << bestValue << std::endl;
+    std::cout << "Evaluated positions: " << positions_evaluated << std::endl;
     return best_move;
 }
 
@@ -1330,12 +1381,6 @@ std::string get_square_name(int square)
     return std::string(1, file) + std::to_string(rank);
 }
 
-int get_piece_value(int piece)
-{
-    int values[6] = { 100, 300, 300, 500, 900, 100000 };
-    return values[piece];
-}
-
 bool compare_moves(const Move& a, const Move& b)
 {
     bool result = (a.capture_value > b.capture_value);
@@ -1359,4 +1404,35 @@ void initialize_zobrist_table()
         zobrist_en_passant[i] = dist(rng);
 
     zobrist_side_is_black = dist(rng);
+}
+
+bool exists_more_than_once(const std::vector<DumbHash>& vec, DumbHash value) {
+    int count = 0;
+
+    for (const auto& elem : vec) 
+    {
+        if (elem == value) 
+        {
+            count++;
+            if (count > 1) 
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+DumbHash Board::compute_dumb_hash()
+{
+    DumbHash hash = DumbHash();
+
+    std::copy(std::begin(this->white_pieces), std::end(this->white_pieces), std::begin(hash.white_pieces));
+    std::copy(std::begin(this->black_pieces), std::end(this->black_pieces), std::begin(hash.black_pieces));
+
+    std::copy(std::begin(this->castling), std::end(this->castling), std::begin(hash.castling));
+
+    hash.en_passant = this->en_passant;
+    return hash;
 }

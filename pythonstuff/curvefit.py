@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from numpy.polynomial.polynomial import Polynomial
 
 # Example data points
-x = np.array([1000, 2000, 3500, 5900])
-y = np.array([ 0, 300, 600, 1000])
+x = np.array([60, 50, 40, 32])
+y = np.array([ 0, 200, 500, 1000])
 
 # Fit a polynomial of degree 2 (quadratic)
 p = Polynomial.fit(x, y, 2)

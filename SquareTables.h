@@ -58,8 +58,8 @@ int bishop_table[2][64] =
         -10,  5,  5, 10, 10,  5,  5,-10,
         -10,  0, 10, 10, 10, 10,  0,-10,
         -10, 10, 10, 10, 10, 10, 10,-10,
-        -10,  5,  0,  0,  0,  0,  5,-10,
-        -20,-10,-10,-10,-10,-10,-10,-20
+        -10, 10,  0,  0,  0,  0, 10,-10,
+        5  ,-10,-10,-10,-10,-10,-10,  5
     },
     { //late game
         -20,-10,-10,-10,-10,-10,-10,-20,
@@ -68,8 +68,8 @@ int bishop_table[2][64] =
         -10,  5,  5, 10, 10,  5,  5,-10,
         -10,  0, 10, 10, 10, 10,  0,-10,
         -10, 10, 10, 10, 10, 10, 10,-10,
-        -10,  5,  0,  0,  0,  0,  5,-10,
-        -20,-10,-10,-10,-10,-10,-10,-20
+        -10, 10,  0,  0,  0,  0, 10,-10,
+        5  ,-10,-10,-10,-10,-10,-10,  5
     }
 };
 
@@ -148,23 +148,33 @@ int king_table[2][64] =
 
 int interpolate(int midgame, int endgame, int alpha, int scale = 1000)
 {
-    float c0 = -289.4;
-    float c1 = 0.317;
-    float c2 = -0.0000167;
-    float y = c2 * alpha * alpha + c1 * alpha + c0;
+    return endgame + ((alpha * (midgame - endgame)) / scale);
+}
 
-    if (y < 0)
+int get_polynomial_value(int value, float c0, float c1, float c2)
+{
+    float y = c2 * value * value + c1 * value + c0;
+
+    if (y < 20)
         y = 0;
-    else if (y > 1000)
+    else if (y > 980)
         y = 1000;
 
-    int correct_alpha = static_cast<int>(y);
-    return endgame + ((correct_alpha * (midgame - endgame)) / scale);
+    int alpha = static_cast<int>(y);
+    return alpha;
+}
+
+int get_piece_value(int piece)
+{
+    //pawn // knight // bishop // rook // queen // king
+    int values[6] = { 100, 300, 310, 500, 900, 100000 };
+    return values[piece];
 }
 
 int get_piece_square_value(int piece, int square, int pieces_value, bool reversed)
 {
-    int alpha = pieces_value;
+    int alpha = get_polynomial_value(pieces_value, -289.4f, 0.317f, -0.0000167f);
+
     if (!reversed)
     {
         square = 63 - square;
@@ -190,6 +200,14 @@ int get_piece_square_value(int piece, int square, int pieces_value, bool reverse
             return interpolate(king_table[0][square], king_table[1][square], alpha);
             break;
     }
+    return 0;
+}
+
+int get_bishop_pair_value(int empty_squares)
+{
+    int alpha = get_polynomial_value(empty_squares, 4140.8, -132.6, 1.06);
+
+    return interpolate(20, 50, alpha);
 }
 
 #endif
