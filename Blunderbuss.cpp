@@ -1,4 +1,5 @@
-﻿#include "Blunderbuss.h"
+﻿#pragma once
+#include "Blunderbuss.h"
 #include "SquareTables.h"
 
 const int BOARD_SIZE = 64;

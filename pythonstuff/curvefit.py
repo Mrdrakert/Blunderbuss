@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 from numpy.polynomial.polynomial import Polynomial
 
 # Example data points
-x = np.array([60, 50, 40, 32])
-y = np.array([ 0, 200, 500, 1000])
+x = np.array([0, 30000, 60000, 120000, 600000])
+y = np.array([ 200, 1200, 2000, 3200, 10000])
 
 # Fit a polynomial of degree 2 (quadratic)
-p = Polynomial.fit(x, y, 2)
+p = Polynomial.fit(x, y, 3)
 
 # Get the polynomial coefficients
 coefs = p.convert().coef

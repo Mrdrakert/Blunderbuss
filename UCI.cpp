@@ -1,3 +1,4 @@
+#pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
@@ -162,6 +163,8 @@ private:
     {
         std::string token;
         int depth = search_depth;
+        int wtime = 0;
+        int btime = 0;
         while (iss >> token) 
         {
             if (token == "depth") 
@@ -169,9 +172,17 @@ private:
                 iss >> depth;
                 log("Received go command with depth: " + std::to_string(depth));
             }
+            if (token == "wtime")
+            {
+                iss >> wtime;
+            }
+            if (token == "btime")
+            {
+                iss >> btime;
+            }
         }
-
-        Move best_move = search_best_move();
+        int time_left = (board.turn == 0) ? wtime : btime;
+        Move best_move = search_best_move(time_left);
         std::string best_move_str = format_move(best_move);
         std::cout << "bestmove " << best_move_str << "\n";
         log("Calculated best move: " + best_move_str);
@@ -197,10 +208,26 @@ private:
         return move_str;
     }
 
-    Move search_best_move() 
+    Move search_best_move(int time_left)
     {
-        Move move = board.find_best_move_with_time_limit(2000);
+        int time_for_move = get_time_for_move(time_left);
+
+        log("Time left " + std::to_string(time_left) + ", searching move with " + std::to_string(time_for_move));
+        Move move = board.find_best_move_with_time_limit(time_for_move);
         return move;
+    }
+
+    int get_time_for_move(int time_left)
+    {
+        float y = 10000;
+        if (time_left < 600000)
+            y = 0.000000000000124 * time_left * time_left * time_left + -0.0000001072 * time_left * time_left + 0.036053 * time_left + 203.05;
+
+        if (y < 200)
+            y = 200;
+
+        int time_for_move = static_cast<int>(y);
+        return time_for_move;
     }
 };
 

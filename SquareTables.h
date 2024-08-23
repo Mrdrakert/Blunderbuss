@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SQUARETABLES_H
 #define SQUARETABLES_H
 
@@ -54,12 +55,12 @@ int bishop_table[2][64] =
     { //opening - middle game
         -20,-10,-10,-10,-10,-10,-10,-20,
         -10,  0,  0,  0,  0,  0,  0,-10,
-        -10,  0,  5, 10, 10,  5,  0,-10,
+        -10,  0,  5,  5,  5,  5,  0,-10,
         -10,  5,  5, 10, 10,  5,  5,-10,
         -10,  0, 10, 10, 10, 10,  0,-10,
         -10, 10, 10, 10, 10, 10, 10,-10,
         -10, 10,  0,  0,  0,  0, 10,-10,
-        5  ,-10,-10,-10,-10,-10,-10,  5
+        0  ,-10,-10,-10,-10,-10,-10,  0
     },
     { //late game
         -20,-10,-10,-10,-10,-10,-10,-20,
@@ -87,7 +88,7 @@ int rook_table[2][64] =
     },
     { //late game
          0,  0,  0,  0,  0,  0,  0,  0,
-         5, 10, 10, 10, 10, 10, 10,  5,
+         5, 30, 30, 30, 30, 30, 30,  5,
         -5,  0,  0,  0,  0,  0,  0, -5,
         -5,  0,  0,  0,  0,  0,  0, -5,
         -5,  0,  0,  0,  0,  0,  0, -5,
@@ -102,8 +103,8 @@ int queen_table[2][64] =
     { //opening - middle game
         -20,-10,-10, -5, -5,-10,-10,-20,
         -10,  0,  0,  0,  0,  0,  0,-10,
-        -10,  0,  5,  5,  5,  5,  0,-10,
-         -5,  0,  5,  5,  5,  5,  0, -5,
+        -10,  0,  0,  0,  0,  0,  0,-10,
+        -10,  0,  0,  0,  0,  0,  0,-10,
           0,  0,  5,  5,  5,  5,  0, -5,
         -10,  5,  5,  5,  5,  5,  0,-10,
         -10,  0,  5,  0,  0,  0,  0,-10,
@@ -167,18 +168,31 @@ int get_polynomial_value(int value, float c0, float c1, float c2)
 int get_piece_value(int piece)
 {
     //pawn // knight // bishop // rook // queen // king
-    int values[6] = { 100, 300, 310, 500, 900, 100000 };
+    int values[6] = { 100, 290, 310, 500, 900, 100000 };
     return values[piece];
+}
+
+int correct_value_for_array(int square, bool reversed)
+{
+    if (reversed)
+        return square;
+
+    if (square < 0 || square > 63)
+        return -1;
+
+    int row = square / 8;
+    int col = square % 8;
+    int transformed = (7 - row) * 8 + col;
+
+    return transformed;
 }
 
 int get_piece_square_value(int piece, int square, int pieces_value, bool reversed)
 {
     int alpha = get_polynomial_value(pieces_value, -289.4f, 0.317f, -0.0000167f);
 
-    if (!reversed)
-    {
-        square = 63 - square;
-    }
+    square = correct_value_for_array(square, reversed);
+
     switch (piece)
     {
         case 0:
@@ -207,7 +221,9 @@ int get_bishop_pair_value(int empty_squares)
 {
     int alpha = get_polynomial_value(empty_squares, 4140.8, -132.6, 1.06);
 
-    return interpolate(20, 50, alpha);
+    return interpolate(20, 60, alpha);
 }
+
+
 
 #endif

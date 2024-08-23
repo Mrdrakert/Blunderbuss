@@ -13,7 +13,6 @@
 #include <fstream>
 
 
-
 class Board;
 struct Move;
 enum class NodeType;
@@ -25,6 +24,7 @@ struct DumbHash;
 class Board 
 {
 public:
+    bool turn = 0;
     Board();
     void setup_board_from_fen(const std::string& fen);
     void make_move(Move move, bool for_sure = 0);
@@ -65,8 +65,6 @@ private:
 
     uint64_t en_passant = 0;
     bool castling[4] = { 1, 1, 1, 1 }; //white king, white queen, black king, black queen
-
-    bool turn = 0;
 
     std::vector<AntiMove> anti_moves;
 
