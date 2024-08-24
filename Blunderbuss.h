@@ -24,7 +24,6 @@ struct DumbHash;
 const int MAX_DEPTH = 32;
 
 
-
 struct Move
 {
     int from;
@@ -72,7 +71,7 @@ public:
     int evaluate_position(bool color);
     int evaluate_end(bool color, int depth);
     int quiescence_search(int alpha, int beta, std::chrono::steady_clock::time_point end_time);
-    int negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time, bool do_null_move = 1);
+    int negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time, bool do_null_move, bool reduced);
     uint64_t count_legal_moves_at_depth(int depth);
     void clear_anti_moves();
     DumbHash compute_dumb_hash();
@@ -151,7 +150,6 @@ struct TranspositionTableEntry {
 void initialize_zobrist_table();
 void print_bitboard(uint64_t bitboard);
 void load_data(uint64_t* values, std::string file_name);
-void load_bitboards();
 std::vector<int> get_set_bit_indices(uint64_t board);
 int findMostSignificantBitIndex(uint64_t value);
 int findLeastSignificantBitIndex(uint64_t value);

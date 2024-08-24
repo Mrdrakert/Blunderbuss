@@ -239,6 +239,23 @@ int endgame_mate_bonus(int my_king, int opp_king, int my_pieces, int opp_pieces)
     return 0;
 }
 
+int get_doubled_pawns_penalty(uint64_t pawns)
+{
+    int penalty_for_doubled_pawn = 30;
+    int penalty = 0;
 
+    for (int file = 0; file < 8; ++file) 
+    {
+        uint64_t file_mask = 0x0101010101010101ULL << file;
+        uint64_t pawns_in_file = pawns & file_mask;
+
+        int count = __popcnt64(pawns_in_file);
+
+        if (count > 1)
+            penalty += penalty_for_doubled_pawn * (count - 1);
+    }
+
+    return -penalty;
+}
 
 #endif

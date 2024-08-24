@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Blunderbuss.h"
 #include "SquareTables.h"
+#include "MoveBitboards.h"
 
 const int BOARD_SIZE = 64;
 const int PIECE_TYPES = 12;
@@ -20,26 +21,6 @@ uint64_t positions_generated;
 const int INF = std::numeric_limits<int>::max();
 const int MATE_VALUE = 1000000;
 const int NUM_LINES = 64;
-uint64_t rook_moves[NUM_LINES];
-uint64_t bishop_moves[NUM_LINES];
-uint64_t queen_moves[NUM_LINES];
-uint64_t knight_moves[NUM_LINES];
-uint64_t king_moves[NUM_LINES];
-
-uint64_t rook_moves_left[NUM_LINES];
-uint64_t rook_moves_right[NUM_LINES];
-uint64_t rook_moves_up[NUM_LINES];
-uint64_t rook_moves_down[NUM_LINES];
-
-uint64_t bishop_moves_left[NUM_LINES];
-uint64_t bishop_moves_right[NUM_LINES];
-uint64_t bishop_moves_up[NUM_LINES];
-uint64_t bishop_moves_down[NUM_LINES];
-
-uint64_t pawn_white_moves[NUM_LINES];
-uint64_t pawn_black_moves[NUM_LINES];
-uint64_t pawn_white_capture_moves[NUM_LINES];
-uint64_t pawn_black_capture_moves[NUM_LINES];
 
 bool DumbHash::operator==(const DumbHash& other) const
 {
@@ -123,7 +104,6 @@ Board::Board()
     this->anti_moves.reserve(10);
     this->repetition_table.reserve(30);
     
-    load_bitboards();
     initialize_zobrist_table();
 }
 
@@ -1052,6 +1032,9 @@ int Board::evaluate_position(bool color)
         result += get_bishop_pair_value(empty_squares);
     }
 
+    result += get_doubled_pawns_penalty(this->white_pieces[0]);
+    result -= get_doubled_pawns_penalty(this->black_pieces[0]);
+
     return result * who_to_move;
 }
 
@@ -1112,7 +1095,7 @@ int Board::quiescence_search(int alpha, int beta, std::chrono::steady_clock::tim
 }
 
 
-int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time, bool do_null_move)
+int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time, bool do_null_move, bool reduced)
 {
     if (depth == 0 || time_limit_reached)
     {
@@ -1152,15 +1135,17 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
     if (if_check(this->turn))
         depth++;
 
-    const int R = 2; // Null move pruning threshold
-    if (do_null_move && ply > 1 && depth >= R + 1 && !this->if_check(this->turn) && !this->is_endgame(moves.size())) //null move pruning
+    const int N_R = 2; // Null move pruning threshold
+    const int L_R = 2; // Late move reduction
+
+    if (do_null_move && ply > 1 && depth >= N_R + 1 && !this->if_check(this->turn) && !this->is_endgame(moves.size())) //null move pruning
     {
         if (this->evaluate_position(this->turn) > beta)
         {
             uint64_t enpass = this->en_passant;
             this->en_passant = 0;
             this->turn = !this->turn;
-            int eval = -negamax(ply + 1, depth - R - 1, -beta, -beta + 1, end_time, 0);
+            int eval = -negamax(ply + 1, depth - N_R - 1, -beta, -beta + 1, end_time, 0, 1);
             this->en_passant = enpass;
             this->turn = !this->turn;
 
@@ -1185,7 +1170,17 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
     {
         bool donull = 1;
         this->make_move(moves[i]);
-        int eval = -negamax(ply + 1, depth - 1, -beta, -alpha, end_time, donull);
+
+        int reduction = 0;
+        bool do_lmr = (!reduced && depth > 3 && i > 3 && moves[i].capture_value <= 0 && !if_check(this->turn));
+        if (do_lmr)
+            reduction = std::min(L_R, depth - 1);
+
+        int eval = -negamax(ply + 1, depth - 1 - reduction, -beta, -alpha, end_time, donull, do_lmr);
+
+        if (do_lmr && eval > alpha) // Re-search at full depth if the reduced search improved alpha
+            eval = -negamax(ply + 1, depth - 1, -beta, -alpha, end_time, donull, 0);
+
         this->unmake_move();
 
         if (eval >= beta) 
@@ -1265,13 +1260,7 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
         {
             move_searched = i;
             this->make_move(moves[i]);
-            int eval = -negamax(1, depth - 1, -INF, INF, end_time);
-
-            if (depth == 15)
-            {
-                //std::cout << "val: " << eval << " from: " << move.from << " to: " << move.to << std::endl;
-            }
-
+            int eval = -negamax(1, depth - 1, -INF, INF, end_time, 1, 0);
             this->unmake_move();
 
             if (eval > current_best_value) 
@@ -1298,7 +1287,7 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
     std::cout << "Stopped while searching depth " << depths_searched << ", move " << move_searched << std::endl;
     std::cout << "Evaluation: " << bestValue << std::endl;
     std::cout << "Evaluated positions: " << positions_evaluated << std::endl;
-    std::cout << "Generated positions: " << positions_generated << std::endl;
+    //std::cout << "Generated positions: " << positions_generated << std::endl;
     return best_move;
 }
 
@@ -1400,30 +1389,6 @@ void load_data(uint64_t* values, std::string file_name)
     file.close();
 
     return;
-}
-
-void load_bitboards() 
-{
-    load_data(rook_moves, "rook_moves.txt");
-    load_data(bishop_moves, "bishop_moves.txt");
-    load_data(queen_moves, "queen_moves.txt");
-    load_data(knight_moves, "knight_moves.txt");
-    load_data(king_moves, "king_moves.txt");
-
-    load_data(rook_moves_up, "rook_moves_up.txt");
-    load_data(rook_moves_down, "rook_moves_down.txt");
-    load_data(rook_moves_left, "rook_moves_left.txt");
-    load_data(rook_moves_right, "rook_moves_right.txt");
-
-    load_data(bishop_moves_up, "bishop_moves_up.txt");
-    load_data(bishop_moves_down, "bishop_moves_down.txt");
-    load_data(bishop_moves_left, "bishop_moves_left.txt");
-    load_data(bishop_moves_right, "bishop_moves_right.txt");
-
-    load_data(pawn_white_moves, "pawn_moves_white.txt");
-    load_data(pawn_black_moves, "pawn_moves_black.txt");
-    load_data(pawn_white_capture_moves, "pawn_capture_moves_white.txt");
-    load_data(pawn_black_capture_moves, "pawn_capture_moves_black.txt");
 }
 
 std::vector<int> get_set_bit_indices(uint64_t board) 
