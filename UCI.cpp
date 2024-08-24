@@ -58,7 +58,7 @@ public:
     }
 
 private:
-    Board board;
+    Board* board;
     int search_depth;
     std::ofstream log_file;
 
@@ -92,7 +92,7 @@ private:
 
     void start_new_game() 
     {
-        board = Board();
+        board = new Board();
         log("Started new game.");
     }
 
@@ -102,7 +102,7 @@ private:
         iss >> sub_command;
         if (sub_command == "startpos") 
         {
-            board.setup_board_from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+            board->setup_board_from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
             log("Set up board from startpos.");
         }
         else if (sub_command == "fen") 
@@ -117,7 +117,7 @@ private:
                 fen += parsing;
             }
 
-            board.setup_board_from_fen(fen);
+            board->setup_board_from_fen(fen);
             log("Set up board from FEN: " + fen);
         }
         handle_moves(iss);
@@ -131,7 +131,7 @@ private:
             if (move_str != "moves")
             {
                 Move move = parse_move(move_str);
-                board.make_move_opponent(move);
+                board->make_move_opponent(move);
                 log("Applied move: " + move_str);
             }
             
@@ -142,7 +142,7 @@ private:
     {
         int from = (move_str[1] - '1') * 8 + (move_str[0] - 'a');
         int to = (move_str[3] - '1') * 8 + (move_str[2] - 'a');
-        int piece_type = board.get_piece_bitboard(from).type;
+        int piece_type = board->get_piece_bitboard(from).type;
         int move_type = 0;
 
         if (move_str.length() == 5)
@@ -180,8 +180,13 @@ private:
             {
                 iss >> btime;
             }
+            if (token == "infinite")
+            {
+                btime = 0;
+                wtime = 0;
+            }
         }
-        int time_left = (board.turn == 0) ? wtime : btime;
+        int time_left = (board->turn == 0) ? wtime : btime;
         Move best_move = search_best_move(time_left);
         std::string best_move_str = format_move(best_move);
         std::cout << "bestmove " << best_move_str << "\n";
@@ -213,7 +218,7 @@ private:
         int time_for_move = get_time_for_move(time_left);
 
         log("Time left " + std::to_string(time_left) + ", searching move with " + std::to_string(time_for_move));
-        Move move = board.find_best_move_with_time_limit(time_for_move);
+        Move move = board->find_best_move_with_time_limit(time_for_move);
         return move;
     }
 
@@ -223,8 +228,11 @@ private:
         if (time_left < 600000)
             y = 0.000000000000124 * time_left * time_left * time_left + -0.0000001072 * time_left * time_left + 0.036053 * time_left + 203.05;
 
-        if (y < 200)
-            y = 200;
+        if (time_left < 5000)
+            y = time_left / 14;
+
+        if (time_left == 0)
+            y = 4000;
 
         int time_for_move = static_cast<int>(y);
         return time_for_move;

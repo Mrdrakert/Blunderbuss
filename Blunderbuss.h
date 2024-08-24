@@ -72,11 +72,13 @@ public:
     int evaluate_position(bool color);
     int evaluate_end(bool color, int depth);
     int quiescence_search(int alpha, int beta, std::chrono::steady_clock::time_point end_time);
-    int negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time);
+    int negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time, bool do_null_move = 1);
     uint64_t count_legal_moves_at_depth(int depth);
     void clear_anti_moves();
     DumbHash compute_dumb_hash();
-
+    void sort_moves(std::vector<Move>& moves, const Move& best_move, const Move& killer_move, const Move& killer_move_2, int color);
+    void store_killer_move(int ply, const Move& move);
+    bool is_endgame(int moves);
 private:
     uint64_t white_pieces[6];
     uint64_t black_pieces[6];
@@ -92,6 +94,8 @@ private:
 
     bool killer_moves_check[MAX_DEPTH][2];
     Move killer_moves[MAX_DEPTH][2];
+
+    int history_table[2][64][64];
 
     bool now_searching_for;
 };
@@ -158,6 +162,6 @@ int store_correct_mate_score(int value, int depth);
 int retrieve_correct_mate_score(int value, int depth);
 bool is_mate_score(int value);
 bool exists_more_than_once(const std::vector<DumbHash>& vec, DumbHash value);
-void sort_moves(std::vector<Move>& moves, const Move& best_move, const Move& killer_move, const Move& killer_move_2);
+//void sort_moves(std::vector<Move>& moves, const Move& best_move, const Move& killer_move, const Move& killer_move_2);
 
 #endif  // BLUNDERBUSS_H

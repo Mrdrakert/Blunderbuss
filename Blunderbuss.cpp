@@ -77,7 +77,7 @@ Move::Move()
 
 bool Move::operator==(const Move& other) const
 {
-    return from == other.from && to == other.to && piece_type == other.piece_type && type == other.piece_type && capture_value == other.capture_value; // Add other necessary comparisons
+    return from == other.from && to == other.to && piece_type == other.piece_type && type == other.type && capture_value == other.capture_value; // Add other necessary comparisons
 }
 
 AntiMove::AntiMove(const uint64_t wht_pieces[6], const uint64_t blk_pieces[6], uint64_t enpass, const bool cstling[4], bool trn) {
@@ -344,6 +344,17 @@ void Board::clear()
     {
         this->killer_moves_check[i][0] = 0;
         this->killer_moves_check[i][1] = 0;
+    }
+
+    for (int i = 0; i < 2; i++)
+    {
+        for (int x = 0; x < 64; x++)
+        {
+            for (int y = 0; y < 64; y++)
+            {
+                this->history_table[i][x][y] = 0;
+            }
+        }
     }
 }
 
@@ -992,14 +1003,17 @@ int Board::evaluate_position(bool color)
 
     int result = 0;
 
-    int piece_strengh_score = 0;
+    int white_piece_strength = 0;
+    int black_piece_strength = 0;
+    int piece_strength_score = 0;
     for (int i = 1; i < 5; i++)
     {
         white_values[i] = __popcnt64(this->white_pieces[i]);
         black_values[i] = __popcnt64(this->black_pieces[i]);
 
-        piece_strengh_score += white_values[i] * get_piece_value(i);
-        piece_strengh_score += black_values[i] * get_piece_value(i);
+        white_piece_strength += white_values[i] * get_piece_value(i);
+        black_piece_strength += black_values[i] * get_piece_value(i);
+        piece_strength_score = white_piece_strength + black_piece_strength;
     }
 
     for (int i = 0; i < 6; i++)
@@ -1007,20 +1021,29 @@ int Board::evaluate_position(bool color)
         uint64_t white_bitboard = this->white_pieces[i];
         uint64_t black_bitboard = this->black_pieces[i];
 
+        int white_sq;
+        int black_sq;
+
         while (white_bitboard) {
-            int sq = _tzcnt_u64(white_bitboard);
-            result += get_piece_square_value(i, sq, piece_strengh_score, 0);
+            white_sq = _tzcnt_u64(white_bitboard);
+            result += get_piece_square_value(i, white_sq, piece_strength_score, 0);
             result += get_piece_value(i);
 
             white_bitboard &= white_bitboard - 1;
         }
 
         while (black_bitboard) {
-            int sq = _tzcnt_u64(black_bitboard);
-            result -= get_piece_square_value(i, sq, piece_strengh_score, 1);
+            black_sq = _tzcnt_u64(black_bitboard);
+            result -= get_piece_square_value(i, black_sq, piece_strength_score, 1);
             result -= get_piece_value(i);;
 
             black_bitboard &= black_bitboard - 1;
+        }
+
+        if (i == 5)
+        {
+            result += endgame_mate_bonus(white_sq, black_sq, white_piece_strength, black_piece_strength);
+            result -= endgame_mate_bonus(black_sq, white_sq, black_piece_strength, white_piece_strength);
         }
     }
 
@@ -1089,7 +1112,7 @@ int Board::quiescence_search(int alpha, int beta, std::chrono::steady_clock::tim
 }
 
 
-int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time)
+int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time, bool do_null_move)
 {
     if (depth == 0 || time_limit_reached)
     {
@@ -1126,46 +1149,55 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
         return this->evaluate_end(this->turn, ply);
     }
 
+    if (if_check(this->turn))
+        depth++;
+
+    const int R = 2; // Null move pruning threshold
+    if (do_null_move && ply > 1 && depth >= R + 1 && !this->if_check(this->turn) && !this->is_endgame(moves.size())) //null move pruning
+    {
+        if (this->evaluate_position(this->turn) > beta)
+        {
+            uint64_t enpass = this->en_passant;
+            this->en_passant = 0;
+            this->turn = !this->turn;
+            int eval = -negamax(ply + 1, depth - R - 1, -beta, -beta + 1, end_time, 0);
+            this->en_passant = enpass;
+            this->turn = !this->turn;
+
+            if (eval >= beta)
+            {
+                return beta;
+            }
+        }
+    }
+
     if (killer_moves_check[ply][0])
         if (killer_moves_check[ply][1])
-            sort_moves(moves, best_move, killer_moves[ply][0], killer_moves[ply][1]);
+            sort_moves(moves, best_move, killer_moves[ply][0], killer_moves[ply][1], this->turn);
         else
-            sort_moves(moves, best_move, killer_moves[ply][0], Move());
+            sort_moves(moves, best_move, killer_moves[ply][0], Move(), this->turn);
     else
-        sort_moves(moves, best_move, Move(), Move());
+        sort_moves(moves, best_move, Move(), Move(), this->turn);
 
     NodeType evaluation_bound = NodeType::UPPERBOUND;
 
-    for (const Move& move : moves) 
+    for (int i = 0; i < moves.size(); i++)//for (const Move& move : moves) 
     {
-        this->make_move(move);
-        int eval = -negamax(ply + 1, depth - 1, -beta, -alpha, end_time);
+        bool donull = 1;
+        this->make_move(moves[i]);
+        int eval = -negamax(ply + 1, depth - 1, -beta, -alpha, end_time, donull);
         this->unmake_move();
 
         if (eval >= beta) 
         {
-            this->store_transposition_table_entry(zobrist_key, depth, ply, beta, NodeType::LOWERBOUND, move);
+            this->store_transposition_table_entry(zobrist_key, depth, ply, beta, NodeType::LOWERBOUND, moves[i]);
 
-            if (move.capture_value <= 0)
+            if (moves[i].capture_value <= 0)
             {
-                if (this->killer_moves_check[ply][0] == 1)
-                {
-                    if (this->killer_moves[ply][0] == move)
-                    {
-                        
-                    }
-                    else
-                    {
-                        this->killer_moves[ply][1] = this->killer_moves[ply][0];
-                        this->killer_moves[ply][0] = move;
-                        this->killer_moves_check[ply][1] = 1;
-                    }
-                }
-                else
-                {
-                    this->killer_moves[ply][0] = move;
-                    this->killer_moves_check[ply][0] = 1;
-                }
+                this->store_killer_move(ply, moves[i]);
+
+                int history_score = depth * depth;
+                this->history_table[this->turn][moves[i].from][moves[i].to] += history_score;
             }
 
             return beta;
@@ -1174,7 +1206,7 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
         if (eval > alpha)
         {
             evaluation_bound = NodeType::EXACT;
-            best_move = move;
+            best_move = moves[i];
             alpha = eval;
         }
 
@@ -1189,6 +1221,27 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
     return alpha;
 }
 
+void Board::store_killer_move(int ply, const Move& move)
+{
+    if (this->killer_moves_check[ply][0] == 1)
+    {
+        if (this->killer_moves[ply][0] == move)
+        {
+        }
+        else
+        {
+            this->killer_moves[ply][1] = this->killer_moves[ply][0];
+            this->killer_moves[ply][0] = move;
+            this->killer_moves_check[ply][1] = 1;
+        }
+    }
+    else
+    {
+        this->killer_moves[ply][0] = move;
+        this->killer_moves_check[ply][0] = 1;
+    }
+}
+
 Move Board::find_best_move_with_time_limit(int time_limit_ms)
 {
     int bestValue = -INF;
@@ -1199,6 +1252,7 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
     auto end_time = start_time + std::chrono::milliseconds(time_limit_ms);
 
     int depths_searched = 1;
+    int move_searched = 0;
     now_searching_for = this->turn;
 
     for (int depth = 2; depth <= MAX_DEPTH; depth++) 
@@ -1207,9 +1261,10 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
         int current_best_value = -INF;
         Move current_best_move;
 
-        for (const Move& move : moves) 
+        for (int i = 0; i < moves.size(); i++)//for (const Move& move : moves) 
         {
-            this->make_move(move);
+            move_searched = i;
+            this->make_move(moves[i]);
             int eval = -negamax(1, depth - 1, -INF, INF, end_time);
 
             if (depth == 15)
@@ -1222,7 +1277,7 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
             if (eval > current_best_value) 
             {
                 current_best_value = eval;
-                current_best_move = move;
+                current_best_move = moves[i];
             }
 
             if (time_limit_reached)
@@ -1240,9 +1295,10 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
         best_move = current_best_move;
     }
 
-    std::cout << "Stopped while searching depth " << depths_searched << std::endl;
+    std::cout << "Stopped while searching depth " << depths_searched << ", move " << move_searched << std::endl;
     std::cout << "Evaluation: " << bestValue << std::endl;
     std::cout << "Evaluated positions: " << positions_evaluated << std::endl;
+    std::cout << "Generated positions: " << positions_generated << std::endl;
     return best_move;
 }
 
@@ -1424,24 +1480,25 @@ bool compare_moves(const Move& a, const Move& b)
     
 }
 
-void sort_moves(std::vector<Move>& moves, const Move& best_move, const Move& killer_move, const Move& killer_move_2) {
+void Board::sort_moves(std::vector<Move>& moves, const Move& best_move, const Move& killer_move, const Move& killer_move_2, int color) {
     std::sort(moves.begin(), moves.end(), [&](const Move& a, const Move& b) {
-        if (a.from == best_move.from && a.to == best_move.to && a.piece_type == best_move.piece_type && a.type == best_move.type) return true;
-        if (b.from == best_move.from && b.to == best_move.to && b.piece_type == best_move.piece_type && b.type == best_move.type) return false;
+        if (a == best_move) return true;
+        if (b == best_move) return false;
 
-        if (a.capture_value > 0 && b.capture_value > 0) {
-            return a.capture_value > b.capture_value;  // Sort captures by value
+        if (a.capture_value != b.capture_value)
+        {
+            return a.capture_value > b.capture_value;
         }
-        if (a.capture_value > 0) return true;
-        if (a.capture_value > 0) return false;
 
-        if (a.from == killer_move.from && a.to == killer_move.to && a.piece_type == killer_move.piece_type && a.type == killer_move.type) return true;
-        if (a.from == killer_move_2.from && a.to == killer_move_2.to && a.piece_type == killer_move_2.piece_type && a.type == killer_move_2.type) return true;
-        if (a.from == killer_move.from && a.to == killer_move.to && a.piece_type == killer_move.piece_type && a.type == killer_move.type) return false;
-        if (a.from == killer_move_2.from && a.to == killer_move_2.to && a.piece_type == killer_move_2.piece_type && a.type == killer_move_2.type) return false;
+        if (a == killer_move) return true;
+        if (b == killer_move) return false;
+        if (a == killer_move_2) return true;
+        if (b == killer_move_2) return false;
 
-        return false;
-        });
+        return this->history_table[color][a.from][a.to] > this->history_table[color][b.from][b.to];
+
+        //return false;
+     });
 }
 
 void initialize_zobrist_table()
@@ -1491,4 +1548,21 @@ DumbHash Board::compute_dumb_hash()
 
     hash.en_passant = this->en_passant;
     return hash;
+}
+
+bool Board::is_endgame(int moves)
+{
+    uint64_t minor_pieces = this->white_pieces[1] | this->white_pieces[2] | this->black_pieces[1] | this->black_pieces[2];
+    uint64_t major_pieces = this->white_pieces[3] | this->white_pieces[4] | this->black_pieces[3] | this->black_pieces[4];
+    uint64_t pawns = this->white_pieces[0] | this->black_pieces[0];
+
+    int min_pieces = __popcnt64(minor_pieces);
+    int maj_pieces = __popcnt64(major_pieces);
+    int pawns_n = __popcnt64(pawns);
+    int value = min_pieces + maj_pieces;
+    if (value > 2)
+    {
+        return false;
+    }
+    return true;
 }
