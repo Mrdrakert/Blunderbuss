@@ -940,7 +940,7 @@ void Board::store_transposition_table_entry(uint64_t zobrist_key, int ply, int d
 }
 
 
-bool Board::probe_transposition_table(uint64_t zobrist_key, int depth, int ply, int alpha, int beta, int& value, Move& best_move)
+bool Board::probe_transposition_table(uint64_t zobrist_key, int depth, int ply, int& alpha, int& beta, int& value, Move& best_move)
 {
     if (this->transposition_table.find(zobrist_key) != this->transposition_table.end())
     {
@@ -964,8 +964,6 @@ bool Board::probe_transposition_table(uint64_t zobrist_key, int depth, int ply, 
                 value = corrected;
                 return true;
             }
-
-
         }
     }
     return false;
@@ -1075,13 +1073,14 @@ int Board::quiescence_search(int alpha, int beta, std::chrono::steady_clock::tim
     int stand_pat = this->evaluate_position(this->turn);
 
     if (stand_pat >= beta) 
-    {
         return beta;
-    }
+
+    int BIG_DELTA = 1000; // queen value
+    if (alpha - BIG_DELTA < alpha && stand_pat < alpha - BIG_DELTA) 
+        return alpha;
+
     if (stand_pat > alpha) 
-    {
         alpha = stand_pat;
-    }
 
     std::vector<Move> moves = this->get_legal_moves();
 
@@ -1116,7 +1115,7 @@ int Board::quiescence_search(int alpha, int beta, std::chrono::steady_clock::tim
 }
 
 
-int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time, bool do_null_move, bool reduced)
+int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time, bool do_null_move, bool reduced, bool is_pv_node)
 {
     if (depth == 0 || time_limit_reached)
     {
@@ -1166,7 +1165,7 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
             uint64_t enpass = this->en_passant;
             this->en_passant = 0;
             this->turn = !this->turn;
-            int eval = -negamax(ply + 1, depth - N_R - 1, -beta, -beta + 1, end_time, 0, 1);
+            int eval = -negamax(ply + 1, depth - N_R - 1, -beta, -beta + 1, end_time, false, true, false);
             this->en_passant = enpass;
             this->turn = !this->turn;
 
@@ -1193,20 +1192,38 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
         this->make_move(moves[i]);
 
         int reduction = 0;
-        bool do_lmr = (!reduced && depth > 3 && i > 3 && moves[i].capture_value <= 0 && !if_check(this->turn));
+        bool do_lmr = (!reduced && depth > 2 && i > 2 && moves[i].capture_value <= 0 && !if_check(this->turn));
         if (do_lmr)
         {
-            reduction = std::min(depth - 1, (depth > 4 ? 1 : 0) + (i - 3) / 4);
+            if (i > 6)
+                reduction = std::min(depth - 1, depth / 3);
+            else
+                reduction = std::min(depth - 1, 1);
             if ((killer_moves_check[ply][0] && moves[i] == killer_moves[ply][0]) || (killer_moves_check[ply][1] && moves[i] == killer_moves[ply][1]))
+            {
                 reduction -= 1;
+            }
         }
-            
-            
 
-        int eval = -negamax(ply + 1, depth - 1 - reduction, -beta, -alpha, end_time, donull, do_lmr);
+        int eval;
+        if (i == 0)
+        {
+            eval = -negamax(ply + 1, depth - 1 - reduction, -beta, -alpha, end_time, donull, do_lmr, true);  // Full window for the first move
+        }
+        else
+        {
+            eval = -negamax(ply + 1, depth - 1 - reduction, -alpha - 1, -alpha, end_time, donull, do_lmr, false);  // Null window for the other moves
 
-        if (do_lmr && eval > alpha)
-            eval = -negamax(ply + 1, depth - 1, -beta, -alpha, end_time, donull, 0);
+            if (eval > alpha && eval < beta)
+            {
+                eval = -negamax(ply + 1, depth - 1, -beta, -alpha, end_time, donull, 0, true);  // Re-search with the full window
+            }
+
+            if (do_lmr && eval > alpha && eval < beta)
+            {
+                eval = -negamax(ply + 1, depth - 1, -beta, -alpha, end_time, donull, 0, true); // If the re-search still improves alpha, re-search at full depth and full window
+            }
+        }
 
         this->unmake_move();
 
@@ -1299,7 +1316,7 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
 
             move_searched = i;
             this->make_move(moves[i]);
-            int eval = -negamax(1, depth - 1, alpha, beta, end_time, 1, 0);
+            int eval = -negamax(1, depth - 1, alpha, beta, end_time, true, false, true);
             this->unmake_move();
 
             if (eval > current_best_value) 

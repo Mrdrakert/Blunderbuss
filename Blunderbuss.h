@@ -65,13 +65,13 @@ public:
     bool if_check(bool color, int square = -1);
     uint64_t compute_zobrist_hash();
     void store_transposition_table_entry(uint64_t zobrist_key, int ply, int depth, int score, NodeType type, Move best_move);
-    bool probe_transposition_table(uint64_t zobrist_key, int depth, int ply, int alpha, int beta, int& value, Move& best_move);
+    bool probe_transposition_table(uint64_t zobrist_key, int depth, int ply, int& alpha, int& beta, int& value, Move& best_move);
     void clear_transposition_table();
     void print_checks();
     int evaluate_position(bool color);
     int evaluate_end(bool color, int depth);
     int quiescence_search(int alpha, int beta, std::chrono::steady_clock::time_point end_time);
-    int negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time, bool do_null_move, bool reduced);
+    int negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time, bool do_null_move, bool reduced, bool is_pv_node);
     uint64_t count_legal_moves_at_depth(int depth);
     void clear_anti_moves();
     void sort_moves(std::vector<Move>& moves, const Move& best_move, const Move& killer_move, const Move& killer_move_2, int color);
