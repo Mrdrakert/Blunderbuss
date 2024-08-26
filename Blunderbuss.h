@@ -51,12 +51,12 @@ public:
     Move find_best_move_with_time_limit(int time_limit_ms);
     uint64_t combine_white();
     uint64_t combine_black();
-    void get_knight_moves(std::vector<Move>& or_moves, int square, bool color);
-    void get_king_moves(std::vector<Move>& or_moves, int square, bool color);
-    void get_pawn_moves(std::vector<Move>& or_moves, int square, bool color);
-    void get_bishop_moves(std::vector<Move>& or_moves, int square, bool color, bool is_queen = 0);
-    void get_rook_moves(std::vector<Move>& or_moves, int square, bool color, bool is_queen = 0);
-    void get_queen_moves(std::vector<Move>& or_moves, int square, bool color);
+    int get_knight_moves(bool add_to_vector, std::vector<Move>& or_moves, int square, bool color);
+    int get_king_moves(bool add_to_vector, std::vector<Move>& or_moves, int square, bool color);
+    int get_pawn_moves(bool add_to_vector, std::vector<Move>& or_moves, int square, bool color);
+    int get_bishop_moves(bool add_to_vector, std::vector<Move>& or_moves, int square, bool color, bool is_queen = 0);
+    int get_rook_moves(bool add_to_vector, std::vector<Move>& or_moves, int square, bool color, bool is_queen = 0);
+    int get_queen_moves(bool add_to_vector, std::vector<Move>& or_moves, int square, bool color);
     void print_chessboard();
     void clear();
     void set_piece(int square, int type);
@@ -74,7 +74,6 @@ public:
     int negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_clock::time_point end_time, bool do_null_move, bool reduced);
     uint64_t count_legal_moves_at_depth(int depth);
     void clear_anti_moves();
-    DumbHash compute_dumb_hash();
     void sort_moves(std::vector<Move>& moves, const Move& best_move, const Move& killer_move, const Move& killer_move_2, int color);
     void store_killer_move(int ply, const Move& move);
     bool is_endgame(int moves);
@@ -108,6 +107,8 @@ struct DumbHash
     bool castling[4] = { 1, 1, 1, 1 };
 
     bool operator==(const DumbHash& other) const;
+
+    DumbHash(const uint64_t(&wht_pieces)[6], const uint64_t(&blk_pieces)[6], uint64_t enpass, const bool(&cstling)[4]);
 };
 
 struct AntiMove
@@ -120,7 +121,7 @@ struct AntiMove
 
     bool turn = 0;
 
-    AntiMove(const uint64_t wht_pieces[6], const uint64_t blk_pieces[6], uint64_t enpass, const bool cstling[4], bool trn);
+    AntiMove(const uint64_t(&wht_pieces)[6], const uint64_t(&blk_pieces)[6], uint64_t enpass, const bool(&cstling)[4], bool trn);
 };
 
 struct PieceAndBoard

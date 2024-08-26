@@ -226,10 +226,10 @@ private:
     {
         float y = 10000;
         if (time_left < 600000)
-            y = 0.000000000000060 * time_left * time_left * time_left + -0.000000054 * time_left * time_left + 0.027 * time_left + 150.0;
+            y = 0.00000000000009074 * time_left * time_left * time_left + -0.00000007166 * time_left * time_left + 0.02666 * time_left + 200.0;
 
-        if (time_left < 7000)
-            y = time_left / 20.0;
+        if (time_left < 10000)
+            y = time_left / 22.0;
 
         if (time_left == 0)
             y = 4000;

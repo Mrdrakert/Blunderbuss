@@ -43,6 +43,15 @@ bool DumbHash::operator==(const DumbHash& other) const
     return true;
 }
 
+DumbHash::DumbHash(const uint64_t(&wht_pieces)[6], const uint64_t(&blk_pieces)[6], uint64_t enpass, const bool(&cstling)[4])
+{
+    std::copy(std::begin(wht_pieces), std::end(wht_pieces), std::begin(white_pieces));
+    std::copy(std::begin(blk_pieces), std::end(blk_pieces), std::begin(black_pieces));
+
+    std::copy(std::begin(cstling), std::end(cstling), std::begin(castling));
+
+    en_passant = enpass;
+}
 
 Move::Move(int the_from, int the_to, int pc_type, int the_type, int cap_val)
     : from(the_from), to(the_to), piece_type(pc_type), type(the_type), capture_value(cap_val) {}
@@ -61,14 +70,12 @@ bool Move::operator==(const Move& other) const
     return from == other.from && to == other.to && piece_type == other.piece_type && type == other.type && capture_value == other.capture_value; // Add other necessary comparisons
 }
 
-AntiMove::AntiMove(const uint64_t wht_pieces[6], const uint64_t blk_pieces[6], uint64_t enpass, const bool cstling[4], bool trn) {
-    for (int i = 0; i < 6; ++i) {
-        white_pieces[i] = wht_pieces[i];
-        black_pieces[i] = blk_pieces[i];
-    }
-    for (int i = 0; i < 4; ++i) {
-        castling[i] = cstling[i];
-    }
+//AntiMove::AntiMove(const uint64_t wht_pieces[6], const uint64_t blk_pieces[6], uint64_t enpass, const bool cstling[4], bool trn) {
+AntiMove::AntiMove(const uint64_t (&wht_pieces)[6], const uint64_t (&blk_pieces)[6], uint64_t enpass, const bool (&cstling)[4], bool trn) 
+{
+    std::copy(std::begin(wht_pieces), std::end(wht_pieces), std::begin(white_pieces));
+    std::copy(std::begin(blk_pieces), std::end(blk_pieces), std::begin(black_pieces));
+    std::copy(std::begin(cstling), std::end(cstling), std::begin(castling));
 
     turn = trn;
     en_passant = enpass;
@@ -101,8 +108,8 @@ Board::Board()
     this->clear();
     clear_anti_moves();
     clear_transposition_table();
-    this->anti_moves.reserve(10);
-    this->repetition_table.reserve(30);
+    this->anti_moves.reserve(40);
+    this->repetition_table.reserve(100);
     
     initialize_zobrist_table();
 }
@@ -129,7 +136,7 @@ uint64_t Board::combine_black()
     return black_pieces[0] | black_pieces[1] | black_pieces[2] | black_pieces[3] | black_pieces[4] | black_pieces[5];
 }
     
-void Board::get_knight_moves(std::vector<Move>& or_moves, int square, bool color) //0 = white, 1 = black
+int Board::get_knight_moves(bool add_to_vector, std::vector<Move>& or_moves, int square, bool color) //0 = white, 1 = black
 {
     uint64_t result;
     uint64_t captures;
@@ -148,9 +155,10 @@ void Board::get_knight_moves(std::vector<Move>& or_moves, int square, bool color
     }
 
     create_moves(or_moves, result, square, captures, color, 1);
+    return __popcnt64(result);
 }
 
-void Board::get_king_moves(std::vector<Move>& or_moves, int square, bool color) //0 = white, 1 = black
+int Board::get_king_moves(bool add_to_vector, std::vector<Move>& or_moves, int square, bool color) //0 = white, 1 = black
 {
     uint64_t result;
     uint64_t captures;
@@ -169,9 +177,10 @@ void Board::get_king_moves(std::vector<Move>& or_moves, int square, bool color) 
     }
 
     create_moves(or_moves, result, square, captures, color, 5);
+    return __popcnt64(result);
 }
 
-void Board::get_pawn_moves(std::vector<Move>& or_moves, int square, bool color) //0 = white, 1 = black
+int Board::get_pawn_moves(bool add_to_vector, std::vector<Move>& or_moves, int square, bool color) //0 = white, 1 = black
 {
     uint64_t all_white = this->combine_white();
     uint64_t all_black = this->combine_black();
@@ -205,9 +214,10 @@ void Board::get_pawn_moves(std::vector<Move>& or_moves, int square, bool color) 
     }
 
     create_moves(or_moves, captures | forwards, square, all_pieces, color, 0);
+    return __popcnt64(captures | forwards);
 }
 
-void Board::get_rook_moves(std::vector<Move>& or_moves, int square, bool color, bool is_queen)
+int Board::get_rook_moves(bool add_to_vector, std::vector<Move>& or_moves, int square, bool color, bool is_queen)
 {
     uint64_t all_white = this->combine_white();
     uint64_t all_black = this->combine_black();
@@ -239,9 +249,10 @@ void Board::get_rook_moves(std::vector<Move>& or_moves, int square, bool color, 
     uint64_t captures = color == 0 ? (rook_attacks & all_black) : (rook_attacks & all_white);
 
     create_moves(or_moves, rook_attacks, square, captures, color, 3+is_queen);
+    return __popcnt64(rook_attacks);
 }
 
-void Board::get_bishop_moves(std::vector<Move>& or_moves, int square, bool color, bool is_queen)
+int Board::get_bishop_moves(bool add_to_vector, std::vector<Move>& or_moves, int square, bool color, bool is_queen)
 {
     uint64_t all_white = this->combine_white();
     uint64_t all_black = this->combine_black();
@@ -273,12 +284,15 @@ void Board::get_bishop_moves(std::vector<Move>& or_moves, int square, bool color
     uint64_t captures = color == 0 ? (bishop_attacks & all_black) : (bishop_attacks & all_white);
 
     create_moves(or_moves, bishop_attacks, square, captures, color, 2+2*is_queen);
+    return __popcnt64(bishop_attacks);
 }
 
-void Board::get_queen_moves(std::vector<Move>& or_moves, int square, bool color)
+int Board::get_queen_moves(bool add_to_vector, std::vector<Move>& or_moves, int square, bool color)
 {
-    this->get_rook_moves(or_moves, square, color, 1);
-    this->get_bishop_moves(or_moves, square, color, 1);
+    int a = this->get_rook_moves(add_to_vector, or_moves, square, color, 1);
+    int b = this->get_bishop_moves(add_to_vector, or_moves, square, color, 1);
+
+    return a+b;
 }
 
 void Board::print_chessboard()
@@ -557,22 +571,22 @@ std::vector<Move> Board::get_legal_moves(bool natural, bool color)
 
             switch (piece_type) {
             case 0:
-                get_pawn_moves(pseudo_legal, square, color);
+                get_pawn_moves(1, pseudo_legal, square, color);
                 break;
             case 1:
-                get_knight_moves(pseudo_legal, square, color);
+                get_knight_moves(1, pseudo_legal, square, color);
                 break;
             case 2:
-                get_bishop_moves(pseudo_legal, square, color);
+                get_bishop_moves(1, pseudo_legal, square, color);
                 break;
             case 3:
-                get_rook_moves(pseudo_legal, square, color);
+                get_rook_moves(1, pseudo_legal, square, color);
                 break;
             case 4:
-                get_queen_moves(pseudo_legal, square, color);
+                get_queen_moves(1, pseudo_legal, square, color);
                 break;
             case 5:
-                get_king_moves(pseudo_legal, square, color);
+                get_king_moves(1, pseudo_legal, square, color);
                 break;
             }
             bitboard &= bitboard - 1;
@@ -616,8 +630,8 @@ bool Board::if_check(bool color, int square)
     uint64_t rook_captures;
     uint64_t bishop_captures;
     uint64_t result;
-    uint64_t all_white = this->combine_white();
-    uint64_t all_black = this->combine_black();
+    uint64_t all_white = white_pieces[0] | white_pieces[1] | white_pieces[2] | white_pieces[3] | white_pieces[4] | white_pieces[5];//this->combine_white();
+    uint64_t all_black = black_pieces[0] | black_pieces[1] | black_pieces[2] | black_pieces[3] | black_pieces[4] | black_pieces[5];//this->combine_black();
     uint64_t all_pieces = all_white | all_black;
 
     if (color == 0)
@@ -858,7 +872,7 @@ void Board::make_move(Move move, bool for_sure)
 
     this->turn = !turn;
 
-    this->repetition_table.push_back(this->compute_dumb_hash());
+    this->repetition_table.emplace_back(DumbHash(this->white_pieces, this->black_pieces, this->en_passant, this->castling));
 }
 
 void Board::unmake_move()
@@ -940,12 +954,12 @@ bool Board::probe_transposition_table(uint64_t zobrist_key, int depth, int ply, 
                 value = corrected;
                 return true;
             }
-            if (entry.type == NodeType::UPPERBOUND && entry.value <= alpha)
+            if (entry.type == NodeType::UPPERBOUND && corrected <= alpha)
             {
                 value = corrected;
                 return true;
             }
-            if (entry.type == NodeType::LOWERBOUND && entry.value >= beta)
+            if (entry.type == NodeType::LOWERBOUND && corrected >= beta)
             {
                 value = corrected;
                 return true;
@@ -980,6 +994,13 @@ int Board::evaluate_position(bool color)
 
     uint64_t all_pieces = this->combine_black() | this->combine_white();
     int empty_squares = 64 - __popcnt64(all_pieces);
+    
+    unsigned long index;
+    _BitScanReverse64(&index, this->white_pieces[5]);
+    int white_king = static_cast<int>(index);
+    
+    _BitScanReverse64(&index, this->black_pieces[5]);
+    int black_king = static_cast<int>(index);
 
     int result = 0;
 
@@ -1006,7 +1027,7 @@ int Board::evaluate_position(bool color)
 
         while (white_bitboard) {
             white_sq = _tzcnt_u64(white_bitboard);
-            result += get_piece_square_value(i, white_sq, piece_strength_score, 0);
+            result += get_piece_square_value(i, white_sq, piece_strength_score, 0, white_king);
             result += get_piece_value(i);
 
             white_bitboard &= white_bitboard - 1;
@@ -1014,7 +1035,7 @@ int Board::evaluate_position(bool color)
 
         while (black_bitboard) {
             black_sq = _tzcnt_u64(black_bitboard);
-            result -= get_piece_square_value(i, black_sq, piece_strength_score, 1);
+            result -= get_piece_square_value(i, black_sq, piece_strength_score, 1, black_king);
             result -= get_piece_value(i);;
 
             black_bitboard &= black_bitboard - 1;
@@ -1032,8 +1053,8 @@ int Board::evaluate_position(bool color)
         result += get_bishop_pair_value(empty_squares);
     }
 
-    result += get_doubled_pawns_penalty(this->white_pieces[0]);
-    result -= get_doubled_pawns_penalty(this->black_pieces[0]);
+    result += get_doubled_pawns_penalty(piece_strength_score, this->white_pieces[0], this->black_pieces[0]);
+    result -= get_doubled_pawns_penalty(piece_strength_score, this->black_pieces[0], this->white_pieces[0]);
 
     return result * who_to_move;
 }
@@ -1107,13 +1128,13 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
     int originalAlpha = alpha;
     Move best_move;
 
-    DumbHash dumb_hash = this->compute_dumb_hash();
+    DumbHash dumb_hash = DumbHash(this->white_pieces, this->black_pieces, this->en_passant, this->castling);
     if (exists_more_than_once(this->repetition_table, dumb_hash))
     {
         if (now_searching_for == this->turn)
-            return -50;
+            return -80;
         else
-            return 50;
+            return 80;
     }
 
     if (this->probe_transposition_table(zobrist_key, depth, ply, alpha, beta, value, best_move))
@@ -1174,11 +1195,17 @@ int Board::negamax(int ply, int depth, int alpha, int beta, std::chrono::steady_
         int reduction = 0;
         bool do_lmr = (!reduced && depth > 3 && i > 3 && moves[i].capture_value <= 0 && !if_check(this->turn));
         if (do_lmr)
-            reduction = std::min(L_R, depth - 1);
+        {
+            reduction = std::min(depth - 1, (depth > 4 ? 1 : 0) + (i - 3) / 4);
+            if ((killer_moves_check[ply][0] && moves[i] == killer_moves[ply][0]) || (killer_moves_check[ply][1] && moves[i] == killer_moves[ply][1]))
+                reduction -= 1;
+        }
+            
+            
 
         int eval = -negamax(ply + 1, depth - 1 - reduction, -beta, -alpha, end_time, donull, do_lmr);
 
-        if (do_lmr && eval > alpha) // Re-search at full depth if the reduced search improved alpha
+        if (do_lmr && eval > alpha)
             eval = -negamax(ply + 1, depth - 1, -beta, -alpha, end_time, donull, 0);
 
         this->unmake_move();
@@ -1239,9 +1266,12 @@ void Board::store_killer_move(int ply, const Move& move)
 
 Move Board::find_best_move_with_time_limit(int time_limit_ms)
 {
+    int aspiration_window = 40;
     int bestValue = -INF;
     Move best_move = Move(-1, -1, -1, -1);
     std::vector<Move> moves = this->get_legal_moves();
+
+    int* previous_scores = new int[moves.size()];
 
     auto start_time = std::chrono::steady_clock::now();
     auto end_time = start_time + std::chrono::milliseconds(time_limit_ms);
@@ -1250,17 +1280,26 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
     int move_searched = 0;
     now_searching_for = this->turn;
 
+    int alpha, beta;
+
     for (int depth = 2; depth <= MAX_DEPTH; depth++) 
     {
+        //if (depth == 8)
+            //positions_evaluated = 0;
+        sort_moves(moves, best_move, Move(), Move(), now_searching_for);
+
         depths_searched += 1;
         int current_best_value = -INF;
         Move current_best_move;
 
         for (int i = 0; i < moves.size(); i++)//for (const Move& move : moves) 
         {
+            alpha = -INF;
+            beta = INF;
+
             move_searched = i;
             this->make_move(moves[i]);
-            int eval = -negamax(1, depth - 1, -INF, INF, end_time, 1, 0);
+            int eval = -negamax(1, depth - 1, alpha, beta, end_time, 1, 0);
             this->unmake_move();
 
             if (eval > current_best_value) 
@@ -1273,6 +1312,9 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
             {
                 break;
             }
+
+            //if (depth == 8)
+                //std::cout << "Move " << i << " positions: " << positions_evaluated << std::endl;
         }
 
         if (time_limit_reached)
@@ -1463,7 +1505,7 @@ void Board::sort_moves(std::vector<Move>& moves, const Move& best_move, const Mo
         return this->history_table[color][a.from][a.to] > this->history_table[color][b.from][b.to];
 
         //return false;
-     });
+    });
 }
 
 void initialize_zobrist_table()
@@ -1500,19 +1542,6 @@ bool exists_more_than_once(const std::vector<DumbHash>& vec, DumbHash value) {
     }
 
     return false;
-}
-
-DumbHash Board::compute_dumb_hash()
-{
-    DumbHash hash = DumbHash();
-
-    std::copy(std::begin(this->white_pieces), std::end(this->white_pieces), std::begin(hash.white_pieces));
-    std::copy(std::begin(this->black_pieces), std::end(this->black_pieces), std::begin(hash.black_pieces));
-
-    std::copy(std::begin(this->castling), std::end(this->castling), std::begin(hash.castling));
-
-    hash.en_passant = this->en_passant;
-    return hash;
 }
 
 bool Board::is_endgame(int moves)

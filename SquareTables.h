@@ -8,16 +8,16 @@ int pawn_table[2][64] =
          0,  0,  0,  0,  0,  0,  0,  0,
         50, 50, 50, 50, 50, 50, 50, 50,
         10, 10, 20, 30, 30, 20, 10, 10,
-         5,  5, 10, 25, 25, 10,  5,  5,
-         0,  0,  0, 20, 20,  0,  0,  0,
-         5, -5,-10,  0,  0,-10, -5,  5,
-         5, 10, 10,-20,-20, 10, 10,  5,
+         5,  5, 10, 25, 25, 5,  0,  0,
+         0,  0,  0, 20, 20,-30,-30,-30,
+         5,  5,  5,  0,  0,-20,-20, 5,
+         5,  5,  5,-20,-20, 20, 20, 20,
          0,  0,  0,  0,  0,  0,  0,  0
     },
     { //late game
          0,  0,  0,  0,  0,  0,  0,  0,
-       100, 90, 80, 80, 80, 80, 90,100,
-        60, 55, 50, 50, 50, 50, 55, 60,
+       100,100, 90, 80, 80, 90,100,100,
+        60, 60, 55, 50, 50, 55, 60, 60,
         35, 30, 30, 30, 30, 30, 30, 35,
         20, 20, 20, 20, 20, 20, 20, 20,
         10, 10, 10, 10, 10, 10, 10, 10,
@@ -131,8 +131,8 @@ int king_table[2][64] =
         -30,-40,-40,-50,-50,-40,-40,-30,
         -20,-30,-30,-40,-40,-30,-30,-20,
         -10,-20,-20,-20,-20,-20,-20,-10,
-         20, 20,  0,  0,  0,  0, 20, 20,
-         20, 30, 15,  0,  0, 10, 30, 20
+         20, 20,  0,  0,  0,  0, 10, 10,
+         20, 30, 15, -5, -5, 10, 30, 20
     },
     { //late game
         -50,-40,-30,-20,-20,-30,-40,-50,
@@ -142,7 +142,7 @@ int king_table[2][64] =
         -30,-10, 30, 40, 40, 30,-10,-30,
         -30,-10, 20, 30, 30, 20,-10,-30,
         -30,-30,  0,  0,  0,  0,-30,-30,
-        -50,-30,-30,-30,-30,-30,-30,-50
+        -50,-20,-30,-30,-30,-30,-20,-50
     }
 };
 
@@ -172,31 +172,38 @@ int get_piece_value(int piece)
     return values[piece];
 }
 
-int correct_value_for_array(int square, bool reversed)
+int correct_value_for_array(int square, bool reversed, bool flipped)  // reversed = white/black, flipped = horizontally
 {
-    if (reversed)
-        return square;
-
     if (square < 0 || square > 63)
         return -1;
 
     int row = square / 8;
     int col = square % 8;
+
+    if (flipped)
+        col = 7 - col;
+
+    if (reversed)
+        return 8 * row + col;
+
     int transformed = (7 - row) * 8 + col;
 
     return transformed;
 }
 
-int get_piece_square_value(int piece, int square, int pieces_value, bool reversed)
+int get_piece_square_value(int piece, int square, int pieces_value, bool reversed, int king_square)
 {
     int alpha = get_polynomial_value(pieces_value, -289.4f, 0.317f, -0.0000167f);
 
-    square = correct_value_for_array(square, reversed);
+    bool king_side = (king_square % 8 >= 4) ? 0 : 1;
+
+    int pawn_square = correct_value_for_array(square, reversed, king_side);
+    square = correct_value_for_array(square, reversed, 0);
 
     switch (piece)
     {
         case 0:
-            return interpolate(pawn_table[0][square], pawn_table[1][square], alpha);
+            return interpolate(pawn_table[0][pawn_square], pawn_table[1][pawn_square], alpha);
             break;
         case 1:
             return interpolate(knight_table[0][square], knight_table[1][square], alpha);
@@ -234,28 +241,37 @@ int endgame_mate_bonus(int my_king, int opp_king, int my_pieces, int opp_pieces)
         int col2 = opp_king % 8;
         int distance = std::abs(row1 - row2) + std::abs(col1 - col2);
 
-        return (70 - 4 * distance);
+        return (140 - 10 * distance);
     }
     return 0;
 }
 
-int get_doubled_pawns_penalty(uint64_t pawns)
+int get_doubled_pawns_penalty(int pieces_value, uint64_t pawns, uint64_t enemy_pawns)
 {
+    //int passed_pawn_bonus = interpolate(10, 50, get_polynomial_value(pieces_value, -289.4f, 0.317f, -0.0000167f));
     int penalty_for_doubled_pawn = 30;
     int penalty = 0;
+    //int passed_bonus = 0;
 
     for (int file = 0; file < 8; ++file) 
     {
         uint64_t file_mask = 0x0101010101010101ULL << file;
         uint64_t pawns_in_file = pawns & file_mask;
+        uint64_t enemy_pawns_in_file = enemy_pawns & file_mask;
 
         int count = __popcnt64(pawns_in_file);
+        int enemy_count = __popcnt64(enemy_pawns_in_file);
 
         if (count > 1)
             penalty += penalty_for_doubled_pawn * (count - 1);
+
+        //if (count > 0 && enemy_count <= 0)
+            //passed_bonus += passed_pawn_bonus;
     }
 
     return -penalty;
 }
+
+
 
 #endif

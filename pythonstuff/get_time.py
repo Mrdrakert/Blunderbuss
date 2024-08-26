@@ -7,14 +7,14 @@ def get_time_for_move(time_left):
 
     if time_left < 600000:
         y = (
-            0.000000000000060 * time_left ** 3 
-            - 0.000000054 * time_left ** 2 
-            + 0.027 * time_left 
-            + 150.0
+            0.00000000000009074 * time_left ** 3 
+            - 0.00000007166 * time_left ** 2 
+            + 0.02666 * time_left 
+            + 200.0
         )
 
-    if time_left <7000:
-        y = time_left / 20.0
+    if time_left <10000:
+        y = time_left / 22.0
 
     if time_left == 0:
         y = 4000.0
@@ -23,7 +23,7 @@ def get_time_for_move(time_left):
     return time_for_move
 
 # Generate time_left values from 0 to 600000
-time_left_values = np.linspace(0, 800000, 5000)
+time_left_values = np.linspace(0, 800000, 2000)
 
 # Compute time_for_move for each time_left value
 time_for_move_values = [get_time_for_move(t) for t in time_left_values]
