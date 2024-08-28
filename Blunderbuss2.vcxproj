@@ -21,10 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{ff6991bc-5325-442c-ab4e-62a60fa49bd7}</ProjectGuid>
-    <RootNamespace>ChessBotOmega</RootNamespace>
+    <ProjectGuid>{c9830018-c477-4d3c-9080-859cca8ec1f8}</ProjectGuid>
+    <RootNamespace>Blunderbuss2</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Blunderbuss</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -140,13 +139,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Blunderbuss.cpp" />
+    <ClCompile Include="AntiMove.cpp" />
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="DumbHash.cpp" />
+    <ClCompile Include="Move.cpp" />
+    <ClCompile Include="PieceAndBoard.cpp" />
     <ClCompile Include="UCI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Blunderbuss.h" />
+    <ClInclude Include="AntiMove.h" />
+    <ClInclude Include="Board.h" />
+    <ClInclude Include="DumbHash.h" />
+    <ClInclude Include="Evaluation.h" />
+    <ClInclude Include="Move.h" />
     <ClInclude Include="MoveBitboards.h" />
-    <ClInclude Include="SquareTables.h" />
+    <ClInclude Include="PieceAndBoard.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

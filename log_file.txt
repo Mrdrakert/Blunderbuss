@@ -1,0 +1,2128 @@
+Tue Aug 27 16:07:16 2024
+: Received command: uci
+Tue Aug 27 16:07:16 2024
+: Sent UCI response.
+Tue Aug 27 16:07:27 2024
+: Received command: go perft 5
+Tue Aug 27 16:08:13 2024
+: Received command: uci
+Tue Aug 27 16:08:13 2024
+: Sent UCI response.
+Tue Aug 27 16:08:16 2024
+: Received command: go perft 5
+Tue Aug 27 16:08:24 2024
+: Received command: uci
+Tue Aug 27 16:08:24 2024
+: Sent UCI response.
+Tue Aug 27 16:09:23 2024
+: Received command: uci
+Tue Aug 27 16:09:23 2024
+: Sent UCI response.
+Tue Aug 27 16:09:33 2024
+: Received command: go perft 5
+Tue Aug 27 16:09:33 2024
+: Positions at depth 5: 0
+Tue Aug 27 16:09:48 2024
+: Received command: go perft 5
+Tue Aug 27 16:10:39 2024
+: Positions at depth 5: 0
+Tue Aug 27 16:10:49 2024
+: Received command: go perft 5
+Tue Aug 27 16:11:21 2024
+: Received command: uci
+Tue Aug 27 16:11:21 2024
+: Sent UCI response.
+Tue Aug 27 16:11:24 2024
+: Received command: go perft 5
+Tue Aug 27 16:11:44 2024
+: Received command: uci
+Tue Aug 27 16:11:44 2024
+: Sent UCI response.
+Tue Aug 27 16:11:46 2024
+: Received command: go perft 5
+Tue Aug 27 16:16:31 2024
+: Received command: uci
+Tue Aug 27 16:16:31 2024
+: Sent UCI response.
+Tue Aug 27 16:16:33 2024
+: Received command: go perft 5
+Tue Aug 27 16:16:33 2024
+: Positions at depth 5: 22428
+Tue Aug 27 16:16:56 2024
+: Received command: go perft 2
+Tue Aug 27 16:16:56 2024
+: Positions at depth 2: 16
+Tue Aug 27 16:17:04 2024
+: Received command: go perft 1
+Tue Aug 27 16:17:04 2024
+: Positions at depth 1: 4
+Tue Aug 27 16:17:06 2024
+: Received command: go perft 3
+Tue Aug 27 16:17:06 2024
+: Positions at depth 3: 176
+Tue Aug 27 16:17:08 2024
+: Received command: go perft 4
+Tue Aug 27 16:17:08 2024
+: Positions at depth 4: 1936
+Tue Aug 27 16:17:09 2024
+: Received command: go perft 5
+Tue Aug 27 16:17:09 2024
+: Positions at depth 5: 22428
+Tue Aug 27 16:17:11 2024
+: Received command: go perft 6
+Tue Aug 27 16:17:11 2024
+: Positions at depth 6: 255135
+Tue Aug 27 16:17:14 2024
+: Received command: go perft 7
+Tue Aug 27 16:17:20 2024
+: Positions at depth 7: 3830854
+Tue Aug 27 16:18:03 2024
+: Received command: uci
+Tue Aug 27 16:18:03 2024
+: Sent UCI response.
+Tue Aug 27 16:18:05 2024
+: Received command: go perft 5
+Tue Aug 27 16:18:05 2024
+: Positions at depth 5: 22428
+Tue Aug 27 16:23:37 2024
+: Received command: uci
+Tue Aug 27 16:23:37 2024
+: Sent UCI response.
+Tue Aug 27 16:26:44 2024
+: Received command: uci
+Tue Aug 27 16:26:44 2024
+: Sent UCI response.
+Tue Aug 27 16:26:57 2024
+: Received command: uci
+Tue Aug 27 16:26:57 2024
+: Sent UCI response.
+Tue Aug 27 16:26:59 2024
+: Received command: go perft 5
+Tue Aug 27 16:26:59 2024
+: Positions at depth 5: 22428
+Tue Aug 27 16:28:06 2024
+: Received command: go perft 5
+Tue Aug 27 16:29:34 2024
+: Received command: print
+Tue Aug 27 16:29:44 2024
+: Received command: print
+Tue Aug 27 16:29:46 2024
+: Received command: go perft 1
+Tue Aug 27 16:29:49 2024
+: Positions at depth 1: 4
+Tue Aug 27 16:29:59 2024
+: Received command: go perft 1
+Tue Aug 27 16:30:16 2024
+: Received command: go perft 1
+Tue Aug 27 16:32:44 2024
+: Received command: go perft 1
+Tue Aug 27 16:35:23 2024
+: Received command: print
+Tue Aug 27 16:35:46 2024
+: Received command: print
+Tue Aug 27 16:35:49 2024
+: Received command: uci
+Tue Aug 27 16:35:49 2024
+: Sent UCI response.
+Tue Aug 27 16:35:52 2024
+: Received command: position fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+Tue Aug 27 16:35:52 2024
+: Set up board from FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+Tue Aug 27 16:35:54 2024
+: Received command: print
+Tue Aug 27 16:38:02 2024
+: Received command: position startpos
+Tue Aug 27 16:38:02 2024
+: Set up board from startpos.
+Tue Aug 27 16:38:04 2024
+: Received command: print
+Tue Aug 27 16:39:17 2024
+: Received command: ui
+Tue Aug 27 16:39:18 2024
+: Received command: uci
+Tue Aug 27 16:39:18 2024
+: Sent UCI response.
+Tue Aug 27 16:39:19 2024
+: Received command: print
+Tue Aug 27 16:39:40 2024
+: Received command: uci
+Tue Aug 27 16:39:40 2024
+: Sent UCI response.
+Tue Aug 27 16:39:41 2024
+: Received command: print
+Tue Aug 27 16:39:45 2024
+: Received command: go perft 4
+Tue Aug 27 16:39:45 2024
+: Positions at depth 4: 197281
+Tue Aug 27 16:39:54 2024
+: Received command: go perft 5
+Tue Aug 27 16:40:01 2024
+: Positions at depth 5: 4865609
+Tue Aug 27 16:40:12 2024
+: Received command: position startpos
+Tue Aug 27 16:40:12 2024
+: Set up board from startpos.
+Tue Aug 27 16:40:16 2024
+: Received command: print
+Tue Aug 27 16:41:48 2024
+: Received command: uci
+Tue Aug 27 16:41:48 2024
+: Sent UCI response.
+Tue Aug 27 16:41:50 2024
+: Received command: print
+Tue Aug 27 16:41:54 2024
+: Received command: position fen { 0x000000000000FF00, 0x0000000000000042, 0x0000000000000024,
+Tue Aug 27 16:41:54 2024
+: Set up board from FEN: { 0x000000000000FF00, 0x0000000000000042, 0x0000000000000024,
+Tue Aug 27 16:41:56 2024
+: Received command:                     0x0000000000000081, 0x0000000000000010, 0x0000000000000008 },
+Tue Aug 27 16:41:59 2024
+: Received command: uci
+Tue Aug 27 16:41:59 2024
+: Sent UCI response.
+Tue Aug 27 16:42:00 2024
+: Received command: print
+Tue Aug 27 16:42:09 2024
+: Received command: position fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+Tue Aug 27 16:42:09 2024
+: Set up board from FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+Tue Aug 27 16:42:12 2024
+: Received command: print
+Tue Aug 27 16:42:47 2024
+: Received command: print
+Tue Aug 27 16:42:49 2024
+: Received command: uci
+Tue Aug 27 16:42:49 2024
+: Sent UCI response.
+Tue Aug 27 16:42:50 2024
+: Received command: print
+Tue Aug 27 16:42:54 2024
+: Received command: position startpos
+Tue Aug 27 16:42:54 2024
+: Set up board from startpos.
+Tue Aug 27 16:42:55 2024
+: Received command: print
+Tue Aug 27 16:44:03 2024
+: Received command: print
+Tue Aug 27 16:44:05 2024
+: Received command: uci
+Tue Aug 27 16:44:05 2024
+: Sent UCI response.
+Tue Aug 27 16:44:10 2024
+: Received command: position startpos
+Tue Aug 27 16:44:10 2024
+: Set up board from startpos.
+Tue Aug 27 16:44:32 2024
+: Received command: uci
+Tue Aug 27 16:44:32 2024
+: Sent UCI response.
+Tue Aug 27 16:44:33 2024
+: Received command: print
+Tue Aug 27 16:44:37 2024
+: Received command: position startpos
+Tue Aug 27 16:44:40 2024
+: Set up board from startpos.
+Tue Aug 27 16:44:43 2024
+: Received command: print
+Tue Aug 27 16:44:46 2024
+: Received command: go perft 4
+Tue Aug 27 16:44:46 2024
+: Positions at depth 4: 197281
+Tue Aug 27 16:45:14 2024
+: Received command: uci
+Tue Aug 27 16:45:14 2024
+: Sent UCI response.
+Tue Aug 27 16:45:15 2024
+: Received command: print
+Tue Aug 27 16:45:29 2024
+: Received command: position fen r1bqkbnr/pppppppp/2n5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2
+Tue Aug 27 16:45:29 2024
+: Set up board from FEN: r1bqkbnr/pppppppp/2n5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2
+Tue Aug 27 16:45:31 2024
+: Received command: print
+Tue Aug 27 16:46:02 2024
+: Received command: uci
+Tue Aug 27 16:46:02 2024
+: Sent UCI response.
+Tue Aug 27 16:46:03 2024
+: Received command: print
+Tue Aug 27 16:46:06 2024
+: Received command: position fen r1bqkbnr/pppppppp/2n5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2
+Tue Aug 27 16:46:06 2024
+: Set up board from FEN: r1bqkbnr/pppppppp/2n5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2
+Tue Aug 27 16:46:07 2024
+: Received command: print
+Tue Aug 27 16:46:13 2024
+: Received command: go perft 3
+Tue Aug 27 16:46:13 2024
+: Positions at depth 3: 20144
+Tue Aug 27 16:46:24 2024
+: Received command: ucinewgame
+Tue Aug 27 16:46:24 2024
+: Started new game.
+Tue Aug 27 16:46:26 2024
+: Received command: print
+Tue Aug 27 16:46:30 2024
+: Received command: go perft 4
+Tue Aug 27 16:46:31 2024
+: Positions at depth 4: 197281
+Tue Aug 27 16:50:52 2024
+: Received command: print
+Tue Aug 27 16:51:48 2024
+: Received command: print
+Tue Aug 27 16:53:15 2024
+: Received command: print
+Tue Aug 27 16:53:28 2024
+: Received command: print
+Tue Aug 27 16:53:52 2024
+: Received command: print
+Tue Aug 27 16:55:38 2024
+: Received command: print
+Tue Aug 27 17:04:35 2024
+: Received command: print
+Tue Aug 27 17:04:46 2024
+: Received command: print
+Tue Aug 27 17:05:02 2024
+: Received command: print
+Tue Aug 27 17:06:44 2024
+: Received command: print
+Tue Aug 27 17:08:17 2024
+: Received command: print
+Tue Aug 27 17:09:48 2024
+: Received command: print
+Tue Aug 27 17:09:55 2024
+: Received command: position startpos
+Tue Aug 27 17:09:55 2024
+: Set up board from startpos.
+Tue Aug 27 17:09:56 2024
+: Received command: print
+Tue Aug 27 17:10:27 2024
+: Received command: print
+Tue Aug 27 17:10:31 2024
+: Received command: go perft 4
+Tue Aug 27 17:10:32 2024
+: Positions at depth 4: 197281
+Tue Aug 27 17:10:56 2024
+: Received command: print
+Tue Aug 27 17:11:09 2024
+: Received command: print
+Tue Aug 27 17:12:05 2024
+: Received command: print
+Tue Aug 27 17:12:16 2024
+: Received command: print
+Tue Aug 27 17:12:24 2024
+: Received command: print
+Tue Aug 27 17:13:00 2024
+: Received command: print
+Tue Aug 27 17:13:21 2024
+: Received command: print
+Tue Aug 27 17:13:40 2024
+: Received command: print
+Tue Aug 27 17:13:50 2024
+: Received command: print
+Tue Aug 27 17:14:09 2024
+: Received command: print
+Tue Aug 27 17:14:26 2024
+: Received command: print
+Tue Aug 27 17:14:28 2024
+: Received command: uci
+Tue Aug 27 17:14:28 2024
+: Sent UCI response.
+Tue Aug 27 17:14:45 2024
+: Received command: go perft 4
+Tue Aug 27 17:14:46 2024
+: Positions at depth 4: 197281
+Tue Aug 27 17:14:50 2024
+: Received command: go perft 5
+Tue Aug 27 17:14:56 2024
+: Positions at depth 5: 4865609
+Tue Aug 27 17:15:11 2024
+: Received command: uci
+Tue Aug 27 17:15:11 2024
+: Sent UCI response.
+Tue Aug 27 17:15:13 2024
+: Received command: go perft 4
+Tue Aug 27 17:15:13 2024
+: Positions at depth 4: 197281
+Tue Aug 27 17:15:15 2024
+: Received command: go perft 5
+Tue Aug 27 17:15:15 2024
+: Positions at depth 5: 4865609
+Tue Aug 27 17:15:16 2024
+: Received command: go perft 6
+Tue Aug 27 17:15:22 2024
+: Positions at depth 6: 119060324
+Tue Aug 27 17:15:44 2024
+: Received command: go perft 7
+Tue Aug 27 17:18:11 2024
+: Positions at depth 7: 3195901860
+Tue Aug 27 17:18:11 2024
+: Received command: stop
+Tue Aug 27 17:19:53 2024
+: Received command: go perft 5
+Tue Aug 27 17:19:54 2024
+: Positions at depth 5: 4865609
+Tue Aug 27 17:19:56 2024
+: Received command: quit
+Tue Aug 27 17:19:56 2024
+: Quitting UCI loop.
+Tue Aug 27 17:20:41 2024
+: Received command: go perft 6
+Tue Aug 27 17:20:46 2024
+: Positions at depth 6: 119060324
+Tue Aug 27 17:21:02 2024
+: Received command: go perft 6
+Tue Aug 27 17:21:04 2024
+: Positions at depth 6: 120921506
+Tue Aug 27 18:06:42 2024
+: Received command: print
+Tue Aug 27 18:06:44 2024
+: Received command: go depth 2
+Tue Aug 27 18:06:44 2024
+: Calculated best move: `1`1 at depth 2
+Tue Aug 27 18:06:47 2024
+: Received command: go depth 4
+Tue Aug 27 18:06:47 2024
+: Calculated best move: `1`1 at depth 4
+Tue Aug 27 18:06:48 2024
+: Received command: go depth 5
+Tue Aug 27 18:06:48 2024
+: Calculated best move: `1`1 at depth 5
+Tue Aug 27 18:06:49 2024
+: Received command: go depth 6
+Tue Aug 27 18:06:49 2024
+: Calculated best move: `1`1 at depth 6
+Tue Aug 27 18:07:54 2024
+: Received command: uci
+Tue Aug 27 18:07:54 2024
+: Sent UCI response.
+Tue Aug 27 18:07:58 2024
+: Received command: go depth 4
+Tue Aug 27 18:08:13 2024
+: Received command: go depth 4
+Tue Aug 27 18:10:12 2024
+: Received command: std::cout << "bestmove " << best_move_str << "\n";
+Tue Aug 27 18:10:17 2024
+: Received command: go depth 4
+Tue Aug 27 18:10:17 2024
+: Calculated best move: `1`1 at depth 4
+Tue Aug 27 18:11:34 2024
+: Received command: go depth 4
+Tue Aug 27 18:11:34 2024
+: Calculated best move: `1`1 at depth 4
+Tue Aug 27 18:11:44 2024
+: Received command: go depth 4
+Tue Aug 27 18:11:44 2024
+: Calculated best move: `1`1 at depth 4
+Tue Aug 27 18:11:58 2024
+: Received command: go depth 4
+Tue Aug 27 18:14:03 2024
+: Received command: go depth 4
+Tue Aug 27 18:14:05 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 18:15:43 2024
+: Received command: go depth 4
+Tue Aug 27 18:15:43 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 18:17:35 2024
+: Received command: go depth 4
+Tue Aug 27 18:17:35 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 18:18:04 2024
+: Received command: depth 6
+Tue Aug 27 18:18:17 2024
+: Received command: go depth 6
+Tue Aug 27 18:18:20 2024
+: Calculated best move: a2a3 at depth 6
+Tue Aug 27 18:19:10 2024
+: Received command: go perft 4
+Tue Aug 27 18:19:10 2024
+: Positions at depth 4: 197281
+Tue Aug 27 18:19:14 2024
+: Received command: go depth 4
+Tue Aug 27 18:19:14 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 18:26:48 2024
+: Received command: go depth 4
+Tue Aug 27 18:27:20 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1
+Tue Aug 27 18:27:20 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1
+Tue Aug 27 18:27:23 2024
+: Received command: go depth 4
+Tue Aug 27 18:27:39 2024
+: Calculated best move: c2c3 at depth 4
+Tue Aug 27 18:28:02 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:28:02 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:28:04 2024
+: Received command: go depth 1
+Tue Aug 27 18:28:04 2024
+: Calculated best move: a2a3 at depth 1
+Tue Aug 27 18:28:15 2024
+: Received command: go depth 0
+Tue Aug 27 18:28:34 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:28:34 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:28:35 2024
+: Received command: print
+Tue Aug 27 18:28:59 2024
+: Received command: go depth 2
+Tue Aug 27 18:28:59 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 18:29:02 2024
+: Received command: go depth 3
+Tue Aug 27 18:29:02 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 18:29:04 2024
+: Received command: go depth 4
+Tue Aug 27 18:29:04 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 18:29:09 2024
+: Received command: go depth 5
+Tue Aug 27 18:29:54 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:29:54 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:29:55 2024
+: Received command: print
+Tue Aug 27 18:29:59 2024
+: Received command: go depth 3
+Tue Aug 27 18:29:59 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 18:30:00 2024
+: Received command: go depth 4
+Tue Aug 27 18:30:01 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 18:30:36 2024
+: Received command: go depth 5
+Tue Aug 27 18:30:39 2024
+: Calculated best move: a2a3 at depth 5
+Tue Aug 27 18:31:28 2024
+: Received command: position fen
+Tue Aug 27 18:31:28 2024
+: Set up board from FEN: 
+Tue Aug 27 18:31:30 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3P4/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:31:30 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3P4/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:31:33 2024
+: Received command: go depth 1
+Tue Aug 27 18:31:33 2024
+: Calculated best move: a2a3 at depth 1
+Tue Aug 27 18:31:42 2024
+: Received command: print
+Tue Aug 27 18:32:52 2024
+: Received command: go depth 2
+Tue Aug 27 18:32:52 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 18:32:57 2024
+: Received command: position fen
+Tue Aug 27 18:33:11 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:33:11 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:33:13 2024
+: Received command: go depth 2
+Tue Aug 27 18:33:58 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 18:34:19 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:34:19 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:34:22 2024
+: Received command: go depth 1
+Tue Aug 27 18:34:25 2024
+: Calculated best move: a2a3 at depth 1
+Tue Aug 27 18:34:50 2024
+: Received command: position fen evaluate_position(this);
+Tue Aug 27 18:35:00 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:35:00 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:35:02 2024
+: Received command: go depth 1
+Tue Aug 27 18:35:02 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 18:35:13 2024
+: Received command: go depth 2
+Tue Aug 27 18:35:13 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 18:35:15 2024
+: Received command: go depth 3
+Tue Aug 27 18:35:15 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 18:35:31 2024
+: Received command: go depth 1
+Tue Aug 27 18:35:31 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 18:35:33 2024
+: Received command: go depth 2
+Tue Aug 27 18:35:33 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 18:35:47 2024
+: Received command: go depth 3
+Tue Aug 27 18:35:47 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 18:35:55 2024
+: Received command: go depth 4
+Tue Aug 27 18:35:55 2024
+: Calculated best move: e4d5 at depth 4
+Tue Aug 27 18:35:58 2024
+: Received command: go depth 5
+Tue Aug 27 18:35:59 2024
+: Calculated best move: a2a3 at depth 5
+Tue Aug 27 18:37:50 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:37:50 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:37:52 2024
+: Received command: go depth 1
+Tue Aug 27 18:37:52 2024
+: Calculated best move: a2a3 at depth 1
+Tue Aug 27 18:38:27 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:38:27 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:38:29 2024
+: Received command: go depth 1
+Tue Aug 27 18:41:34 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:41:34 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:41:36 2024
+: Received command: go depth 1
+Tue Aug 27 18:41:36 2024
+: Calculated best move: a2a3 at depth 1
+Tue Aug 27 18:41:49 2024
+: Received command: go depth 4
+Tue Aug 27 18:41:50 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 18:41:53 2024
+: Received command: go depth 1
+Tue Aug 27 18:41:53 2024
+: Calculated best move: a2a3 at depth 1
+Tue Aug 27 18:41:54 2024
+: Received command: go depth 2
+Tue Aug 27 18:41:54 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 18:41:56 2024
+: Received command: go depth 3
+Tue Aug 27 18:41:56 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 18:44:48 2024
+: Received command: position fen
+Tue Aug 27 18:44:57 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:44:57 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:44:59 2024
+: Received command: go depth 1
+Tue Aug 27 18:44:59 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 18:45:02 2024
+: Received command: go depth 2
+Tue Aug 27 18:45:02 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 18:45:05 2024
+: Received command: go depth 3
+Tue Aug 27 18:45:05 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 18:46:35 2024
+: Received command: position fen evaluated
+Tue Aug 27 18:46:54 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:46:54 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:46:56 2024
+: Received command: go depth 1
+Tue Aug 27 18:46:56 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 18:46:58 2024
+: Received command: go depth 2
+Tue Aug 27 18:46:58 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 18:47:00 2024
+: Received command: go depth 3
+Tue Aug 27 18:50:46 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 18:50:52 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:50:52 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:50:54 2024
+: Received command: go depth 1
+Tue Aug 27 18:50:54 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 18:51:00 2024
+: Received command: go depth 2
+Tue Aug 27 18:51:00 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 18:51:08 2024
+: Received command: go depth 3
+Tue Aug 27 18:51:08 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 18:51:49 2024
+: Received command: position fen rnbqkbnr/pppppp1p/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:51:49 2024
+: Set up board from FEN: rnbqkbnr/pppppp1p/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:51:50 2024
+: Received command: print
+Tue Aug 27 18:51:54 2024
+: Received command: go depth 1
+Tue Aug 27 18:51:54 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 18:51:57 2024
+: Received command: go depth 2
+Tue Aug 27 18:51:57 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 18:52:11 2024
+: Received command: go depth 3
+Tue Aug 27 18:52:11 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 18:55:01 2024
+: Received command: go depth 4
+Tue Aug 27 18:55:01 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 18:55:32 2024
+: Received command: go depth 2
+Tue Aug 27 18:55:32 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 18:55:34 2024
+: Received command: go depth 1
+Tue Aug 27 18:55:34 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 18:56:05 2024
+: Received command: position fen rnbqkbnr/pppppp1p/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 0 1
+Tue Aug 27 18:56:05 2024
+: Set up board from FEN: rnbqkbnr/pppppp1p/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 0 1
+Tue Aug 27 18:56:08 2024
+: Received command: go depth 1
+Tue Aug 27 18:56:08 2024
+: Calculated best move: d5e4 at depth 1
+Tue Aug 27 18:56:14 2024
+: Received command: go depth 2
+Tue Aug 27 18:56:14 2024
+: Calculated best move: d5d4 at depth 2
+Tue Aug 27 18:56:30 2024
+: Received command: position fen rnbqkbnr/pppppp1p/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:56:30 2024
+: Set up board from FEN: rnbqkbnr/pppppp1p/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:56:32 2024
+: Received command: go depth 1
+Tue Aug 27 18:56:32 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 18:56:40 2024
+: Received command: go depth 2
+Tue Aug 27 18:56:40 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 18:56:56 2024
+: Received command: go depth 3
+Tue Aug 27 18:56:56 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 18:57:07 2024
+: Received command: print
+Tue Aug 27 18:57:44 2024
+: Received command: position fen rnbqkbnr/pppppp1p/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:57:44 2024
+: Set up board from FEN: rnbqkbnr/pppppp1p/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:57:45 2024
+: Received command: print
+Tue Aug 27 18:57:48 2024
+: Received command: go depth 1
+Tue Aug 27 18:57:48 2024
+: Calculated best move: a2a3 at depth 1
+Tue Aug 27 18:57:53 2024
+: Received command: go depth 2
+Tue Aug 27 18:57:53 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 18:57:54 2024
+: Received command: go depth 3
+Tue Aug 27 18:57:54 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 18:57:55 2024
+: Received command: go depth 4
+Tue Aug 27 18:57:55 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 18:58:15 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:58:15 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 18:58:17 2024
+: Received command: print
+Tue Aug 27 19:01:03 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:01:03 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:01:06 2024
+: Received command: print
+Tue Aug 27 19:01:09 2024
+: Received command: go depth 1
+Tue Aug 27 19:01:09 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:01:12 2024
+: Received command: go depth 2
+Tue Aug 27 19:01:12 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 19:01:23 2024
+: Received command: go depth 3
+Tue Aug 27 19:01:24 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:01:55 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:01:55 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:01:56 2024
+: Received command: print
+Tue Aug 27 19:01:58 2024
+: Received command: go depth 1
+Tue Aug 27 19:01:58 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:02:01 2024
+: Received command: go depth 2
+Tue Aug 27 19:02:01 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 19:02:05 2024
+: Received command: go depth 3
+Tue Aug 27 19:02:05 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:04:23 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:04:23 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:04:23 2024
+: Received command: 
+Tue Aug 27 19:04:28 2024
+: Received command: go depth 1
+Tue Aug 27 19:04:28 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:04:30 2024
+: Received command: go depth 2
+Tue Aug 27 19:04:30 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 19:04:32 2024
+: Received command: go depth 3
+Tue Aug 27 19:04:32 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:04:41 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:04:41 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:04:45 2024
+: Received command: print
+Tue Aug 27 19:04:47 2024
+: Received command: go depth 1
+Tue Aug 27 19:04:47 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:04:48 2024
+: Received command: go depth 2
+Tue Aug 27 19:04:48 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 19:04:51 2024
+: Received command: go depth 3
+Tue Aug 27 19:04:51 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:08:37 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:08:37 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:08:37 2024
+: Received command: 
+Tue Aug 27 19:08:40 2024
+: Received command: go depth 1
+Tue Aug 27 19:08:40 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:08:42 2024
+: Received command: go depth 2
+Tue Aug 27 19:08:42 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 19:08:44 2024
+: Received command: go depth 3
+Tue Aug 27 19:08:44 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:09:15 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:09:15 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:09:15 2024
+: Received command: 
+Tue Aug 27 19:09:17 2024
+: Received command: go depth 1
+Tue Aug 27 19:09:17 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:09:19 2024
+: Received command: go depth 2
+Tue Aug 27 19:09:19 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 19:09:21 2024
+: Received command: go depth 3
+Tue Aug 27 19:09:21 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:11:15 2024
+: Received command: position fen rnb1kbnr/pppppp1p/8/3q4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:11:15 2024
+: Set up board from FEN: rnb1kbnr/pppppp1p/8/3q4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:11:16 2024
+: Received command: print
+Tue Aug 27 19:11:20 2024
+: Received command: go depth 1
+Tue Aug 27 19:11:20 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:11:38 2024
+: Received command: go depth 2
+Tue Aug 27 19:11:38 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 19:13:28 2024
+: Received command: go depth 3
+Tue Aug 27 19:13:28 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:15:25 2024
+: Received command: position fen rnb1kbnr/pppppp1p/8/3q4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:15:25 2024
+: Set up board from FEN: rnb1kbnr/pppppp1p/8/3q4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:15:26 2024
+: Received command: print
+Tue Aug 27 19:15:28 2024
+: Received command: go depth 1
+Tue Aug 27 19:15:28 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:15:30 2024
+: Received command: go depth 2
+Tue Aug 27 19:15:30 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 19:16:24 2024
+: Received command: go depth 3
+Tue Aug 27 19:16:24 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:17:20 2024
+: Received command: position fen rnb1kbnr/pppppp1p/8/3P4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 0 1
+Tue Aug 27 19:17:20 2024
+: Set up board from FEN: rnb1kbnr/pppppp1p/8/3P4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 0 1
+Tue Aug 27 19:17:22 2024
+: Received command: print
+Tue Aug 27 19:17:24 2024
+: Received command: go depth 1
+Tue Aug 27 19:17:24 2024
+: Calculated best move: a7a5 at depth 1
+Tue Aug 27 19:17:30 2024
+: Received command: go depth 2
+Tue Aug 27 19:17:30 2024
+: Calculated best move: a7a5 at depth 2
+Tue Aug 27 19:17:32 2024
+: Received command: go depth 3
+Tue Aug 27 19:17:32 2024
+: Calculated best move: g8f6 at depth 3
+Tue Aug 27 19:18:26 2024
+: Received command: go depth 4
+Tue Aug 27 19:18:26 2024
+: Calculated best move: a7a5 at depth 4
+Tue Aug 27 19:18:38 2024
+: Received command: go depth 5
+Tue Aug 27 19:18:40 2024
+: Calculated best move: a7a6 at depth 5
+Tue Aug 27 19:18:51 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:18:51 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:18:53 2024
+: Received command: print
+Tue Aug 27 19:18:57 2024
+: Received command: go depth 1
+Tue Aug 27 19:18:57 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:18:59 2024
+: Received command: go depth 2
+Tue Aug 27 19:18:59 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 19:19:01 2024
+: Received command: go depth 3
+Tue Aug 27 19:19:01 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:19:03 2024
+: Received command: go depth 4
+Tue Aug 27 19:19:04 2024
+: Calculated best move: e4d5 at depth 4
+Tue Aug 27 19:19:05 2024
+: Received command: go depth 5
+Tue Aug 27 19:19:08 2024
+: Calculated best move: a2a3 at depth 5
+Tue Aug 27 19:20:30 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:20:30 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:20:31 2024
+: Received command: print
+Tue Aug 27 19:20:33 2024
+: Received command: go depth 1
+Tue Aug 27 19:20:33 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:20:35 2024
+: Received command: go depth 2
+Tue Aug 27 19:20:35 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 19:20:37 2024
+: Received command: go depth 3
+Tue Aug 27 19:20:37 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:21:03 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:21:03 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:21:04 2024
+: Received command: print
+Tue Aug 27 19:21:06 2024
+: Received command: go depth 1
+Tue Aug 27 19:21:06 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:21:07 2024
+: Received command: go depth 2
+Tue Aug 27 19:21:07 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 19:21:08 2024
+: Received command: go depth 3
+Tue Aug 27 19:21:08 2024
+: Calculated best move: c3d5 at depth 3
+Tue Aug 27 19:29:55 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:29:55 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:29:56 2024
+: Received command: print
+Tue Aug 27 19:29:59 2024
+: Received command: go depth 1
+Tue Aug 27 19:29:59 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:30:02 2024
+: Received command: go depth 2
+Tue Aug 27 19:30:02 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 19:30:04 2024
+: Received command: go depth 3
+Tue Aug 27 19:30:04 2024
+: Calculated best move: c3d5 at depth 3
+Tue Aug 27 19:30:08 2024
+: Received command: go depth 4
+Tue Aug 27 19:30:08 2024
+: Calculated best move: e4d5 at depth 4
+Tue Aug 27 19:31:02 2024
+: Received command: go depth 5
+Tue Aug 27 19:31:03 2024
+: Calculated best move: e4d5 at depth 5
+Tue Aug 27 19:32:27 2024
+: Received command: position fen rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:32:27 2024
+: Set up board from FEN: rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:32:32 2024
+: Received command: go depth 1
+Tue Aug 27 19:32:32 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:32:44 2024
+: Received command: go depth 2
+Tue Aug 27 19:32:44 2024
+: Calculated best move: e4d5 at depth 2
+Tue Aug 27 19:32:53 2024
+: Received command: go depth 3
+Tue Aug 27 19:32:53 2024
+: Calculated best move: e4d5 at depth 3
+Tue Aug 27 19:32:57 2024
+: Received command: go depth 4
+Tue Aug 27 19:32:57 2024
+: Calculated best move: e4d5 at depth 4
+Tue Aug 27 19:32:59 2024
+: Received command: go depth 5
+Tue Aug 27 19:33:00 2024
+: Calculated best move: e4d5 at depth 5
+Tue Aug 27 19:33:29 2024
+: Received command: position fen rnbqkbnr/pppppp1p/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:33:29 2024
+: Set up board from FEN: rnbqkbnr/pppppp1p/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 19:33:32 2024
+: Received command: go depth 1
+Tue Aug 27 19:33:32 2024
+: Calculated best move: e4d5 at depth 1
+Tue Aug 27 19:33:37 2024
+: Received command: print
+Tue Aug 27 19:36:20 2024
+: Received command: position startpos
+Tue Aug 27 19:36:20 2024
+: Set up board from startpos.
+Tue Aug 27 19:36:22 2024
+: Received command: print
+Tue Aug 27 19:36:25 2024
+: Received command: go depth 1
+Tue Aug 27 19:36:25 2024
+: Calculated best move: a2a3 at depth 1
+Tue Aug 27 19:36:27 2024
+: Received command: go depth 2
+Tue Aug 27 19:36:27 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 19:36:28 2024
+: Received command: go depth 3
+Tue Aug 27 19:36:28 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:36:30 2024
+: Received command: go depth 4
+Tue Aug 27 19:36:30 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 19:36:31 2024
+: Received command: go depth 5
+Tue Aug 27 19:36:31 2024
+: Calculated best move: a2a3 at depth 5
+Tue Aug 27 19:36:32 2024
+: Received command: go depth 6
+Tue Aug 27 19:36:34 2024
+: Calculated best move: a2a3 at depth 6
+Tue Aug 27 19:36:38 2024
+: Received command: go depth 7
+Tue Aug 27 19:36:45 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 19:37:59 2024
+: Received command: position startpos
+Tue Aug 27 19:37:59 2024
+: Set up board from startpos.
+Tue Aug 27 19:38:00 2024
+: Received command: print
+Tue Aug 27 19:38:01 2024
+: Received command: go depth 1
+Tue Aug 27 19:38:01 2024
+: Calculated best move: a2a3 at depth 1
+Tue Aug 27 19:38:03 2024
+: Received command: go depth 2
+Tue Aug 27 19:38:03 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 19:38:06 2024
+: Received command: go depth 3
+Tue Aug 27 19:38:06 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:38:07 2024
+: Received command: go depth 4
+Tue Aug 27 19:38:07 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 19:38:08 2024
+: Received command: go depth 5
+Tue Aug 27 19:38:08 2024
+: Calculated best move: a2a3 at depth 5
+Tue Aug 27 19:38:09 2024
+: Received command: go depth 6
+Tue Aug 27 19:38:09 2024
+: Calculated best move: a2a3 at depth 6
+Tue Aug 27 19:38:10 2024
+: Received command: go depth 7
+Tue Aug 27 19:38:11 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 19:38:14 2024
+: Received command: go depth 8
+Tue Aug 27 19:38:23 2024
+: Calculated best move: a2a3 at depth 8
+Tue Aug 27 19:40:39 2024
+: Received command: position startpos
+Tue Aug 27 19:40:39 2024
+: Set up board from startpos.
+Tue Aug 27 19:40:40 2024
+: Received command: print
+Tue Aug 27 19:40:42 2024
+: Received command: go depth 7
+Tue Aug 27 19:40:42 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 19:40:46 2024
+: Received command: go depth 8
+Tue Aug 27 19:40:55 2024
+: Calculated best move: a2a3 at depth 8
+Tue Aug 27 19:47:47 2024
+: Received command: print
+Tue Aug 27 19:47:50 2024
+: Received command: go depth 3
+Tue Aug 27 19:47:50 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:47:51 2024
+: Received command: go depth 1
+Tue Aug 27 19:47:51 2024
+: Calculated best move: a2a3 at depth 1
+Tue Aug 27 19:47:52 2024
+: Received command: go depth 2
+Tue Aug 27 19:47:52 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 19:47:53 2024
+: Received command: go depth 3
+Tue Aug 27 19:47:53 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:47:54 2024
+: Received command: go depth 4
+Tue Aug 27 19:47:54 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 19:47:55 2024
+: Received command: go depth 5
+Tue Aug 27 19:47:55 2024
+: Calculated best move: a2a3 at depth 5
+Tue Aug 27 19:47:56 2024
+: Received command: go depth 6
+Tue Aug 27 19:47:56 2024
+: Calculated best move: a2a3 at depth 6
+Tue Aug 27 19:47:59 2024
+: Received command: go depth 7
+Tue Aug 27 19:47:59 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 19:48:09 2024
+: Received command: print
+Tue Aug 27 19:48:11 2024
+: Received command: go depth 2
+Tue Aug 27 19:48:11 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 19:48:12 2024
+: Received command: go depth 3
+Tue Aug 27 19:48:12 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:48:13 2024
+: Received command: go depth 4
+Tue Aug 27 19:48:13 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 19:48:14 2024
+: Received command: go depth 5
+Tue Aug 27 19:48:14 2024
+: Calculated best move: a2a3 at depth 5
+Tue Aug 27 19:48:15 2024
+: Received command: go depth 6
+Tue Aug 27 19:48:17 2024
+: Calculated best move: a2a3 at depth 6
+Tue Aug 27 19:48:22 2024
+: Received command: go depth 7
+Tue Aug 27 19:48:29 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 19:49:44 2024
+: Received command: print
+Tue Aug 27 19:49:46 2024
+: Received command: go depth 1
+Tue Aug 27 19:49:46 2024
+: Calculated best move: a2a3 at depth 1
+Tue Aug 27 19:49:47 2024
+: Received command: go depth 2
+Tue Aug 27 19:49:47 2024
+: Calculated best move: a2a3 at depth 2
+Tue Aug 27 19:49:48 2024
+: Received command: go depth 3
+Tue Aug 27 19:49:48 2024
+: Calculated best move: a2a3 at depth 3
+Tue Aug 27 19:49:49 2024
+: Received command: go depth 4
+Tue Aug 27 19:49:49 2024
+: Calculated best move: a2a3 at depth 4
+Tue Aug 27 19:49:50 2024
+: Received command: go depth 5
+Tue Aug 27 19:49:50 2024
+: Calculated best move: a2a3 at depth 5
+Tue Aug 27 19:49:51 2024
+: Received command: go depth 6
+Tue Aug 27 19:49:52 2024
+: Calculated best move: a2a3 at depth 6
+Tue Aug 27 19:49:56 2024
+: Received command: go depth 7
+Tue Aug 27 19:50:00 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 19:50:14 2024
+: Received command: print
+Tue Aug 27 19:50:16 2024
+: Received command: go depth 7
+Tue Aug 27 19:50:17 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 19:50:19 2024
+: Received command: go depth 8
+Tue Aug 27 19:50:22 2024
+: Calculated best move: a2a3 at depth 8
+Tue Aug 27 19:50:25 2024
+: Received command: go depth 9
+Tue Aug 27 19:50:32 2024
+: Calculated best move: a2a3 at depth 9
+Tue Aug 27 19:51:37 2024
+: Received command: print
+Tue Aug 27 19:51:39 2024
+: Received command: go depth 6
+Tue Aug 27 19:51:40 2024
+: Calculated best move: a2a3 at depth 6
+Tue Aug 27 19:51:42 2024
+: Received command: go depth 7
+Tue Aug 27 19:51:44 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 19:52:00 2024
+: Received command: go depth 6
+Tue Aug 27 19:52:02 2024
+: Calculated best move: a2a3 at depth 6
+Tue Aug 27 19:52:03 2024
+: Received command: go depth 7
+Tue Aug 27 19:52:07 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 19:53:19 2024
+: Received command: print
+Tue Aug 27 19:53:21 2024
+: Received command: go depth 7
+Tue Aug 27 19:53:23 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 19:53:46 2024
+: Received command: print
+Tue Aug 27 19:53:49 2024
+: Received command: go depth 7
+Tue Aug 27 19:53:51 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 19:57:28 2024
+: Received command: print
+Tue Aug 27 19:57:29 2024
+: Received command: go depth 7
+Tue Aug 27 19:57:33 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 20:00:04 2024
+: Received command: go depth 7
+Tue Aug 27 20:00:08 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 20:00:51 2024
+: Received command: position fen 4k3/8/8/2Q1K3/8/8/8/8 w - - 0 1
+Tue Aug 27 20:00:51 2024
+: Set up board from FEN: 4k3/8/8/2Q1K3/8/8/8/8 w - - 0 1
+Tue Aug 27 20:00:53 2024
+: Received command: go depth 3
+Tue Aug 27 20:00:53 2024
+: Calculated best move: c5c1 at depth 3
+Tue Aug 27 20:00:55 2024
+: Received command: go depth 4
+Tue Aug 27 20:00:55 2024
+: Calculated best move: c5c1 at depth 4
+Tue Aug 27 20:00:56 2024
+: Received command: go depth 5
+Tue Aug 27 20:00:56 2024
+: Calculated best move: c5c1 at depth 5
+Tue Aug 27 20:00:57 2024
+: Received command: go depth 6
+Tue Aug 27 20:00:58 2024
+: Calculated best move: c5c7 at depth 6
+Tue Aug 27 20:01:21 2024
+: Received command: go depth 8
+Tue Aug 27 20:01:36 2024
+: Calculated best move: c5d5 at depth 8
+Tue Aug 27 20:03:58 2024
+: Received command: position fen 4k3/8/8/2Q1K3/8/8/8/8 w - - 0 1
+Tue Aug 27 20:03:58 2024
+: Set up board from FEN: 4k3/8/8/2Q1K3/8/8/8/8 w - - 0 1
+Tue Aug 27 20:03:59 2024
+: Received command: print
+Tue Aug 27 20:04:01 2024
+: Received command: go depth 8
+Tue Aug 27 20:04:02 2024
+: Calculated best move: c5c7 at depth 8
+Tue Aug 27 20:04:28 2024
+: Received command: position fen 5k2/2Q5/8/4K3/8/8/8/8 w - - 2 2
+Tue Aug 27 20:04:28 2024
+: Set up board from FEN: 5k2/2Q5/8/4K3/8/8/8/8 w - - 2 2
+Tue Aug 27 20:04:34 2024
+: Received command: go depth 6
+Tue Aug 27 20:04:34 2024
+: Calculated best move: e5f6 at depth 6
+Tue Aug 27 20:04:52 2024
+: Received command: position fen 6k1/2Q5/5K2/8/8/8/8/8 w - - 4 3
+Tue Aug 27 20:04:52 2024
+: Set up board from FEN: 6k1/2Q5/5K2/8/8/8/8/8 w - - 4 3
+Tue Aug 27 20:04:55 2024
+: Received command: go depth 4
+Tue Aug 27 20:04:55 2024
+: Calculated best move: c7g7 at depth 4
+Tue Aug 27 20:08:32 2024
+: Received command: print
+Tue Aug 27 20:08:34 2024
+: Received command: go depth 6
+Tue Aug 27 20:08:34 2024
+: Calculated best move: a2a3 at depth 6
+Tue Aug 27 20:21:52 2024
+: Received command: 
+Tue Aug 27 20:21:52 2024
+: Received command: 
+Tue Aug 27 20:21:52 2024
+: Received command: bool DumbHash::operator==(const DumbHash& other) const
+Tue Aug 27 20:21:52 2024
+: Received command: {
+Tue Aug 27 20:21:52 2024
+: Received command:     for (int i = 0; i < 6; ++i)
+Tue Aug 27 20:21:52 2024
+: Received command:         if (white_pieces[i] != other.white_pieces[i])
+Tue Aug 27 20:21:52 2024
+: Received command:             return false;
+Tue Aug 27 20:21:52 2024
+: Received command: 
+Tue Aug 27 20:21:52 2024
+: Received command:     for (int i = 0; i < 6; ++i)
+Tue Aug 27 20:21:52 2024
+: Received command:         if (black_pieces[i] != other.black_pieces[i])
+Tue Aug 27 20:21:52 2024
+: Received command:             return false;
+Tue Aug 27 20:21:52 2024
+: Received command: 
+Tue Aug 27 20:21:52 2024
+: Received command:     if (en_passant != other.en_passant)
+Tue Aug 27 20:21:52 2024
+: Received command:         return false;
+Tue Aug 27 20:21:52 2024
+: Received command: 
+Tue Aug 27 20:21:52 2024
+: Received command:     for (int i = 0; i < 4; ++i)
+Tue Aug 27 20:21:52 2024
+: Received command:         if (castling[i] != other.castling[i])
+Tue Aug 27 20:21:52 2024
+: Received command:             return false;
+Tue Aug 27 20:21:52 2024
+: Received command: 
+Tue Aug 27 20:21:52 2024
+: Received command:     return true;
+Tue Aug 27 20:21:52 2024
+: Received command: }
+Tue Aug 27 20:21:52 2024
+: Received command: 
+Tue Aug 27 20:21:52 2024
+: Received command: DumbHash::DumbHash(const uint64_t(&wht_pieces)[6], const uint64_t(&blk_pieces)[6], uint64_t enpass, const bool(&cstling)[4])
+Tue Aug 27 20:21:52 2024
+: Received command: {
+Tue Aug 27 20:21:52 2024
+: Received command:     std::copy(std::begin(wht_pieces), std::end(wht_pieces), std::begin(white_pieces));
+Tue Aug 27 20:21:52 2024
+: Received command:     std::copy(std::begin(blk_pieces), std::end(blk_pieces), std::begin(black_pieces));
+Tue Aug 27 20:21:52 2024
+: Received command: 
+Tue Aug 27 20:21:52 2024
+: Received command:     std::copy(std::begin(cstling), std::end(cstling), std::begin(castling));
+Tue Aug 27 20:21:52 2024
+: Received command: 
+Tue Aug 27 20:21:52 2024
+: Received command:     en_passant = enpass;
+Tue Aug 27 20:21:58 2024
+: Received command: position startpos
+Tue Aug 27 20:21:58 2024
+: Set up board from startpos.
+Tue Aug 27 20:21:59 2024
+: Received command: print
+Tue Aug 27 20:22:01 2024
+: Received command: go depth 6
+Tue Aug 27 20:22:01 2024
+: Calculated best move: a2a3 at depth 6
+Tue Aug 27 20:22:03 2024
+: Received command: go depth 7
+Tue Aug 27 20:22:04 2024
+: Calculated best move: a2a3 at depth 7
+Tue Aug 27 20:22:05 2024
+: Received command: go depth 8
+Tue Aug 27 20:22:07 2024
+: Calculated best move: a2a3 at depth 8
+Tue Aug 27 20:22:27 2024
+: Received command: go depth 9
+Tue Aug 27 20:22:34 2024
+: Calculated best move: a2a3 at depth 9
+Tue Aug 27 22:15:46 2024
+: Received command: print
+Tue Aug 27 22:15:50 2024
+: Received command: go timed 2000
+Tue Aug 27 22:15:52 2024
+: Calculated best move: e2e4 with time 2000ms
+Tue Aug 27 22:16:26 2024
+: Received command: go timed 2000
+Tue Aug 27 22:16:28 2024
+: Calculated best move: a2a3 with time 2000ms
+Tue Aug 27 22:16:31 2024
+: Received command: go timed 2000
+Tue Aug 27 22:16:33 2024
+: Calculated best move: e2e4 with time 2000ms
+Tue Aug 27 22:17:02 2024
+: Received command: position fen rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2
+Tue Aug 27 22:17:02 2024
+: Set up board from FEN: rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2
+Tue Aug 27 22:17:04 2024
+: Received command: go timed 2000
+Tue Aug 27 22:17:06 2024
+: Calculated best move: a2a3 with time 2000ms
+Tue Aug 27 22:18:17 2024
+: Received command: go timed 3000
+Tue Aug 27 22:18:20 2024
+: Calculated best move: g1h3 with time 3000ms
+Tue Aug 27 22:18:42 2024
+: Received command: go timed 5000
+Tue Aug 27 22:18:47 2024
+: Calculated best move: d2d4 with time 5000ms
+Tue Aug 27 22:19:18 2024
+: Received command: position fen rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2
+Tue Aug 27 22:19:18 2024
+: Set up board from FEN: rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2
+Tue Aug 27 22:19:25 2024
+: Received command: go timed 5000
+Tue Aug 27 22:19:30 2024
+: Calculated best move: c1d2 with time 5000ms
+Tue Aug 27 22:26:22 2024
+: Received command: uci
+Tue Aug 27 22:26:22 2024
+: Sent UCI response.
+Tue Aug 27 22:26:22 2024
+: Received command: ucinewgame
+Tue Aug 27 22:26:22 2024
+: Started new game.
+Tue Aug 27 22:26:22 2024
+: Received command: isready
+Tue Aug 27 22:26:22 2024
+: Sent readyok.
+Tue Aug 27 22:26:22 2024
+: Received command: position fen rnbqk2r/ppp1bppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 2 6
+Tue Aug 27 22:26:22 2024
+: Set up board from FEN: rnbqk2r/ppp1bppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 2 6
+Tue Aug 27 22:26:22 2024
+: Received command: go wtime 120000 btime 120000
+Tue Aug 27 22:26:25 2024
+: Calculated best move: g5f6 with time 120000ms
+Tue Aug 27 22:38:18 2024
+: Received command: print
+Tue Aug 27 22:38:20 2024
+: Received command: position fen rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 1 moves c4d5 e6d5 g1f3 b8c6
+Tue Aug 27 22:38:20 2024
+: Set up board from FEN: rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 1
+Tue Aug 27 22:38:21 2024
+: Received command: print
+Tue Aug 27 22:51:38 2024
+: Received command: position fen rnbqkb1r/pp2pppp/2p2n2/8/2pP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 1 moves f3g5 d8a5 a2a3 h7h6 g5f7 e8f7 b2b4 c4b3 d1b3 f7e8 f2f4 f6d5 e2e3 a5c3 b3c3 d5c3 a3a4 c3d5 c1d2 g7g5 f4g5 h6g5 g2g3 g5g4 a4a5 f8h6 a1a3 c8f5 f1e2 f5d7
+Tue Aug 27 22:51:38 2024
+: Set up board from FEN: rnbqkb1r/pp2pppp/2p2n2/8/2pP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 1
+Tue Aug 27 22:51:40 2024
+: Received command: print
+Tue Aug 27 22:52:21 2024
+: Received command: go wtime 39574 btime 48744
+Tue Aug 27 22:52:22 2024
+: Calculated best move: d2b4 with time 39574ms
+Tue Aug 27 22:55:24 2024
+: Received command: go wtime 39574 btime 48744
+Tue Aug 27 22:55:25 2024
+: Calculated best move: d2c1 with time 39574ms
+Tue Aug 27 22:55:27 2024
+: Received command: go wtime 39574 btime 48744
+Tue Aug 27 22:55:28 2024
+: Calculated best move: d2c1 with time 39574ms
+Tue Aug 27 22:55:30 2024
+: Received command: go wtime 39574 btime 48744
+Tue Aug 27 22:55:31 2024
+: Calculated best move: d2c1 with time 39574ms
+Tue Aug 27 22:55:34 2024
+: Received command: go wtime 39574 btime 48744
+Tue Aug 27 22:55:35 2024
+: Calculated best move: d2c1 with time 39574ms
+Tue Aug 27 22:55:38 2024
+: Received command: go wtime 39574 btime 48744
+Tue Aug 27 22:55:39 2024
+: Calculated best move: d2c1 with time 39574ms
+Tue Aug 27 22:55:40 2024
+: Received command: go wtime 39574 btime 48744
+Tue Aug 27 22:55:41 2024
+: Calculated best move: d2c1 with time 39574ms
+Tue Aug 27 22:55:43 2024
+: Received command: go wtime 39574 btime 48744
+Tue Aug 27 22:55:44 2024
+: Calculated best move: d2c1 with time 39574ms
+Tue Aug 27 22:55:45 2024
+: Received command: go wtime 39574 btime 48744
+Tue Aug 27 22:55:46 2024
+: Calculated best move: d2c1 with time 39574ms
+Tue Aug 27 22:55:53 2024
+: Received command: go wtime 40000 btime 48744
+Tue Aug 27 22:55:54 2024
+: Calculated best move: d2c1 with time 40000ms
+Tue Aug 27 22:55:58 2024
+: Received command: go wtime 35000 btime 48744
+Tue Aug 27 22:55:59 2024
+: Calculated best move: d2c1 with time 35000ms
+Tue Aug 27 22:56:03 2024
+: Received command: go wtime 25000 btime 48744
+Tue Aug 27 22:56:03 2024
+: Calculated best move: d2c1 with time 25000ms
+Tue Aug 27 22:56:07 2024
+: Received command: go wtime 20000 btime 48744
+Tue Aug 27 22:56:08 2024
+: Calculated best move: d2c1 with time 20000ms
+Tue Aug 27 22:56:12 2024
+: Received command: go wtime 60000 btime 48744
+Tue Aug 27 22:56:14 2024
+: Calculated best move: e2d3 with time 60000ms
+Tue Aug 27 22:56:58 2024
+: Received command: position fen rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 1 moves b2b4 f8b4 a2a3 b4d2 f3d2 f4f3 g2f3 a7a5 c2c3 a5a4 f3f4 h5f4
+Tue Aug 27 22:56:58 2024
+: Set up board from FEN: rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 1
+Tue Aug 27 22:57:00 2024
+: Received command: print
+Tue Aug 27 22:57:50 2024
+: Received command: go wtime 51077 btime 51077
+Tue Aug 27 22:57:51 2024
+: Calculated best move: h1g1 with time 1386ms
+Tue Aug 27 22:58:19 2024
+: Received command: go wtime 51077 btime 51077
+Tue Aug 27 22:58:21 2024
+: Calculated best move: h2h3 with time 1386ms
+Tue Aug 27 22:58:23 2024
+: Received command: go wtime 51077 btime 51077
+Tue Aug 27 22:58:24 2024
+: Calculated best move: h1g1 with time 1386ms
+Tue Aug 27 22:59:44 2024
+: Received command: position fen rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 1 moves b2b4 f8b4 a2a3 b4d2 f3d2 f4f3 g2f3 a7a5 c2c3 a5a4 f3f4 h5f4
+Tue Aug 27 22:59:44 2024
+: Set up board from FEN: rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 1
+Tue Aug 27 22:59:45 2024
+: Received command: print
+Tue Aug 27 22:59:51 2024
+: Received command: go wtime 51077 btime 51077
+Tue Aug 27 22:59:52 2024
+: Calculated best move: h1g1 with time 1386ms
+Tue Aug 27 23:00:48 2024
+: Received command: position fen rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 1 moves b2b4 f8b4 a2a3 b4d2 f3d2 f4f3 g2f3 a7a5 c2c3 a5a4 f3f4 h5f4
+Tue Aug 27 23:00:48 2024
+: Set up board from FEN: rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 1
+Tue Aug 27 23:00:50 2024
+: Received command: print
+Tue Aug 27 23:00:52 2024
+: Received command: go wtime 51077 btime 51077
+Tue Aug 27 23:00:53 2024
+: Calculated best move: h1g1 with time 1386ms
+Tue Aug 27 23:05:10 2024
+: Received command: position fen 2kr4/1p2npp1/p3p3/Pn1pPr1P/3Pb3/2P2N1R/1R3PB1/2B1K3 w - - 2 24
+Tue Aug 27 23:05:10 2024
+: Set up board from FEN: 2kr4/1p2npp1/p3p3/Pn1pPr1P/3Pb3/2P2N1R/1R3PB1/2B1K3 w - - 2 24
+Tue Aug 27 23:05:11 2024
+: Received command: print
+Tue Aug 27 23:09:03 2024
+: Received command: go wtime 100000 btime 100000 movestogo 40
+Tue Aug 27 23:09:05 2024
+: Calculated best move: h3g3 with time 2240ms
+Tue Aug 27 23:11:23 2024
+: Received command: position fen r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1 moves b5c6 b7c6 f3e5 f6e4 d1e2 f7f5 e2h5 e8e7 e5g6 e7f6 g6h8 d8e7 e1g1
+Tue Aug 27 23:11:23 2024
+: Set up board from FEN: r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1
+Tue Aug 27 23:11:23 2024
+: Received command: print
+Tue Aug 27 23:12:00 2024
+: Received command: position fen r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1 moves b5c6 b7c6 f3e5 f6e4 d1e2 f7f5 e2h5 e8e7 e5g6 e7f6 g6h8 d8e7 e1g1
+Tue Aug 27 23:12:00 2024
+: Set up board from FEN: r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1
+Tue Aug 27 23:16:47 2024
+: Received command: position fen r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1 moves b5c6 b7c6 f3e5 f6e4 d1e2 f7f5 e2h5 e8e7 e5g6 e7f6 g6h8 d8e7 e1g1
+Tue Aug 27 23:18:04 2024
+: Received command: position fen r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1 moves b5c6 b7c6 f3e5 f6e4 d1e2 f7f5 e2h5 e8e7 e5g6 e7f6 g6h8 d8e7 e1g1
+Tue Aug 27 23:18:04 2024
+: Set up board from FEN: r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1
+Tue Aug 27 23:18:05 2024
+: Received command: print
+Tue Aug 27 23:24:57 2024
+: Received command: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:25:01 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:25:01 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:25:02 2024
+: Received command: print
+Tue Aug 27 23:25:10 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:25:10 2024
+: Calculated best move: d3d2 with time 459ms
+Tue Aug 27 23:25:39 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P3PP1/P2k1R2/R5K1 b - - 1 2
+Tue Aug 27 23:25:39 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P3PP1/P2k1R2/R5K1 b - - 1 2
+Tue Aug 27 23:25:40 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:25:41 2024
+: Calculated best move: d2e3 with time 459ms
+Tue Aug 27 23:28:04 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:28:04 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:28:05 2024
+: Received command: print
+Tue Aug 27 23:28:18 2024
+: Received command: go perft 1
+Tue Aug 27 23:28:18 2024
+: Positions at depth 1: 2
+Tue Aug 27 23:28:21 2024
+: Received command: go perft 2
+Tue Aug 27 23:28:21 2024
+: Positions at depth 2: 65
+Tue Aug 27 23:28:22 2024
+: Received command: go perft 3
+Tue Aug 27 23:28:22 2024
+: Positions at depth 3: 940
+Tue Aug 27 23:28:31 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:28:31 2024
+: Calculated best move: d3d2 with time 459ms
+Tue Aug 27 23:30:56 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:30:56 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:31:00 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:31:01 2024
+: Calculated best move: d3e2 with time 459ms
+Tue Aug 27 23:36:47 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:36:47 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:36:48 2024
+: Received command: print
+Tue Aug 27 23:36:55 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:36:55 2024
+: Calculated best move: d3e2 with time 459ms
+Tue Aug 27 23:37:25 2024
+: Received command: position fen std::cout << "info depth " << depth << " score cp " << best_score << " nodes " << positions_evaluated << "\n";
+Tue Aug 27 23:37:25 2024
+: Set up board from FEN: std::cout << "info depth " <<
+Tue Aug 27 23:37:36 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:37:36 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:37:37 2024
+: Received command: print
+Tue Aug 27 23:37:41 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:37:42 2024
+: Calculated best move: d3e2 with time 459ms
+Tue Aug 27 23:37:59 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P3PP1/P2Pk3/R4RK1 w - - 1 2
+Tue Aug 27 23:37:59 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P3PP1/P2Pk3/R4RK1 w - - 1 2
+Tue Aug 27 23:38:01 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:38:01 2024
+: Calculated best move: a2a3 with time 459ms
+Tue Aug 27 23:39:04 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P3PP1/P2Pk3/R4RK1 w - - 1 2
+Tue Aug 27 23:39:04 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P3PP1/P2Pk3/R4RK1 w - - 1 2
+Tue Aug 27 23:39:07 2024
+: Received command: print
+Tue Aug 27 23:39:12 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:39:13 2024
+: Calculated best move: a2a3 with time 459ms
+Tue Aug 27 23:39:38 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:39:38 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:39:41 2024
+: Received command: print
+Tue Aug 27 23:39:44 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:39:44 2024
+: Calculated best move: d3e2 with time 459ms
+Tue Aug 27 23:39:48 2024
+: Received command: go depth 2
+Tue Aug 27 23:39:48 2024
+: Calculated best move: d3e2 at depth 2
+Tue Aug 27 23:39:50 2024
+: Received command: go depth 3
+Tue Aug 27 23:39:50 2024
+: Calculated best move: d3e2 at depth 3
+Tue Aug 27 23:39:51 2024
+: Received command: go depth 4
+Tue Aug 27 23:39:51 2024
+: Calculated best move: d3e2 at depth 4
+Tue Aug 27 23:39:52 2024
+: Received command: go depth 5
+Tue Aug 27 23:39:52 2024
+: Calculated best move: d3e2 at depth 5
+Tue Aug 27 23:39:53 2024
+: Received command: go depth 6
+Tue Aug 27 23:39:53 2024
+: Calculated best move: d3e2 at depth 6
+Tue Aug 27 23:40:23 2024
+: Received command: go depth 1
+Tue Aug 27 23:40:23 2024
+: Calculated best move: d3d2 at depth 1
+Tue Aug 27 23:40:25 2024
+: Received command: go depth 2
+Tue Aug 27 23:40:25 2024
+: Calculated best move: d3e2 at depth 2
+Tue Aug 27 23:40:27 2024
+: Received command: go depth 1
+Tue Aug 27 23:40:27 2024
+: Calculated best move: d3d2 at depth 1
+Tue Aug 27 23:40:35 2024
+: Received command: go depth 2
+Tue Aug 27 23:40:35 2024
+: Calculated best move: d3e2 at depth 2
+Tue Aug 27 23:40:39 2024
+: Received command: go depth 3
+Tue Aug 27 23:40:39 2024
+: Calculated best move: d3e2 at depth 3
+Tue Aug 27 23:40:40 2024
+: Received command: go depth 4
+Tue Aug 27 23:40:40 2024
+: Calculated best move: d3e2 at depth 4
+Tue Aug 27 23:40:41 2024
+: Received command: go depth 5
+Tue Aug 27 23:40:41 2024
+: Calculated best move: d3e2 at depth 5
+Tue Aug 27 23:40:42 2024
+: Received command: go depth 6
+Tue Aug 27 23:40:42 2024
+: Calculated best move: d3e2 at depth 6
+Tue Aug 27 23:40:44 2024
+: Received command: go depth 12
+Tue Aug 27 23:40:44 2024
+: Calculated best move: d3d2 at depth 12
+Tue Aug 27 23:40:47 2024
+: Received command: go depth 16
+Tue Aug 27 23:40:47 2024
+: Calculated best move: d3d2 at depth 16
+Tue Aug 27 23:40:49 2024
+: Received command: go depth 20
+Tue Aug 27 23:40:49 2024
+: Calculated best move: d3d2 at depth 20
+Tue Aug 27 23:40:50 2024
+: Received command: go depth 32
+Tue Aug 27 23:40:50 2024
+: Calculated best move: d3d2 at depth 32
+Tue Aug 27 23:42:43 2024
+: Received command: position fen r4rk1/p2p4/1p1K1pp1/bnp5/6P1/1P6/6bR/6N1 w - - 0 1
+Tue Aug 27 23:42:43 2024
+: Set up board from FEN: r4rk1/p2p4/1p1K1pp1/bnp5/6P1/1P6/6bR/6N1 w - - 0 1
+Tue Aug 27 23:42:44 2024
+: Received command: print
+Tue Aug 27 23:42:50 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:42:51 2024
+: Calculated best move: d6e7 with time 459ms
+Tue Aug 27 23:44:20 2024
+: Received command: position fen r4rk1/p2p4/1p1K1pp1/bnp5/6P1/1P6/6bR/6N1 w - - 0 1
+Tue Aug 27 23:44:20 2024
+: Set up board from FEN: r4rk1/p2p4/1p1K1pp1/bnp5/6P1/1P6/6bR/6N1 w - - 0 1
+Tue Aug 27 23:44:21 2024
+: Received command: print
+Tue Aug 27 23:44:26 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:44:27 2024
+: Calculated best move: d6d7 with time 459ms
+Tue Aug 27 23:46:24 2024
+: Received command: position fen r4rk1/p2p4/1p1K1pp1/bnp5/6P1/1P6/6bR/6N1 w - - 0 1
+Tue Aug 27 23:46:24 2024
+: Set up board from FEN: r4rk1/p2p4/1p1K1pp1/bnp5/6P1/1P6/6bR/6N1 w - - 0 1
+Tue Aug 27 23:46:26 2024
+: Received command: print
+Tue Aug 27 23:46:31 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:46:31 2024
+: Calculated best move: d6d7 with time 459ms
+Tue Aug 27 23:46:45 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:46:45 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:46:46 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:46:47 2024
+: Calculated best move: d3d2 with time 459ms
+Tue Aug 27 23:48:15 2024
+: Received command: position fen 6n1/6Br/1p6/3N2p1/B1P1k3/1P3PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:48:15 2024
+: Set up board from FEN: 6n1/6Br/1p6/3N2p1/B1P1k3/1P3PP1/P2P4/R4RK1 b - - 0 1
+Tue Aug 27 23:48:16 2024
+: Received command: print
+Tue Aug 27 23:48:23 2024
+: Received command: go wtime 10000 btime 10000
+Tue Aug 27 23:48:23 2024
+: Calculated best move: e4f5 with time 459ms
+Wed Aug 28 00:01:31 2024
+: Received command: position fen 6n1/6Br/1p6/3N2p1/B1P1k3/1P3PP1/P2P4/R4RK1 b - - 0 1
+Wed Aug 28 00:01:31 2024
+: Set up board from FEN: 6n1/6Br/1p6/3N2p1/B1P1k3/1P3PP1/P2P4/R4RK1 b - - 0 1
+Wed Aug 28 00:01:33 2024
+: Received command: print
+Wed Aug 28 00:01:38 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:01:39 2024
+: Calculated best move: e4f5 with time 459ms
+Wed Aug 28 00:02:26 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:02:26 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:02:28 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:02:28 2024
+: Calculated best move: d3e2 with time 459ms
+Wed Aug 28 00:03:43 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:03:43 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:03:44 2024
+: Received command: print
+Wed Aug 28 00:03:49 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:03:50 2024
+: Calculated best move: `1`1 with time 459ms
+Wed Aug 28 00:05:48 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:05:48 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:05:50 2024
+: Received command: print
+Wed Aug 28 00:05:54 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:05:54 2024
+: Calculated best move: d3d2 with time 459ms
+Wed Aug 28 00:07:04 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:07:04 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:07:06 2024
+: Received command: print
+Wed Aug 28 00:07:10 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:07:10 2024
+: Calculated best move: d3d2 with time 459ms
+Wed Aug 28 00:07:32 2024
+: Received command: go wtime 10000 btime 15000
+Wed Aug 28 00:07:33 2024
+: Calculated best move: d3e2 with time 584ms
+Wed Aug 28 00:09:09 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:09:09 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:09:09 2024
+: Received command: print
+Wed Aug 28 00:09:14 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:09:15 2024
+: Calculated best move: d3d2 with time 459ms
+Wed Aug 28 00:09:18 2024
+: Received command: go wtime 10000 btime 15000
+Wed Aug 28 00:09:18 2024
+: Calculated best move: d3d2 with time 584ms
+Wed Aug 28 00:09:23 2024
+: Received command: go wtime 10000 btime 18000
+Wed Aug 28 00:09:23 2024
+: Calculated best move: d3d2 with time 657ms
+Wed Aug 28 00:09:26 2024
+: Received command: go wtime 10000 btime 20000
+Wed Aug 28 00:09:27 2024
+: Calculated best move: d3d2 with time 705ms
+Wed Aug 28 00:09:29 2024
+: Received command: go wtime 10000 btime 60000
+Wed Aug 28 00:09:31 2024
+: Calculated best move: d3d2 with time 1561ms
+Wed Aug 28 00:12:33 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:12:33 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:12:34 2024
+: Received command: print
+Wed Aug 28 00:12:38 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:12:39 2024
+: Calculated best move: d3d2 with time 459ms
+Wed Aug 28 00:12:49 2024
+: Received command: go wtime 10000 btime 15000
+Wed Aug 28 00:12:50 2024
+: Calculated best move: d3d2 with time 584ms
+Wed Aug 28 00:14:29 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:14:29 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:14:29 2024
+: Received command: print
+Wed Aug 28 00:14:29 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:14:30 2024
+: Calculated best move: d3d2 with time 459ms
+Wed Aug 28 00:14:51 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:14:51 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:14:51 2024
+: Received command: print
+Wed Aug 28 00:14:51 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:14:51 2024
+: Calculated best move: d3d2 with time 459ms
+Wed Aug 28 00:15:30 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:15:30 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:15:30 2024
+: Received command: print
+Wed Aug 28 00:15:30 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:15:30 2024
+: Calculated best move: d3d2 with time 459ms
+Wed Aug 28 00:16:14 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:16:14 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:16:14 2024
+: Received command: print
+Wed Aug 28 00:16:14 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:16:15 2024
+: Calculated best move: d3d2 with time 459ms
+Wed Aug 28 00:16:19 2024
+: Received command: go wtime 10000 btime 15000
+Wed Aug 28 00:16:20 2024
+: Calculated best move: d3d2 with time 584ms
+Wed Aug 28 00:16:23 2024
+: Received command: go wtime 10000 btime 60000
+Wed Aug 28 00:16:24 2024
+: Calculated best move: d3d2 with time 1561ms
+Wed Aug 28 00:20:49 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:20:49 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:20:49 2024
+: Received command: print
+Wed Aug 28 00:20:49 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:20:50 2024
+: Calculated best move: d3d2 with time 459ms
+Wed Aug 28 00:21:00 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:21:00 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:21:00 2024
+: Received command: print
+Wed Aug 28 00:21:00 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:21:00 2024
+: Calculated best move: d3d2 with time 459ms
+Wed Aug 28 00:21:15 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:21:15 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:21:15 2024
+: Received command: print
+Wed Aug 28 00:21:15 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:21:16 2024
+: Calculated best move: d3d2 with time 459ms
+Wed Aug 28 00:22:22 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:22:22 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:22:22 2024
+: Received command: print
+Wed Aug 28 00:22:22 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 00:22:22 2024
+: Calculated best move: d3d2 with time 459ms
+Wed Aug 28 00:22:35 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:22:35 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:22:35 2024
+: Received command: print
+Wed Aug 28 00:22:35 2024
+: Received command: go wtime 10000 btime 15000
+Wed Aug 28 00:22:36 2024
+: Calculated best move: d3d2 with time 584ms
+Wed Aug 28 00:23:22 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:23:22 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:23:22 2024
+: Received command: print
+Wed Aug 28 00:23:22 2024
+: Received command: go wtime 10000 btime 15000
+Wed Aug 28 00:23:23 2024
+: Calculated best move: d3d2 with time 584ms
+Wed Aug 28 00:24:59 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:24:59 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:24:59 2024
+: Received command: print
+Wed Aug 28 00:24:59 2024
+: Received command: go wtime 10000 btime 15000
+Wed Aug 28 00:25:00 2024
+: Calculated best move: d3d2 with time 584ms
+Wed Aug 28 00:33:39 2024
+: Received command: uci
+Wed Aug 28 00:33:39 2024
+: Sent UCI response.
+Wed Aug 28 00:33:39 2024
+: Received command: ucinewgame
+Wed Aug 28 00:33:39 2024
+: Started new game.
+Wed Aug 28 00:33:39 2024
+: Received command: isready
+Wed Aug 28 00:33:39 2024
+: Sent readyok.
+Wed Aug 28 00:33:39 2024
+: Received command: position fen 4rk2/p1pp1p2/Bn2qbp1/3n2Br/7P/3N1Q2/PPP2P2/2R2K1R w - - 7 12
+Wed Aug 28 00:33:39 2024
+: Set up board from FEN: 4rk2/p1pp1p2/Bn2qbp1/3n2Br/7P/3N1Q2/PPP2P2/2R2K1R w - - 7 12
+Wed Aug 28 00:33:39 2024
+: Received command: go wtime 100000 btime 100000 movestogo 40
+Wed Aug 28 00:33:41 2024
+: Calculated best move: g5f6 with time 2240ms
+Wed Aug 28 00:33:48 2024
+: Received command: uci
+Wed Aug 28 00:33:48 2024
+: Sent UCI response.
+Wed Aug 28 00:33:48 2024
+: Received command: ucinewgame
+Wed Aug 28 00:33:48 2024
+: Started new game.
+Wed Aug 28 00:33:48 2024
+: Received command: isready
+Wed Aug 28 00:33:48 2024
+: Sent readyok.
+Wed Aug 28 00:33:48 2024
+: Received command: position fen 4rk2/p1pp1p2/Bn2qbp1/3n2Br/7P/3N1Q2/PPP2P2/2R2K1R w - - 7 12
+Wed Aug 28 00:33:48 2024
+: Set up board from FEN: 4rk2/p1pp1p2/Bn2qbp1/3n2Br/7P/3N1Q2/PPP2P2/2R2K1R w - - 7 12
+Wed Aug 28 00:33:48 2024
+: Received command: go wtime 100000 btime 100000 movestogo 40
+Wed Aug 28 00:33:50 2024
+: Calculated best move: g5f6 with time 2240ms
+Wed Aug 28 00:37:20 2024
+: Received command: uci
+Wed Aug 28 00:37:20 2024
+: Sent UCI response.
+Wed Aug 28 00:37:20 2024
+: Received command: ucinewgame
+Wed Aug 28 00:37:20 2024
+: Started new game.
+Wed Aug 28 00:37:20 2024
+: Received command: isready
+Wed Aug 28 00:37:20 2024
+: Sent readyok.
+Wed Aug 28 00:37:20 2024
+: Received command: position fen rnbqk2r/ppp1bppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 2 6
+Wed Aug 28 00:37:20 2024
+: Set up board from FEN: rnbqk2r/ppp1bppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 2 6
+Wed Aug 28 00:37:20 2024
+: Received command: go wtime 120000 btime 120000
+Wed Aug 28 00:37:22 2024
+: Calculated best move: b2b3 with time 2524ms
+Wed Aug 28 00:38:04 2024
+: Received command: uci
+Wed Aug 28 00:38:04 2024
+: Sent UCI response.
+Wed Aug 28 00:38:04 2024
+: Received command: ucinewgame
+Wed Aug 28 00:38:04 2024
+: Started new game.
+Wed Aug 28 00:38:04 2024
+: Received command: isready
+Wed Aug 28 00:38:04 2024
+: Sent readyok.
+Wed Aug 28 00:38:04 2024
+: Received command: position fen rnbqk2r/ppp1bppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 2 6
+Wed Aug 28 00:38:04 2024
+: Set up board from FEN: rnbqk2r/ppp1bppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 2 6
+Wed Aug 28 00:38:04 2024
+: Received command: go wtime 120000 btime 120000
+Wed Aug 28 00:38:07 2024
+: Calculated best move: b2b3 with time 2524ms
+Wed Aug 28 00:38:16 2024
+: Received command: position fen 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:38:16 2024
+: Set up board from FEN: 6n1/6Br/1p6/6p1/BNP5/1P1k1PP1/P2P4/R4RK1 b - - 2 2
+Wed Aug 28 00:38:17 2024
+: Received command: go wtime 120000 btime 120000
+Wed Aug 28 00:38:19 2024
+: Calculated best move: d3d2 with time 2524ms
+Wed Aug 28 00:38:44 2024
+: Received command: uci
+Wed Aug 28 00:38:44 2024
+: Sent UCI response.
