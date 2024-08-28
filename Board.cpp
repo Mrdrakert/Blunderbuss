@@ -826,6 +826,15 @@ int Board::search(int ply_from_root, int depth_left, int alpha, int beta) {
         return quiescence_search(ply_from_root + 1, alpha, beta);
     }
 
+    DumbHash dumb_hash = DumbHash(this->white_pieces, this->black_pieces, this->en_passant, this->castling);
+    if (exists_more_than_once(repetition_table, dumb_hash))
+    {
+        if (now_searching_for == this->turn)
+            return DRAW_VALUE;
+        else
+            return -DRAW_VALUE;
+    }
+
     std::vector<Move> moves = get_legal_moves(1); // generate pseudo-legal moves
 
     if (moves.size() == 0)
@@ -866,6 +875,7 @@ int Board::search(int ply_from_root, int depth_left, int alpha, int beta) {
 
 Move Board::find_best_move_for_depth(int depth)
 {
+    now_searching_for = turn;
     time_limit_reached = false;
     timed_search = false;
     positions_evaluated = 0;
@@ -902,6 +912,7 @@ Move Board::find_best_move_for_depth(int depth)
 
 Move Board::find_best_move_with_time_limit(int time_limit_ms)
 {
+    now_searching_for = turn;
     time_limit_reached = false;
     timed_search = true;
     auto start_time = std::chrono::steady_clock::now();
@@ -1002,3 +1013,20 @@ void Board::print_chessboard()
     std::cout << "+-----------------+\n\n";
 }
 
+bool exists_more_than_once(const std::vector<DumbHash>& vec, DumbHash value) {
+    int count = 0;
+
+    for (const auto& elem : vec)
+    {
+        if (elem == value)
+        {
+            count++;
+            if (count > 1)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}

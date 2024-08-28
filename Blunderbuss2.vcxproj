@@ -154,6 +154,7 @@
     <ClInclude Include="Move.h" />
     <ClInclude Include="MoveBitboards.h" />
     <ClInclude Include="PieceAndBoard.h" />
+    <ClInclude Include="PieceSquareTables.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2126,3 +2126,73 @@ Wed Aug 28 00:38:44 2024
 : Received command: uci
 Wed Aug 28 00:38:44 2024
 : Sent UCI response.
+Wed Aug 28 22:19:33 2024
+: Received command: uci
+Wed Aug 28 22:19:33 2024
+: Sent UCI response.
+Wed Aug 28 22:19:33 2024
+: Received command: ucinewgame
+Wed Aug 28 22:19:33 2024
+: Started new game.
+Wed Aug 28 22:19:33 2024
+: Received command: isready
+Wed Aug 28 22:19:33 2024
+: Sent readyok.
+Wed Aug 28 22:19:33 2024
+: Received command: position fen rnbqk2r/ppp1bppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 2 6
+Wed Aug 28 22:19:33 2024
+: Set up board from FEN: rnbqk2r/ppp1bppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 2 6
+Wed Aug 28 22:19:33 2024
+: Received command: go wtime 120000 btime 120000
+Wed Aug 28 22:19:36 2024
+: Calculated best move: d1b3 with time 2524ms
+Wed Aug 28 23:38:16 2024
+: Received command: position fen 8/8/4k3/8/8/2Q1K3/8/8 w - - 0 1
+Wed Aug 28 23:38:16 2024
+: Set up board from FEN: 8/8/4k3/8/8/2Q1K3/8/8 w - - 0 1
+Wed Aug 28 23:38:17 2024
+: Received command: print
+Wed Aug 28 23:38:24 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 23:38:25 2024
+: Calculated best move: c3c6 with time 459ms
+Wed Aug 28 23:38:37 2024
+: Received command: position fen 8/8/2Q5/5k2/8/4K3/8/8 w - - 2 2
+Wed Aug 28 23:38:37 2024
+: Set up board from FEN: 8/8/2Q5/5k2/8/4K3/8/8 w - - 2 2
+Wed Aug 28 23:38:38 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 23:38:38 2024
+: Calculated best move: c6d6 with time 459ms
+Wed Aug 28 23:38:53 2024
+: Received command: position fen 8/8/3Q4/6k1/8/4K3/8/8 w - - 4 3
+Wed Aug 28 23:38:53 2024
+: Set up board from FEN: 8/8/3Q4/6k1/8/4K3/8/8 w - - 4 3
+Wed Aug 28 23:38:54 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 23:38:54 2024
+: Calculated best move: d6d4 with time 459ms
+Wed Aug 28 23:39:10 2024
+: Received command: position fen 8/8/8/5k2/3Q4/4K3/8/8 w - - 6 4
+Wed Aug 28 23:39:10 2024
+: Set up board from FEN: 8/8/8/5k2/3Q4/4K3/8/8 w - - 6 4
+Wed Aug 28 23:39:11 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 23:39:12 2024
+: Calculated best move: d4e4 with time 459ms
+Wed Aug 28 23:39:23 2024
+: Received command: position fen 8/8/5k2/8/4Q3/4K3/8/8 w - - 8 5
+Wed Aug 28 23:39:23 2024
+: Set up board from FEN: 8/8/5k2/8/4Q3/4K3/8/8 w - - 8 5
+Wed Aug 28 23:39:25 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 23:39:25 2024
+: Calculated best move: e4e8 with time 459ms
+Wed Aug 28 23:39:38 2024
+: Received command: position fen 4Q3/8/8/5k2/8/4K3/8/8 w - - 10 6
+Wed Aug 28 23:39:38 2024
+: Set up board from FEN: 4Q3/8/8/5k2/8/4K3/8/8 w - - 10 6
+Wed Aug 28 23:39:39 2024
+: Received command: go wtime 10000 btime 10000
+Wed Aug 28 23:39:40 2024
+: Calculated best move: e8e7 with time 459ms
