@@ -330,6 +330,14 @@ void Board::clear()
     {
         castling[i] = 0;
     }
+
+
+    for (int i = 0; i < MAX_DEPTH; i++)
+    {
+        killer_moves_check[i][0] = 0;
+        killer_moves_check[i][1] = 0;
+    }
+
     
     anti_moves.clear();
     repetition_table.clear();
@@ -784,7 +792,10 @@ int Board::quiescence_search(int ply_from_root, int alpha, int beta)
 
     std::vector<Move> moves = get_legal_moves(0);
     moves.erase(std::remove_if(moves.begin(), moves.end(), [](const Move& m) { return m.capture_value <= 0;  }), moves.end()); //remove noncaptures
-    sort_moves(moves);
+    
+    Move killer_1 = (killer_moves_check[ply_from_root][0] == 1) ? killer_moves[ply_from_root][0] : Move();
+    Move killer_2 = (killer_moves_check[ply_from_root][1] == 1) ? killer_moves[ply_from_root][1] : Move();
+    sort_moves(moves, Move(), killer_1, killer_2);
 
     int move_counter = 0;
     for (int i = 0; i < moves.size(); i++)
@@ -803,6 +814,7 @@ int Board::quiescence_search(int ply_from_root, int alpha, int beta)
 
         if (score >= beta)
         {
+            store_killer_move(ply_from_root, moves[i]);
             return beta;
         }
 
@@ -837,15 +849,21 @@ int Board::search(int ply_from_root, int depth_left, int alpha, int beta) {
 
     std::vector<Move> moves = get_legal_moves(1); // generate pseudo-legal moves
 
+    bool is_check = if_check(turn);
+    if (is_check)
+        depth_left += 1;
+
     if (moves.size() == 0)
     {
-        if (if_check(turn))
+        if (is_check)
             return -MATE_VALUE + ply_from_root;
 
         return 0;
     }
 
-    sort_moves(moves);
+    Move killer_1 = (killer_moves_check[ply_from_root][0] == 1) ? killer_moves[ply_from_root][0] : Move();
+    Move killer_2 = (killer_moves_check[ply_from_root][1] == 1) ? killer_moves[ply_from_root][1] : Move();
+    sort_moves(moves, Move(), killer_1, killer_2);
 
     for (int i = 0; i < moves.size(); i++) 
     {
@@ -855,6 +873,7 @@ int Board::search(int ply_from_root, int depth_left, int alpha, int beta) {
 
         if (score >= beta)
         {
+            store_killer_move(ply_from_root, moves[i]);
             return beta;
         }
             
@@ -881,7 +900,7 @@ Move Board::find_best_move_for_depth(int depth)
     positions_evaluated = 0;
 
     std::vector<Move> moves = get_legal_moves(1);
-    sort_moves(moves);
+    sort_moves(moves, Move(), Move(), Move());
     Move best_move;
     int best_score = -INF;
 
@@ -923,10 +942,11 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
     int best_score = -INF;
 
     std::vector<Move> moves = get_legal_moves(1);
-    sort_moves(moves);
 
-    for (int depth = 2; depth <= MAX_DEPTH; depth++)
+    for (int depth = 1; depth <= MAX_DEPTH; depth++)
     {
+        sort_moves(moves, best_move, Move(), Move());
+
         int alpha = -INF;
         int beta = INF;
         Move current_best_move;
@@ -969,8 +989,26 @@ Move Board::find_best_move_with_time_limit(int time_limit_ms)
 }
 
 
-void Board::sort_moves(std::vector<Move>& moves) {
+void Board::sort_moves(std::vector<Move>& moves, Move best_move, Move killer_move_1, Move killer_move_2) {
     std::sort(moves.begin(), moves.end(), [&](const Move& a, const Move& b) {
+        if (best_move == a)
+            return true;
+        if (best_move == b)
+            return false;
+
+        if (a.capture_value != b.capture_value)
+            return a.capture_value > b.capture_value;
+
+        if (killer_move_1 == a)
+            return true;
+        if (killer_move_1 == b)
+            return false;
+
+        if (killer_move_2 == a)
+            return true;
+        if (killer_move_2 == b)
+            return false;
+
         return a.capture_value > b.capture_value;
     });
 }
@@ -1011,6 +1049,21 @@ void Board::print_chessboard()
         std::cout << "|\n";
     }
     std::cout << "+-----------------+\n\n";
+}
+
+void Board::store_killer_move(int ply_from_root, Move move)
+{
+    if (killer_moves_check[ply_from_root][0] == 0)
+    {
+        killer_moves[ply_from_root][0] = move;
+        killer_moves_check[ply_from_root][0] = 1;
+    }
+    else
+    {
+        killer_moves_check[ply_from_root][1] = 1;
+        killer_moves[ply_from_root][1] = killer_moves[ply_from_root][0];
+        killer_moves[ply_from_root][0] = move;
+    }
 }
 
 bool exists_more_than_once(const std::vector<DumbHash>& vec, DumbHash value) {

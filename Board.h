@@ -49,12 +49,14 @@ public:
     void create_moves(std::vector<Move>& or_moves, uint64_t dests_board, int from, uint64_t capture_mask, bool color, int piece_type);
     std::vector<Move> get_legal_moves(bool check_legality = 0, bool natural = 0, bool color = 0);
     bool if_check(bool color, int square = -1);
-    void sort_moves(std::vector<Move>& moves);
+    void sort_moves(std::vector<Move>& moves, Move best_move, Move killer_move_1, Move killer_move_2);
     //int quiescence_search(int alpha, int beta, std::chrono::steady_clock::time_point end_time);
     int quiescence_search(int ply_from_root, int alpha, int beta);
     int search(int ply_from_root, int depth_left, int alpha, int beta);
     Move find_best_move_for_depth(int depth);
     Move find_best_move_with_time_limit(int time_limit_ms);
+
+    void store_killer_move(int ply_from_root, Move move);
     
 private:
     uint64_t positions_evaluated = 0;
@@ -64,6 +66,9 @@ private:
 
     std::vector<AntiMove> anti_moves;
     std::vector<DumbHash> repetition_table;
+
+    bool killer_moves_check[MAX_DEPTH][2];
+    Move killer_moves[MAX_DEPTH][2];
 
     bool now_searching_for;
 
