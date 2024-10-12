@@ -348,9 +348,9 @@ void Board::setup_board_from_fen(const std::string& fen)
     clear();
 
     std::istringstream fen_stream(fen);
-    std::string board_part, active_color, cstling, en_pass;
+    std::string board_part, active_color, cstling, en_pass, fifty_rule, move_num;
 
-    fen_stream >> board_part >> active_color >> cstling >> en_pass;
+    fen_stream >> board_part >> active_color >> cstling >> en_pass >> fifty_rule >> move_num;
 
     int rank = 7;
     int file = 0;
@@ -419,6 +419,8 @@ void Board::setup_board_from_fen(const std::string& fen)
     {
         en_passant = 0;
     }
+    
+    this->move_num = stoi(move_num);
 }
 
 void Board::set_piece(int square, int type)
@@ -730,6 +732,9 @@ void Board::unmake_move()
 
 void Board::make_move_opponent(Move move)
 {
+    if (turn == 1)
+        move_num += 1;
+
     std::vector<Move> moves = this->get_legal_moves(0);
 
     for (int i = 0; i < moves.size(); i++)

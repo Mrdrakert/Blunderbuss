@@ -25,6 +25,7 @@ class Board
 {
 public:
     bool turn = 0;
+    int move_num = 1;
     uint64_t white_pieces[6];
     uint64_t black_pieces[6];
 

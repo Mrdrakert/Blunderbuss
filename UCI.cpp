@@ -213,13 +213,16 @@ private:
     {
         float y = 10000;
         if (time_left < 600000)
-            y = 0.00000000000009074 * time_left * time_left * time_left + -0.00000007166 * time_left * time_left + 0.02666 * time_left + 200.0;
+            y = 0.00000000000009 * time_left * time_left * time_left + -0.00000007 * time_left * time_left + 0.025 * time_left + 200.0;
 
         if (time_left < 10000)
             y = time_left / 22.0;
 
         if (time_left == 0)
             y = 4000;
+
+        if (board->move_num < 4)
+            y = (y * board->move_num) / (board->move_num + 1);
 
         int time_for_move = static_cast<int>(y);
         return time_for_move;
