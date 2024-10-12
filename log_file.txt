@@ -2196,3 +2196,15 @@ Wed Aug 28 23:39:39 2024
 : Received command: go wtime 10000 btime 10000
 Wed Aug 28 23:39:40 2024
 : Calculated best move: e8e7 with time 459ms
+Sat Oct 12 15:37:08 2024
+: Received command: uci
+Sat Oct 12 15:37:08 2024
+: Sent UCI response.
+Sat Oct 12 15:37:13 2024
+: Received command: setoption dp_penalty 10
+Sat Oct 12 15:37:13 2024
+: Set option  to 
+Sat Oct 12 15:37:53 2024
+: Received command: setoption name dp_penalty value 10
+Sat Oct 12 15:37:53 2024
+: Set option dp_penalty to 10

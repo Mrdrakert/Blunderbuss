@@ -4,12 +4,13 @@
 
 
 
-Board::Board()
+Board::Board(int dp_penalty)
     :white_pieces{ 0x000000000000FF00, 0x0000000000000042, 0x0000000000000024,
                     0x0000000000000081, 0x0000000000000008, 0x0000000000000010 },
     black_pieces{ 0x00FF000000000000, 0x4200000000000000, 0x2400000000000000,
                     0x8100000000000000, 0x0800000000000000, 0x1000000000000000 },
-    en_passant(0x0000000000000000)
+    en_passant(0x0000000000000000), 
+    DOUBLED_PAWN_PENALTY(dp_penalty)
 {
     now_searching_for = 0;
     anti_moves.reserve(40);

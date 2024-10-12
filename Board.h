@@ -24,12 +24,14 @@ const int MAX_DEPTH = 32;
 class Board
 {
 public:
+
+    const int DOUBLED_PAWN_PENALTY;
     bool turn = 0;
     int move_num = 1;
     uint64_t white_pieces[6];
     uint64_t black_pieces[6];
 
-    Board();
+    Board(int dp_penalty = 0);
     void clear();
     void setup_board_from_fen(const std::string& fen);
     void make_move(Move move, bool reversible = 1);

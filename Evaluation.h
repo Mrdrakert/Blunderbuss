@@ -8,8 +8,6 @@ const int INF = std::numeric_limits<int>::max();
 const int MATE_VALUE = 100000;
 const int DRAW_VALUE = -50;
 
-const int DOUBLED_PAWN_PENALTY = 20;
-
 // when its = 1 then the engine tries to lose
 const bool blunder_mode = 0;
 
@@ -145,8 +143,8 @@ int evaluate_position(Board* board)
         result -= (15 - kings_distance) * 20;
     }
 
-    result -= DOUBLED_PAWN_PENALTY * count_doubled_pawns(board->white_pieces[0]);
-    result += DOUBLED_PAWN_PENALTY * count_doubled_pawns(board->black_pieces[0]);
+    result -= board->DOUBLED_PAWN_PENALTY * count_doubled_pawns(board->white_pieces[0]);
+    result += board->DOUBLED_PAWN_PENALTY * count_doubled_pawns(board->black_pieces[0]);
 
 
     for (int i = 0; i < 6; i++)

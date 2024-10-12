@@ -6,6 +6,7 @@
 #include <sstream>
 #include <fstream>
 #include <chrono>
+#include <map>
 #include "Board.h"
 
 
@@ -14,11 +15,17 @@ class UCI
 public:
     UCI()
     {
-        board = new Board();
+        options["dp_penalty"] = "10";
+        create_new_board();
     }
 
     ~UCI()
     { }
+
+    void create_new_board()
+    {
+        board = new Board(stoi(options["dp_penalty"]));
+    }
 
     void run()
     {
@@ -60,11 +67,15 @@ public:
             {
                 board->print_chessboard();
             }
+            else if (token == "setoption") {
+                handle_setoption_command(iss);
+            }
         }
     }
 
 private:
     Board* board;
+    std::map<std::string, std::string> options;
     std::string log_file = "log_file.txt";
 
     void log(const std::string& message)
@@ -98,7 +109,7 @@ private:
 
     void start_new_game()
     {
-        board = new Board();
+        create_new_board();
         log("Started new game.");
     }
 
@@ -278,6 +289,25 @@ private:
         std::cout << "|____/|_|\\__,_|_| |_|\\__,_|\\___|_|  |_.__/ \\__,_|___/___/" << std::endl << std::endl;
         std::cout << "_________________________________________________________" << std::endl << std::endl;
     }
+
+    void handle_setoption_command(std::istringstream& iss) {
+        std::string token;
+        std::string option_name;
+        std::string option_value;
+
+        while (iss >> token) {
+            if (token == "name") {
+                iss >> option_name;
+            }
+            else if (token == "value") {
+                iss >> option_value;
+            }
+        }
+
+        options[option_name] = option_value;
+        log("Set option " + option_name + " to " + option_value);
+    }
+
 };
 
 int main()
