@@ -12,12 +12,39 @@ const int DRAW_VALUE = -50;
 const bool blunder_mode = 0;
 
 
-int get_piece_value_rigid(int piece)
+
+double transition(double piece_strength) 
+{
+    const double max_strength = 7760.0;
+    double x = piece_strength / max_strength;
+
+    double a = -2.0;
+    double b = 3.0;
+
+    return a * (x * x * x) + b * (x * x);
+}
+
+int interpolate(double transition_value, int start, int end) 
+{
+    if (transition_value < 0) transition_value = 0;
+    if (transition_value > 1) transition_value = 1;
+
+    return static_cast<int>(end + (start - end) * transition_value);
+}
+
+int get_piece_value_static(int piece)
 {
     //pawn // knight // bishop // rook // queen // king
     int values[6] = { 100, 290, 300, 500, 900, 100000 };
 
     return values[piece];
+}
+
+int get_piece_value_rigid(int piece, Board* board, int full_strength)
+{
+    int value = interpolate(transition(full_strength), board->piece_values_mg[piece], board->piece_values_eg[piece]);
+
+    return value;
 }
 
 
@@ -126,12 +153,14 @@ int evaluate_position(Board* board)
 
     int white_pieces_strength = 0;
     int black_pieces_strength = 0;
+    int total_strength = 0;
 
     for (int i = 1; i < 5; i++)
     {
-        white_pieces_strength += get_piece_value_rigid(i) * __popcnt64(board->white_pieces[i]);
-        black_pieces_strength += get_piece_value_rigid(i) * __popcnt64(board->black_pieces[i]);
+        white_pieces_strength += get_piece_value_static(i) * __popcnt64(board->white_pieces[i]);
+        black_pieces_strength += get_piece_value_static(i) * __popcnt64(board->black_pieces[i]);
     }
+    total_strength = white_pieces_strength + black_pieces_strength;
 
     int kings_distance = get_squares_distance(white_king, black_king);
     if (white_pieces_strength > 400 && black_pieces_strength < 300)
@@ -155,7 +184,7 @@ int evaluate_position(Board* board)
         int white_sq;
         while (white_bitboard) {
             white_sq = _tzcnt_u64(white_bitboard);
-            result += get_piece_value_rigid(i);
+            result += get_piece_value_rigid(i, board, total_strength);
             result += get_piece_placement_value(white_sq, i, 0, white_pieces_strength, black_pieces_strength);
 
             white_bitboard &= white_bitboard - 1;
@@ -164,7 +193,7 @@ int evaluate_position(Board* board)
         int black_sq;
         while (black_bitboard) {
             black_sq = _tzcnt_u64(black_bitboard);
-            result -= get_piece_value_rigid(i);
+            result -= get_piece_value_rigid(i, board, total_strength);
             result -= get_piece_placement_value(black_sq, i, 1, black_pieces_strength, white_pieces_strength);
 
             black_bitboard &= black_bitboard - 1;

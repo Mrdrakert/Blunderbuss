@@ -17,6 +17,7 @@
 #include "PieceAndBoard.h"
 #include "AntiMove.h"
 #include "DumbHash.h"
+#include <map>
 
 const int MAX_DEPTH = 32;
 
@@ -26,12 +27,16 @@ class Board
 public:
 
     const int DOUBLED_PAWN_PENALTY;
+    int piece_values_mg[6];
+    int piece_values_eg[6];
+
     bool turn = 0;
     int move_num = 1;
     uint64_t white_pieces[6];
     uint64_t black_pieces[6];
 
-    Board(int dp_penalty = 0);
+    Board(std::map<std::string, std::string> options);
+    //Board(int dp_penalty = 0, int pawn_val = 100, int knight_val = 290, int bishop_val = 300, int rook_val = 500, int queen_val = 900);
     void clear();
     void setup_board_from_fen(const std::string& fen);
     void make_move(Move move, bool reversible = 1);

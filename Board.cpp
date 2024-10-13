@@ -4,13 +4,29 @@
 
 
 
-Board::Board(int dp_penalty)
+Board::Board(std::map<std::string, std::string> options)
     :white_pieces{ 0x000000000000FF00, 0x0000000000000042, 0x0000000000000024,
                     0x0000000000000081, 0x0000000000000008, 0x0000000000000010 },
     black_pieces{ 0x00FF000000000000, 0x4200000000000000, 0x2400000000000000,
                     0x8100000000000000, 0x0800000000000000, 0x1000000000000000 },
-    en_passant(0x0000000000000000), 
-    DOUBLED_PAWN_PENALTY(dp_penalty)
+    en_passant(0x0000000000000000),
+    DOUBLED_PAWN_PENALTY(stoi(options["dp_penalty"])),
+
+    piece_values_mg{ 
+    stoi(options["pawn_mg"]), 
+    stoi(options["knight_mg"]), 
+    stoi(options["bishop_mg"]), 
+    stoi(options["rook_mg"]), 
+    stoi(options["queen_mg"]), 
+    100000 },
+
+    piece_values_eg{ 
+    stoi(options["pawn_eg"]),
+    stoi(options["knight_eg"]),
+    stoi(options["bishop_eg"]),
+    stoi(options["rook_eg"]),
+    stoi(options["queen_eg"]),
+    100000 }
 {
     now_searching_for = 0;
     anti_moves.reserve(40);
@@ -471,7 +487,7 @@ void Board::create_moves(std::vector<Move>& or_moves, uint64_t dests_board, int 
         if (captured_piece.type != -1)
         {
             captured_piece.type = (captured_piece.type > 5) ? captured_piece.type - 6 : captured_piece.type;
-            capture_value = 10 * get_piece_value_rigid(captured_piece.type) - get_piece_value_rigid(piece_type);
+            capture_value = 10 * get_piece_value_static(captured_piece.type) - get_piece_value_static(piece_type);
         }
 
         if (piece_type == 0)

@@ -15,7 +15,21 @@ class UCI
 public:
     UCI()
     {
-        options["dp_penalty"] = "10";
+        //default options
+        options["dp_penalty"] = "12";
+
+        options["pawn_mg"] = "100";
+        options["knight_mg"] = "290";
+        options["bishop_mg"] = "300";
+        options["rook_mg"] = "500";
+        options["queen_mg"] = "900";
+
+        options["pawn_eg"] = "100";
+        options["knight_eg"] = "290";
+        options["bishop_eg"] = "300";
+        options["rook_eg"] = "500";
+        options["queen_eg"] = "900";
+
         create_new_board();
     }
 
@@ -24,7 +38,7 @@ public:
 
     void create_new_board()
     {
-        board = new Board(stoi(options["dp_penalty"]));
+        board = new Board(options);
     }
 
     void run()
