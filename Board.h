@@ -22,10 +22,19 @@
 const int MAX_DEPTH = 32;
 
 
+struct TranspositionTableEntry {
+    int depth;
+    int score;
+    int flag;
+    Move move;
+};
+
+enum { EXACT, ALPHA, BETA };
+
 class Board
 {
 public:
-
+    int tt_hits;
     const int DOUBLED_PAWN_PENALTY;
     int piece_values_mg[6];
     int piece_values_eg[6];
@@ -63,6 +72,7 @@ public:
     int search(int ply_from_root, int depth_left, int alpha, int beta);
     Move find_best_move_for_depth(int depth);
     Move find_best_move_with_time_limit(int time_limit_ms);
+    void clear_transposition_table();
 
     void store_killer_move(int ply_from_root, Move move);
     
@@ -74,6 +84,7 @@ private:
 
     std::vector<AntiMove> anti_moves;
     std::vector<DumbHash> repetition_table;
+    std::unordered_map<uint64_t, TranspositionTableEntry> transposition_table;
 
     bool killer_moves_check[MAX_DEPTH][2];
     Move killer_moves[MAX_DEPTH][2];

@@ -59,5 +59,8 @@
     <ClInclude Include="PieceSquareTables.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="ZobristKeys.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

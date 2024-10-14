@@ -13,9 +13,13 @@ struct DumbHash
     uint64_t en_passant = 0;
     bool castling[4] = { 1, 1, 1, 1 };
 
+    bool turn;
+
     bool operator==(const DumbHash& other) const;
 
-    DumbHash(const uint64_t(&wht_pieces)[6], const uint64_t(&blk_pieces)[6], uint64_t enpass, const bool(&cstling)[4]);
+    DumbHash(const uint64_t(&wht_pieces)[6], const uint64_t(&blk_pieces)[6], uint64_t enpass, const bool(&cstling)[4], bool turn);
+
+    uint64_t hash();
 };
 
 #endif  // DUMBHASH_H

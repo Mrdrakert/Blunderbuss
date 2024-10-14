@@ -30,6 +30,7 @@ public:
         options["rook_eg"] = "500";
         options["queen_eg"] = "900";
 
+        board = new Board(options);
         create_new_board();
     }
 
@@ -38,6 +39,7 @@ public:
 
     void create_new_board()
     {
+        board->clear_transposition_table();
         board = new Board(options);
     }
 
@@ -95,13 +97,14 @@ private:
     void log(const std::string& message)
     {
         std::ofstream out_file(log_file, std::ios::app);
+
         if (out_file.is_open())
         {
             auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
             out_file << std::ctime(&now) << ": " << message << "\n";
             out_file.close();
         }
-        else 
+        else
         {
             std::cerr << "Unable to open the file." << std::endl;
         }
@@ -171,6 +174,9 @@ private:
 
     void handle_go_command(std::istringstream& iss)
     {
+        board->clear_transposition_table();
+        board->tt_hits = 0;
+
         std::string token;
         int wtime = 0;
         int btime = 0;
@@ -229,8 +235,11 @@ private:
             Move best_move = board->find_best_move_with_time_limit(time_for_move);
             std::string best_move_str = format_move(best_move);
             std::cout << "bestmove " << best_move_str << "\n";
-            log("Calculated best move: " + best_move_str + " with time " + std::to_string(time_for_move) + "ms");
+            std::string to_log = "Calculated best move: " + best_move_str + " with time " + std::to_string(time_for_move) + "ms";
+            log(to_log);
         }
+
+        //std::cout << "tt_hits " << board->tt_hits << "\n";
 
     }
 
@@ -246,8 +255,12 @@ private:
         if (time_left == 0)
             y = 4000;
 
+
         if (board->move_num < 4)
             y = (y * board->move_num) / (board->move_num + 1);
+
+        if (y <= 2)
+            y = 2;
 
         int time_for_move = static_cast<int>(y);
         return time_for_move;

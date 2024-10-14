@@ -730,7 +730,7 @@ void Board::make_move(Move move, bool reversible)
 
     turn = !turn;
 
-    repetition_table.emplace_back(DumbHash(white_pieces, black_pieces, en_passant, castling));
+    repetition_table.emplace_back(DumbHash(white_pieces, black_pieces, en_passant, castling, this->turn));
 }
 
 void Board::unmake_move()
@@ -813,7 +813,9 @@ int Board::quiescence_search(int ply_from_root, int alpha, int beta)
     }
 
     std::vector<Move> moves = get_legal_moves(0);
-    moves.erase(std::remove_if(moves.begin(), moves.end(), [](const Move& m) { return m.capture_value <= 0;  }), moves.end()); //remove noncaptures
+    moves.erase(std::remove_if(moves.begin(), moves.end(), [](const Move& m) {
+        return m.capture_value <= 0 && m.type != 4;
+        }), moves.end()); 
     
     Move killer_1 = (killer_moves_check[ply_from_root][0] == 1) ? killer_moves[ply_from_root][0] : Move();
     Move killer_2 = (killer_moves_check[ply_from_root][1] == 1) ? killer_moves[ply_from_root][1] : Move();
@@ -860,7 +862,7 @@ int Board::search(int ply_from_root, int depth_left, int alpha, int beta) {
         return quiescence_search(ply_from_root + 1, alpha, beta);
     }
 
-    DumbHash dumb_hash = DumbHash(this->white_pieces, this->black_pieces, this->en_passant, this->castling);
+    DumbHash dumb_hash = DumbHash(this->white_pieces, this->black_pieces, this->en_passant, this->castling, this->turn);
     if (exists_more_than_once(repetition_table, dumb_hash))
     {
         if (now_searching_for == this->turn)
@@ -868,6 +870,40 @@ int Board::search(int ply_from_root, int depth_left, int alpha, int beta) {
         else
             return -DRAW_VALUE;
     }
+
+    uint64_t position_hash = dumb_hash.hash();
+    Move tt_move = Move();
+
+    TranspositionTableEntry entry;
+    bool found_entry = false;
+
+    if (ply_from_root != 0 && transposition_table.find(position_hash) != transposition_table.end()) 
+    {
+        tt_hits += 1;
+
+        found_entry = true;
+        entry = transposition_table[position_hash];
+        
+
+        if (entry.depth >= depth_left) 
+        {
+            if (entry.flag == EXACT) 
+            {
+                return entry.score;
+            }
+            else if (entry.flag == ALPHA && entry.score <= alpha) 
+            {
+                return alpha;
+            }
+            else if (entry.flag == BETA && entry.score >= beta) 
+            {
+                return beta;
+            }
+        }
+
+        tt_move = entry.move;
+    }
+
 
     std::vector<Move> moves = get_legal_moves(1); // generate pseudo-legal moves
 
@@ -885,7 +921,12 @@ int Board::search(int ply_from_root, int depth_left, int alpha, int beta) {
 
     Move killer_1 = (killer_moves_check[ply_from_root][0] == 1) ? killer_moves[ply_from_root][0] : Move();
     Move killer_2 = (killer_moves_check[ply_from_root][1] == 1) ? killer_moves[ply_from_root][1] : Move();
-    sort_moves(moves, Move(), killer_1, killer_2);
+    sort_moves(moves, tt_move, killer_1, killer_2); //add ttmove
+
+    int original_alpha = alpha;
+
+    int best_score = -INF;
+    Move best_move;
 
     for (int i = 0; i < moves.size(); i++) 
     {
@@ -893,22 +934,40 @@ int Board::search(int ply_from_root, int depth_left, int alpha, int beta) {
         int score = -search(ply_from_root + 1, depth_left - 1, -beta, -alpha);
         unmake_move();
 
-        if (score >= beta)
+        if (score > best_score)
         {
-            store_killer_move(ply_from_root, moves[i]);
-            return beta;
-        }
-            
-        if (score > alpha)
-        {
-            alpha = score;
-        }
+            best_score = score;
+            best_move = moves[i];
 
-        if (std::chrono::steady_clock::now() >= end_time) {
+            if (score > alpha)
+            {
+                alpha = score;
+
+                if (score >= beta)
+                {
+                    TranspositionTableEntry new_entry = { depth_left, beta, BETA, best_move };
+                    transposition_table[position_hash] = new_entry;
+
+                    store_killer_move(ply_from_root, moves[i]);
+                    return beta;
+                }
+            }
+        }
+        if (std::chrono::steady_clock::now() >= end_time) 
+        {
             time_limit_reached = true;
             break;
         }
     }
+
+    int flag;
+    if (alpha <= original_alpha)
+        flag = ALPHA;
+    else
+        flag = EXACT;
+
+    TranspositionTableEntry new_entry = { depth_left, alpha, flag, best_move };
+    transposition_table[position_hash] = new_entry;
 
     return alpha;
 }
@@ -1088,6 +1147,11 @@ void Board::store_killer_move(int ply_from_root, Move move)
     }
 }
 
+void Board::clear_transposition_table()
+{
+    this->transposition_table.clear();
+}
+
 bool exists_more_than_once(const std::vector<DumbHash>& vec, DumbHash value) {
     int count = 0;
 
@@ -1105,3 +1169,5 @@ bool exists_more_than_once(const std::vector<DumbHash>& vec, DumbHash value) {
 
     return false;
 }
+
+
