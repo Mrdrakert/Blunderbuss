@@ -14,3 +14,535 @@ Mon Apr  7 17:21:52 2025
 : Started new game.
 Mon Apr  7 17:22:03 2025
 : Received command: print
+Mon Apr  7 18:02:07 2025
+: Received command: uci
+Mon Apr  7 18:02:07 2025
+: Sent UCI response.
+Mon Apr  7 18:08:33 2025
+: Received command: uci
+Mon Apr  7 18:08:33 2025
+: Sent UCI response.
+Mon Apr  7 18:08:37 2025
+: Received command: ucinewgame
+Mon Apr  7 18:08:37 2025
+: Started new game.
+Mon Apr  7 18:08:38 2025
+: Received command: print
+Mon Apr  7 18:08:42 2025
+: Received command: go perft
+Mon Apr  7 18:08:42 2025
+: Invalid perft depth value.
+Mon Apr  7 18:08:46 2025
+: Received command: go perft 5
+Mon Apr  7 18:09:54 2025
+: Received command: uci
+Mon Apr  7 18:09:54 2025
+: Sent UCI response.
+Mon Apr  7 18:10:01 2025
+: Received command: ucinewgame
+Mon Apr  7 18:10:01 2025
+: Started new game.
+Mon Apr  7 18:10:04 2025
+: Received command: go perft 4
+Mon Apr  7 18:10:04 2025
+: Perft 4: 197742
+Mon Apr  7 18:10:36 2025
+: Received command: go perft 5
+Mon Apr  7 18:10:37 2025
+: Perft 5: 4896998
+Mon Apr  7 18:30:17 2025
+: Received command: uci
+Mon Apr  7 18:30:17 2025
+: Sent UCI response.
+Mon Apr  7 18:30:18 2025
+: Received command: ucinewgame
+Mon Apr  7 18:30:18 2025
+: Started new game.
+Mon Apr  7 18:30:21 2025
+: Received command: go perft 4
+Mon Apr  7 18:32:12 2025
+: Received command: uci
+Mon Apr  7 18:32:12 2025
+: Sent UCI response.
+Mon Apr  7 18:32:14 2025
+: Received command: go perft 4
+Mon Apr  7 18:35:55 2025
+: Received command: go perft 4
+Mon Apr  7 18:35:55 2025
+: Perft 4: 196980
+Mon Apr  7 18:37:52 2025
+: Received command: go perft 4
+Mon Apr  7 18:37:52 2025
+: Perft 4: 197281
+Mon Apr  7 18:38:00 2025
+: Received command: go perft 5
+Mon Apr  7 18:38:03 2025
+: Perft 5: 4865351
+Mon Apr  7 19:14:34 2025
+: Received command: uci
+Mon Apr  7 19:14:34 2025
+: Sent UCI response.
+Mon Apr  7 19:14:37 2025
+: Received command: go perft 4
+Mon Apr  7 19:14:37 2025
+: Perft 4: 33128
+Mon Apr  7 19:14:45 2025
+: Received command: go perft 5
+Mon Apr  7 19:14:45 2025
+: Perft 5: 397916
+Mon Apr  7 19:15:38 2025
+: Received command: go perft 4
+Mon Apr  7 19:15:38 2025
+: Perft 4: 33128
+Mon Apr  7 19:18:40 2025
+: Received command: go perft 4
+Mon Apr  7 19:18:40 2025
+: Perft 4: 197281
+Mon Apr  7 19:20:38 2025
+: Received command: go perft 4
+Mon Apr  7 19:20:38 2025
+: Perft 4: 3136
+Mon Apr  7 19:21:04 2025
+: Received command: uci
+Mon Apr  7 19:21:04 2025
+: Sent UCI response.
+Mon Apr  7 19:21:06 2025
+: Received command: go perft 4
+Mon Apr  7 19:21:06 2025
+: Perft 4: 3136
+Mon Apr  7 19:25:26 2025
+: Received command: go perft 4
+Mon Apr  7 19:25:26 2025
+: Perft 4: 3136
+Mon Apr  7 19:25:30 2025
+: Received command: go perft 1
+Mon Apr  7 19:25:30 2025
+: Perft 1: 8
+Mon Apr  7 19:25:34 2025
+: Received command: go perft 2
+Mon Apr  7 19:25:34 2025
+: Perft 2: 64
+Mon Apr  7 19:26:18 2025
+: Received command: go perft 1
+Mon Apr  7 19:26:18 2025
+: Perft 1: 8
+Mon Apr  7 19:26:49 2025
+: Received command: go perft 1
+Mon Apr  7 19:26:49 2025
+: Perft 1: 8
+Mon Apr  7 19:28:00 2025
+: Received command: go perft 1
+Mon Apr  7 19:28:00 2025
+: Perft 1: 20
+Mon Apr  7 19:28:02 2025
+: Received command: go perft 2
+Mon Apr  7 19:28:02 2025
+: Perft 2: 68047
+Mon Apr  7 19:28:15 2025
+: Received command: go perft 4
+Mon Apr  7 19:28:31 2025
+: Received command: go perft 2
+Mon Apr  7 19:28:31 2025
+: Perft 2: 1936
+Mon Apr  7 19:28:33 2025
+: Received command: go perft 2
+Mon Apr  7 19:28:33 2025
+: Perft 2: 68047
+Mon Apr  7 19:28:34 2025
+: Received command: go perft 2
+Mon Apr  7 19:28:34 2025
+: Perft 2: 68047
+Mon Apr  7 19:28:35 2025
+: Received command: go perft 2
+Mon Apr  7 19:28:35 2025
+: Perft 2: 68047
+Mon Apr  7 19:28:37 2025
+: Received command: go perft 1
+Mon Apr  7 19:28:37 2025
+: Perft 1: 404
+Mon Apr  7 19:28:38 2025
+: Received command: go perft 2
+Mon Apr  7 19:28:38 2025
+: Perft 2: 68047
+Mon Apr  7 19:28:39 2025
+: Received command: go perft 1
+Mon Apr  7 19:28:39 2025
+: Perft 1: 404
+Mon Apr  7 19:29:01 2025
+: Received command: go perft 1
+Mon Apr  7 19:29:01 2025
+: Perft 1: 8
+Mon Apr  7 19:29:02 2025
+: Received command: go perft 1
+Mon Apr  7 19:29:02 2025
+: Perft 1: 8
+Mon Apr  7 19:29:03 2025
+: Received command: go perft 1
+Mon Apr  7 19:29:03 2025
+: Perft 1: 8
+Mon Apr  7 19:29:05 2025
+: Received command: go perft 2
+Mon Apr  7 19:29:05 2025
+: Perft 2: 64
+Mon Apr  7 19:29:05 2025
+: Received command: go perft 2
+Mon Apr  7 19:29:05 2025
+: Perft 2: 64
+Mon Apr  7 19:29:06 2025
+: Received command: go perft 2
+Mon Apr  7 19:29:06 2025
+: Perft 2: 64
+Mon Apr  7 19:29:08 2025
+: Received command: go perft 3
+Mon Apr  7 19:29:08 2025
+: Perft 3: 448
+Mon Apr  7 19:29:08 2025
+: Received command: go perft 3
+Mon Apr  7 19:29:08 2025
+: Perft 3: 448
+Mon Apr  7 19:29:09 2025
+: Received command: go perft 3
+Mon Apr  7 19:29:09 2025
+: Perft 3: 448
+Mon Apr  7 19:29:11 2025
+: Received command: go perft 4
+Mon Apr  7 19:29:11 2025
+: Perft 4: 3136
+Mon Apr  7 19:29:12 2025
+: Received command: go perft 4
+Mon Apr  7 19:29:12 2025
+: Perft 4: 3136
+Mon Apr  7 19:29:13 2025
+: Received command: go perft 4
+Mon Apr  7 19:29:13 2025
+: Perft 4: 3136
+Mon Apr  7 19:30:21 2025
+: Received command: go perft 2
+Mon Apr  7 19:30:21 2025
+: Perft 2: 568
+Mon Apr  7 19:30:27 2025
+: Received command: go perft 1
+Mon Apr  7 19:30:27 2025
+: Perft 1: 34
+Mon Apr  7 19:30:28 2025
+: Received command: go perft 2
+Mon Apr  7 19:30:28 2025
+: Perft 2: 1044
+Mon Apr  7 19:30:29 2025
+: Received command: go perft 2
+Mon Apr  7 19:30:29 2025
+: Perft 2: 1044
+Mon Apr  7 19:33:25 2025
+: Received command: go perft 1
+Mon Apr  7 19:33:25 2025
+: Perft 1: 20
+Mon Apr  7 19:33:30 2025
+: Received command: go perft 2
+Mon Apr  7 19:33:30 2025
+: Perft 2: 1044
+Mon Apr  7 19:33:32 2025
+: Received command: go perft 1
+Mon Apr  7 19:33:32 2025
+: Perft 1: 34
+Mon Apr  7 19:33:34 2025
+: Received command: go perft 1
+Mon Apr  7 19:33:34 2025
+: Perft 1: 34
+Mon Apr  7 19:33:39 2025
+: Received command: go perft 1
+Mon Apr  7 19:33:39 2025
+: Perft 1: 20
+Mon Apr  7 19:33:40 2025
+: Received command: go perft 1
+Mon Apr  7 19:33:40 2025
+: Perft 1: 34
+Mon Apr  7 19:33:41 2025
+: Received command: go perft 1
+Mon Apr  7 19:33:41 2025
+: Perft 1: 34
+Mon Apr  7 19:33:49 2025
+: Received command: go perft 1
+Mon Apr  7 19:33:49 2025
+: Perft 1: 20
+Mon Apr  7 19:33:50 2025
+: Received command: go perft 1
+Mon Apr  7 19:33:50 2025
+: Perft 1: 34
+Mon Apr  7 19:33:51 2025
+: Received command: go perft 1
+Mon Apr  7 19:33:51 2025
+: Perft 1: 34
+Mon Apr  7 19:34:43 2025
+: Received command: go perft 1
+Mon Apr  7 19:35:13 2025
+: Perft 1: 20
+Mon Apr  7 19:35:26 2025
+: Received command: go perft 1
+Mon Apr  7 19:35:32 2025
+: Perft 1: 20
+Mon Apr  7 19:35:37 2025
+: Received command: go perft 1
+Mon Apr  7 19:35:44 2025
+: Perft 1: 34
+Mon Apr  7 19:38:21 2025
+: Received command: go perft 1
+Mon Apr  7 19:38:24 2025
+: Perft 1: 20
+Mon Apr  7 19:38:27 2025
+: Received command: go perft 1
+Mon Apr  7 19:38:28 2025
+: Perft 1: 20
+Mon Apr  7 19:38:33 2025
+: Received command: go perft 2
+Mon Apr  7 19:38:38 2025
+: Perft 2: 512
+Mon Apr  7 19:38:46 2025
+: Received command: go perft 1
+Mon Apr  7 19:38:46 2025
+: Perft 1: 20
+Mon Apr  7 19:38:48 2025
+: Received command: go perft 2
+Mon Apr  7 19:38:48 2025
+: Perft 2: 512
+Mon Apr  7 19:38:51 2025
+: Received command: go perft 3
+Mon Apr  7 19:38:51 2025
+: Perft 3: 13704
+Mon Apr  7 19:38:52 2025
+: Received command: go perft 4
+Mon Apr  7 19:38:52 2025
+: Perft 4: 352129
+Mon Apr  7 19:38:54 2025
+: Received command: go perft 5
+Mon Apr  7 19:38:56 2025
+: Perft 5: 9962704
+Mon Apr  7 19:39:39 2025
+: Received command: go perft 1
+Mon Apr  7 19:39:39 2025
+: Perft 1: 20
+Mon Apr  7 19:39:40 2025
+: Received command: go perft 2
+Mon Apr  7 19:39:40 2025
+: Perft 2: 512
+Mon Apr  7 19:39:41 2025
+: Received command: go perft 3
+Mon Apr  7 19:39:41 2025
+: Perft 3: 13704
+Mon Apr  7 19:39:42 2025
+: Received command: go perft 4
+Mon Apr  7 19:39:42 2025
+: Perft 4: 352129
+Mon Apr  7 19:39:43 2025
+: Received command: go perft 5
+Mon Apr  7 19:39:45 2025
+: Perft 5: 9962704
+Mon Apr  7 19:42:00 2025
+: Received command: go perft 1
+Mon Apr  7 19:42:00 2025
+: Perft 1: 20
+Mon Apr  7 19:42:01 2025
+: Received command: go perft 2
+Mon Apr  7 19:42:01 2025
+: Perft 2: 1044
+Mon Apr  7 19:42:03 2025
+: Received command: go perft 1
+Mon Apr  7 19:42:03 2025
+: Perft 1: 34
+Mon Apr  7 19:42:04 2025
+: Received command: go perft 2
+Mon Apr  7 19:42:04 2025
+: Perft 2: 1044
+Mon Apr  7 19:42:17 2025
+: Received command: go perft 1
+Mon Apr  7 19:42:17 2025
+: Perft 1: 20
+Mon Apr  7 19:42:18 2025
+: Received command: go perft 1
+Mon Apr  7 19:42:18 2025
+: Perft 1: 20
+Mon Apr  7 19:42:19 2025
+: Received command: go perft 1
+Mon Apr  7 19:42:19 2025
+: Perft 1: 20
+Mon Apr  7 19:42:20 2025
+: Received command: go perft 2
+Mon Apr  7 19:42:20 2025
+: Perft 2: 400
+Mon Apr  7 19:42:22 2025
+: Received command: go perft 3
+Mon Apr  7 19:42:22 2025
+: Perft 3: 8902
+Mon Apr  7 19:42:26 2025
+: Received command: go perft 3
+Mon Apr  7 19:42:26 2025
+: Perft 3: 8902
+Mon Apr  7 19:42:27 2025
+: Received command: go perft 4
+Mon Apr  7 19:42:27 2025
+: Perft 4: 197742
+Mon Apr  7 19:42:33 2025
+: Received command: go perft 5
+Mon Apr  7 19:42:35 2025
+: Perft 5: 4897256
+Mon Apr  7 19:42:58 2025
+: Received command: go perft 1
+Mon Apr  7 19:42:58 2025
+: Perft 1: 20
+Mon Apr  7 19:42:59 2025
+: Received command: go perft 1
+Mon Apr  7 19:42:59 2025
+: Perft 1: 20
+Mon Apr  7 19:43:00 2025
+: Received command: go perft 2
+Mon Apr  7 19:43:00 2025
+: Perft 2: 400
+Mon Apr  7 19:43:01 2025
+: Received command: go perft 3
+Mon Apr  7 19:43:01 2025
+: Perft 3: 8902
+Mon Apr  7 19:43:02 2025
+: Received command: go perft 4
+Mon Apr  7 19:43:02 2025
+: Perft 4: 197281
+Mon Apr  7 19:43:04 2025
+: Received command: go perft 5
+Mon Apr  7 19:43:07 2025
+: Perft 5: 4865609
+Mon Apr  7 19:43:12 2025
+: Received command: go perft 6
+Mon Apr  7 19:43:47 2025
+: Received command: go perft 4
+Mon Apr  7 19:43:47 2025
+: Perft 4: 197281
+Mon Apr  7 19:43:48 2025
+: Received command: go perft 5
+Mon Apr  7 19:43:48 2025
+: Perft 5: 4865609
+Mon Apr  7 19:43:49 2025
+: Received command: go perft 6
+Mon Apr  7 19:43:55 2025
+: Perft 6: 119060546
+Mon Apr  7 19:45:53 2025
+: Received command: go perft 6
+Mon Apr  7 19:45:59 2025
+: Perft 6: 119060546
+Mon Apr  7 19:48:42 2025
+: Received command: go perft 4
+Mon Apr  7 19:49:49 2025
+: Received command: go perft 4
+Mon Apr  7 19:49:49 2025
+: Perft 4: 197281
+Mon Apr  7 19:52:18 2025
+: Received command: go perft 5
+Mon Apr  7 19:52:18 2025
+: Perft 5: 4865609
+Mon Apr  7 19:52:27 2025
+: Received command: go perft 6
+Mon Apr  7 19:52:34 2025
+: Perft 6: 119060546
+Mon Apr  7 20:19:48 2025
+: Received command: go perft 1
+Mon Apr  7 20:27:22 2025
+: Received command: print
+Mon Apr  7 20:27:28 2025
+: Received command: go perft 1
+Mon Apr  7 20:27:28 2025
+: Perft 1: 20
+Mon Apr  7 20:27:30 2025
+: Received command: go perft 2
+Mon Apr  7 20:27:30 2025
+: Perft 2: 400
+Mon Apr  7 20:27:31 2025
+: Received command: go perft 3
+Mon Apr  7 20:27:31 2025
+: Perft 3: 8902
+Mon Apr  7 20:27:32 2025
+: Received command: go perft 4
+Mon Apr  7 20:27:32 2025
+: Perft 4: 197281
+Mon Apr  7 20:27:33 2025
+: Received command: go perft 5
+Mon Apr  7 20:27:33 2025
+: Perft 5: 4865609
+Mon Apr  7 20:27:36 2025
+: Received command: go perft 6
+Mon Apr  7 20:27:42 2025
+: Perft 6: 119060546
+Mon Apr  7 20:30:23 2025
+: Received command: print
+Mon Apr  7 20:30:27 2025
+: Received command: position fen rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR b KQkq a3 0 1
+Mon Apr  7 20:30:27 2025
+: Loaded FEN:  rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR b KQkq a3 0 1
+Mon Apr  7 20:30:29 2025
+: Received command: print
+Mon Apr  7 20:30:32 2025
+: Received command: go perft 5
+Mon Apr  7 20:30:32 2025
+: Perft 5: 5961204
+Mon Apr  7 20:32:28 2025
+: Received command: go perft 6
+Mon Apr  7 20:32:34 2025
+: Perft 6: 119060546
+Mon Apr  7 20:33:26 2025
+: Received command: position fen rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR b KQkq a3 0 1
+Mon Apr  7 20:33:26 2025
+: Loaded FEN:  rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR b KQkq a3 0 1
+Mon Apr  7 20:33:29 2025
+: Received command: print
+Mon Apr  7 20:33:36 2025
+: Received command: go perft 5
+Mon Apr  7 20:33:36 2025
+: Perft 5: 5961204
+Mon Apr  7 20:35:16 2025
+: Received command: position fen rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR b KQkq a3 0 1
+Mon Apr  7 20:35:16 2025
+: Loaded FEN:  rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR b KQkq a3 0 1
+Mon Apr  7 20:35:19 2025
+: Received command: go perft 5
+Mon Apr  7 20:35:19 2025
+: Perft 5: 5363573
+Mon Apr  7 20:37:05 2025
+: Received command: position fen rnbqkbnr/p1pppppp/8/1p6/P7/8/1PPPPPPP/RNBQKBNR w KQkq b6 0 2
+Mon Apr  7 20:37:05 2025
+: Loaded FEN:  rnbqkbnr/p1pppppp/8/1p6/P7/8/1PPPPPPP/RNBQKBNR w KQkq b6 0 2
+Mon Apr  7 20:37:07 2025
+: Received command: go perft 4
+Mon Apr  7 20:37:07 2025
+: Perft 4: 273986
+Mon Apr  7 20:39:04 2025
+: Received command: position fen rnbqkbnr/p1pppppp/8/1P6/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 2
+Mon Apr  7 20:39:04 2025
+: Loaded FEN:  rnbqkbnr/p1pppppp/8/1P6/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 2
+Mon Apr  7 20:39:06 2025
+: Received command: go perft 3
+Mon Apr  7 20:39:06 2025
+: Perft 3: 11206
+Mon Apr  7 20:40:20 2025
+: Received command: position fen rnbqkbnr/2pppppp/8/pP6/8/8/1PPPPPPP/RNBQKBNR w KQkq a6 0 3
+Mon Apr  7 20:40:20 2025
+: Loaded FEN:  rnbqkbnr/2pppppp/8/pP6/8/8/1PPPPPPP/RNBQKBNR w KQkq a6 0 3
+Mon Apr  7 20:40:24 2025
+: Received command: go perft 2
+Mon Apr  7 20:40:24 2025
+: Perft 2: 505
+Mon Apr  7 20:41:22 2025
+: Received command: position fen rnbqkbnr/2pppppp/P7/8/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 3
+Mon Apr  7 20:41:22 2025
+: Loaded FEN:  rnbqkbnr/2pppppp/P7/8/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 3
+Mon Apr  7 20:41:26 2025
+: Received command: go perft 1
+Mon Apr  7 20:41:26 2025
+: Perft 1: 20
+Mon Apr  7 20:44:27 2025
+: Received command: go perft 5
+Mon Apr  7 20:44:28 2025
+: Perft 5: 4865609
+Mon Apr  7 20:44:30 2025
+: Received command: go perft 6
+Mon Apr  7 20:44:36 2025
+: Perft 6: 119060324
+Mon Apr  7 20:44:45 2025
+: Received command: go perft 7
+Mon Apr  7 20:47:29 2025
+: Perft 7: 3195018407

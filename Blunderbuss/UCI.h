@@ -24,4 +24,5 @@ private:
     void PrintWelcomeMessage();
     void HandleSetOptionCommand(std::istringstream& iss);
     void HandleGoCommand(std::istringstream& iss);
+    void HandlePositionCommand(std::istringstream& iss);
 };

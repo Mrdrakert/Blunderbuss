@@ -3,6 +3,6 @@
 int main()
 {
     UCI uci;
-    uci.run();
+    uci.Run();
     return 0;
 }

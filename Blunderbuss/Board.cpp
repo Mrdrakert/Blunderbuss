@@ -2,6 +2,8 @@
 #include "MoveBitboards.h"
 #include <iostream>
 #include <intrin.h>
+#include <stdlib.h>
+#include <sstream>
 
 // Initialize the board with starting positions
 Board* InitBoard() {
@@ -9,6 +11,8 @@ Board* InitBoard() {
 
     // White's turn
     board->turn = 0;
+
+	board->en_passant = 0; // No en passant target square
 
     // White pieces: pawn, knight, bishop, rook, queen, king
     board->pieces[0][0] = 0x000000000000FF00; // Pawns
@@ -26,6 +30,8 @@ Board* InitBoard() {
     board->pieces[1][3] = 0x8100000000000000; // Rooks
     board->pieces[1][4] = 0x0800000000000000; // Queen
     board->pieces[1][5] = 0x1000000000000000; // King
+
+	LoadFEN(board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
     return board;
 }
@@ -168,7 +174,7 @@ uint64_t GetKingMoves(Board* board, int square, bool color)
     return moves;
 }
 
-uint64_t GetPawnMoves(Board* board, int square, bool color)
+uint64_t GetPawnMoves(Board* board, int square, bool color, bool onlyCaptures)
 {
     uint64_t whiteMask = 0x0000000000FF0000;
     uint64_t blackMask = 0x0000FF0000000000;
@@ -181,19 +187,24 @@ uint64_t GetPawnMoves(Board* board, int square, bool color)
 
     if (color == 0)
     {
-        moves |= opOccupancy & pawn_white_capture_moves[square];
-        if (square / 8 == 1)
-            occupancy |= ((whiteMask & occupancy) << 8);
-        moves |= ~occupancy & pawn_white_moves[square];
+        moves |= (opOccupancy | board->en_passant) & pawn_white_capture_moves[square];
+        if (onlyCaptures == false)
+        {
+            if (square / 8 == 1)
+                occupancy |= ((whiteMask & occupancy) << 8);
+            moves |= ~occupancy & pawn_white_moves[square];
+        }
     }
     else
     {
-        moves |= opOccupancy & pawn_black_capture_moves[square];
-        if (square / 8 == 6)
-            occupancy |= ((blackMask & occupancy) >> 8);
-        moves |= ~occupancy & pawn_black_moves[square];
+        moves |= (opOccupancy | board->en_passant) & pawn_black_capture_moves[square];
+        if (onlyCaptures == false)
+        {
+            if (square / 8 == 6)
+                occupancy |= ((blackMask & occupancy) >> 8);
+            moves |= ~occupancy & pawn_black_moves[square];
+        }
     }
-
 
     return moves;
 }
@@ -213,7 +224,7 @@ std::vector<Move> GetMovesSide(Board* board, bool color)
             uint64_t theMoves = 0;
             switch (i) {
             case 0:
-                theMoves = GetPawnMoves(board, index, color);
+                theMoves = GetPawnMoves(board, index, color, false);
                 break;
             case 1:
                 theMoves = GetKnightMoves(board, index, color);
@@ -236,13 +247,48 @@ std::vector<Move> GetMovesSide(Board* board, bool color)
             unsigned long index2 = 0;
             while (_BitScanForward64(&index2, theMoves))
             {
-                moves.push_back({ static_cast<int>(index), static_cast<int>(index2) });
+				Move move = { static_cast<int>(index), static_cast<int>(index2) };
+                move.enPassantSquare = -1;
+                move.special = 0;
+                move.capturedPiece = 0;
+                if (i == 0) // if the piece is a pawn
+				{
+					if (index2 / 8 == 7 || index / 8 == 0)
+					{
+						move.special = 4; // promotion to queen
+						moves.push_back(move);
+						move.special = 5; // promotion to knight
+						moves.push_back(move);
+						move.special = 6; // promotion to rook
+						moves.push_back(move);
+						move.special = 7; // promotion to bishop
+						moves.push_back(move);
+					}
+					else if ((1ULL << index2) == board->en_passant)
+					{
+						move.special = 2; // en passant
+					}
+					else if (abs(static_cast<int>(index2 - index)) == 16)  //if it moved 2 squares forward, set enpassant square
+					{
+						int square = (index + index2) / 2;
+                        move.enPassantSquare = square;
+					}
+
+				}
+				else if (i == 5) // castling
+				{
+					if (index2 == index + 2 || index2 == index - 2)
+					{
+						move.special = 3; // castling
+					}
+				}
+
+                moves.push_back(move);
                 theMoves ^= (1ULL << index2);
             }
             temp ^= (1ULL << index);
         }
     }
-
 
     return moves; // Return the vector of moves
 }
@@ -280,8 +326,21 @@ void MakeMove(Board* board, Move move)
         }
     }
 
+	// If move type is enpassant, then remove the piece from the square behind
+    if (move.special == 2)
+    {
+		int square = (opponentColor == 1) ? move.to - 8 : move.to + 8;
+		if (board->pieces[opponentColor][0] & (1ULL << square))
+		{
+			// Remove the captured piece
+			board->pieces[opponentColor][0] &= ~(1ULL << square);
+		}
+	}
+
     // Place the piece on the 'to' square
     board->pieces[color][pieceType] |= (1ULL << move.to);
+
+    board->en_passant = (move.enPassantSquare != -1) ? (1ULL << move.enPassantSquare) : 0;
 
     board->turn = !board->turn;
 }
@@ -294,7 +353,117 @@ void UnmakeMove(Board* board, Snapshot snap)
     //delete snap;
 }
 
-uint64_t Perft(Board* board, int depth)
+bool IsCheck(Board* board, bool color)
+{
+    int kingSquare = -1;
+    unsigned long index = 0;
+    _BitScanForward64(&index, board->pieces[color][5]);
+	kingSquare = index;
+
+	uint64_t kingMoves = GetKingMoves(board, kingSquare, color);
+	uint64_t rookMoves = GetRookMoves(board, kingSquare, color);
+	uint64_t bishopMoves = GetBishopMoves(board, kingSquare, color);
+	uint64_t knightMoves = GetKnightMoves(board, kingSquare, color);
+	uint64_t pawnMoves = GetPawnMoves(board, kingSquare, color, true);
+
+	if (rookMoves & (board->pieces[!color][3] | board->pieces[!color][4]))
+	{
+		return true;
+	}
+	if (bishopMoves & (board->pieces[!color][2] | board->pieces[!color][4]))
+	{
+		return true;
+	}
+	if (knightMoves & board->pieces[!color][1])
+	{
+		return true;
+	}
+	if (pawnMoves & board->pieces[!color][0])
+	{
+		return true;
+	}
+
+    return false;
+}
+
+int PieceTypeFromLetter(char c)
+{
+	c = toupper(c); // Convert to uppercase
+	switch (c)
+	{
+	    case 'P': return 0; // Pawn
+	    case 'N': return 1; // Knight
+	    case 'B': return 2; // Bishop
+	    case 'R': return 3; // Rook
+	    case 'Q': return 4; // Queen
+	    case 'K': return 5; // King
+	    default: return -1; // Invalid piece type
+	}
+}
+
+void LoadFEN(Board* board, const std::string& fen)
+{
+    // Clear the board
+    memset(board->pieces, 0, sizeof(board->pieces));
+    board->turn = 0;
+    board->en_passant = 0;
+    // Parse the FEN string
+    std::istringstream iss(fen);
+    std::string position;
+    iss >> position;
+    int rank = 7;
+    int file = 0;
+    for (char c : position)
+    {
+        if (c >= '1' && c <= '8')
+        {
+            file += c - '0'; // Skip squares
+        }
+        else if (c == '/')
+        {
+            rank--;
+            file = 0; // Reset file for the next rank
+        }
+        else
+        {
+            int color = isupper(c) ? 0 : 1; // Determine color (white or black)
+            int pieceType = PieceTypeFromLetter(c); // Convert piece character to index
+            board->pieces[color][pieceType] |= (1ULL << (rank * 8 + file));
+            file++;
+        }
+    }
+    std::string turn;
+    iss >> turn;
+    board->turn = (turn == "b") ? 1 : 0;
+    std::string castling;
+	iss >> castling;
+    std::string enPassant;
+    iss >> enPassant;
+    if (enPassant != "-")
+    {
+        int file = enPassant[0] - 'a';
+        int rank = enPassant[1] - '1';
+        board->en_passant = (1ULL << (rank * 8 + file));
+    }
+}
+
+
+//function that returns a string with move notation, for example e2e4
+std::string MoveToString(Move move)
+{
+	std::string result;
+	char file = 'a' + (move.from % 8);
+	char rank = '1' + (move.from / 8);
+	result += file;
+	result += rank;
+	file = 'a' + (move.to % 8);
+	rank = '1' + (move.to / 8);
+	result += file;
+	result += rank;
+	return result;
+}
+
+uint64_t Perft(Board* board, int depth, bool initial)
 {
     if (depth == 0)
     {
@@ -309,7 +478,16 @@ uint64_t Perft(Board* board, int depth)
         Snapshot snap = MakeSnapshot(board);
         MakeMove(board, move);
 
-        nodes += Perft(board, depth - 1);
+		if (IsCheck(board, !board->turn))
+		{
+			UnmakeMove(board, snap);
+			continue;
+		}
+
+        uint64_t temp = Perft(board, depth - 1, false);
+        if (initial)
+		    std::cout << MoveToString(move) << " " << temp << "\n";
+        nodes += temp;
 
         UnmakeMove(board, snap);
     }

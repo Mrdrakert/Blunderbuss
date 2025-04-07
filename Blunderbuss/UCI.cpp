@@ -40,7 +40,7 @@ void UCI::Run()
         }
         else if (token == "position")
         {
-            // TODO: Implement position parsing
+            HandlePositionCommand(iss);
         }
         else if (token == "go")
         {
@@ -137,12 +137,34 @@ void UCI::HandleGoCommand(std::istringstream& iss)
     {
         if (token == "perft")
         {
-            iss >> value;
-        }
-        else if (token == "xd")
-        {
-            //iss >> option_value;
+            int depth;
+            if (iss >> depth)
+            {
+				uint64_t nodes = Perft(board, depth, true);
+				std::cout << "info string Perft " << depth << ": " << nodes << "\n";
+				Log("Perft " + std::to_string(depth) + ": " + std::to_string(nodes));
+            }
+            else
+            {
+                Log("Invalid perft depth value.");
+            }
         }
     }
-    
+}
+
+void UCI::HandlePositionCommand(std::istringstream& iss)
+{
+    std::string token;
+
+    while (iss >> token)
+    {
+        if (token == "fen")
+        {
+            //read the fen and call LoadFen
+			std::string fen;
+			std::getline(iss, fen);
+			LoadFEN(board, fen);
+			Log("Loaded FEN: " + fen);
+		}
+    }
 }
