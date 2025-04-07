@@ -1,0 +1,10 @@
+﻿  Blunderbuss.cpp
+  Board.cpp
+D:\Programowanie\Szachowe\Blunderbuss\Blunderbuss\Board.cpp(92,17): error C3861: "_BitScanReverse64": identyfikatora nie odnaleziono
+D:\Programowanie\Szachowe\Blunderbuss\Blunderbuss\Board.cpp(97,17): error C3861: "_BitScanForward64": identyfikatora nie odnaleziono
+D:\Programowanie\Szachowe\Blunderbuss\Blunderbuss\Board.cpp(126,17): error C3861: "_BitScanReverse64": identyfikatora nie odnaleziono
+D:\Programowanie\Szachowe\Blunderbuss\Blunderbuss\Board.cpp(131,17): error C3861: "_BitScanForward64": identyfikatora nie odnaleziono
+D:\Programowanie\Szachowe\Blunderbuss\Blunderbuss\Board.cpp(211,16): error C3861: "_BitScanForward64": identyfikatora nie odnaleziono
+D:\Programowanie\Szachowe\Blunderbuss\Blunderbuss\Board.cpp(237,20): error C3861: "_BitScanForward64": identyfikatora nie odnaleziono
+  UCI.cpp
+  Generowanie kodu...

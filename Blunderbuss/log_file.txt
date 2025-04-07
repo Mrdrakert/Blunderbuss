@@ -1,0 +1,16 @@
+Mon Apr  7 17:21:24 2025
+: Received command: uci
+Mon Apr  7 17:21:24 2025
+: Sent UCI response.
+Mon Apr  7 17:21:45 2025
+: Received command: isready
+Mon Apr  7 17:21:45 2025
+: Sent readyok.
+Mon Apr  7 17:21:47 2025
+: Received command: newgame
+Mon Apr  7 17:21:52 2025
+: Received command: ucinewgame
+Mon Apr  7 17:21:52 2025
+: Started new game.
+Mon Apr  7 17:22:03 2025
+: Received command: print
