@@ -9,28 +9,6 @@
 Board* InitBoard() {
     Board* board = new Board();
 
-    // White's turn
-    board->turn = 0;
-
-	board->en_passant = 0; // No en passant target square
-
-    // White pieces: pawn, knight, bishop, rook, queen, king
-    board->pieces[0][0] = 0x000000000000FF00; // Pawns
-    //board->pieces[0][0] = 0x0000000000000000; // Pawns
-    board->pieces[0][1] = 0x0000000000000042; // Knights
-    board->pieces[0][2] = 0x0000000000000024; // Bishops
-    board->pieces[0][3] = 0x0000000000000081; // Rooks
-    board->pieces[0][4] = 0x0000000000000008; // Queen
-    board->pieces[0][5] = 0x0000000000000010; // King
-
-    // Black pieces: pawn, knight, bishop, rook, queen, king
-    board->pieces[1][0] = 0x00FF000000000000; // Pawns
-    board->pieces[1][1] = 0x4200000000000000; // Knights
-    board->pieces[1][2] = 0x2400000000000000; // Bishops
-    board->pieces[1][3] = 0x8100000000000000; // Rooks
-    board->pieces[1][4] = 0x0800000000000000; // Queen
-    board->pieces[1][5] = 0x1000000000000000; // King
-
 	LoadFEN(board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
     return board;
@@ -41,6 +19,8 @@ Snapshot MakeSnapshot(Board* board)
     Snapshot snap;
     snap.turn = board->turn;
     memcpy(snap.pieces, board->pieces, 2 * 6 * sizeof(uint64_t));
+	memcpy(snap.castling, board->castling, 4 * sizeof(bool));
+	snap.en_passant = board->en_passant;
     return snap;
 }
 
@@ -167,9 +147,34 @@ uint64_t GetKingMoves(Board* board, int square, bool color)
 
     // Get the occupancy bitboard (all occupied squares)
     uint64_t myOccupancy = GetOccupancy(board, color);
+	uint64_t opOccupancy = GetOccupancy(board, !color);
 
     uint64_t result = ~myOccupancy & king_moves[square];
     moves |= result;
+
+	// Check for castling
+    if (color == 0) // White king
+    {
+        if (board->castling[0] && ((myOccupancy | opOccupancy) & 0x0000000000000060) == 0)
+        {
+            moves |= 0x0000000000000040; // King-side castling
+        }
+		if (board->castling[1] && ((myOccupancy | opOccupancy) & 0x000000000000000E) == 0)
+		{
+			moves |= 0x0000000000000004; // Queen-side castling
+		}
+    }
+    else // Black king
+    {
+		if (board->castling[2] && ((myOccupancy | opOccupancy) & 0x6000000000000000) == 0)
+		{
+			moves |= 0x4000000000000000; // King-side castling
+		}
+        if (board->castling[3] && ((myOccupancy | opOccupancy) & 0x0E00000000000000) == 0)
+        {
+			moves |= 0x0400000000000000; // Queen-side castling
+        }
+    }
 
     return moves;
 }
@@ -248,12 +253,13 @@ std::vector<Move> GetMovesSide(Board* board, bool color)
             while (_BitScanForward64(&index2, theMoves))
             {
 				Move move = { static_cast<int>(index), static_cast<int>(index2) };
+                move.pieceType = i;
                 move.enPassantSquare = -1;
                 move.special = 0;
                 move.capturedPiece = 0;
                 if (i == 0) // if the piece is a pawn
 				{
-					if (index2 / 8 == 7 || index / 8 == 0)
+					if (index2 / 8 == 7 || index2 / 8 == 0)
 					{
 						move.special = 4; // promotion to queen
 						moves.push_back(move);
@@ -262,7 +268,7 @@ std::vector<Move> GetMovesSide(Board* board, bool color)
 						move.special = 6; // promotion to rook
 						moves.push_back(move);
 						move.special = 7; // promotion to bishop
-						moves.push_back(move);
+						//moves.push_back(move);
 					}
 					else if ((1ULL << index2) == board->en_passant)
 					{
@@ -298,15 +304,7 @@ void MakeMove(Board* board, Move move)
 {
     int color = board->turn ? 1 : 0;
     int opponentColor = 1 - color;
-    int pieceType = -1;
-    for (int i = 0; i < 6; ++i)
-    {
-        if (board->pieces[color][i] & (1ULL << move.from))
-        {
-            pieceType = i;
-            break;
-        }
-    }
+    int pieceType = move.pieceType;
 
     if (pieceType == -1)
     {
@@ -315,30 +313,101 @@ void MakeMove(Board* board, Move move)
 
     // Remove the piece from the 'from' square
     board->pieces[color][pieceType] &= ~(1ULL << move.from);
+
+	uint64_t toSquare = (1ULL << move.to);
     // Check if the 'to' square is occupied by an opponent's piece (capture)
     for (int i = 0; i < 6; ++i)
     {
-        if (board->pieces[opponentColor][i] & (1ULL << move.to))
+        if (board->pieces[opponentColor][i] & toSquare)
         {
             // Remove the captured piece
-            board->pieces[opponentColor][i] &= ~(1ULL << move.to);
+            board->pieces[opponentColor][i] &= ~toSquare;
             break;
         }
     }
 
-	// If move type is enpassant, then remove the piece from the square behind
+    // If move type is enpassant, then remove the piece from the square behind
     if (move.special == 2)
     {
-		int square = (opponentColor == 1) ? move.to - 8 : move.to + 8;
-		if (board->pieces[opponentColor][0] & (1ULL << square))
-		{
-			// Remove the captured piece
-			board->pieces[opponentColor][0] &= ~(1ULL << square);
-		}
-	}
+        int square = (opponentColor == 1) ? move.to - 8 : move.to + 8;
+        if (board->pieces[opponentColor][0] & (1ULL << square))
+        {
+            // Remove the captured piece
+            board->pieces[opponentColor][0] &= ~(1ULL << square);
+        }
+    }
 
-    // Place the piece on the 'to' square
-    board->pieces[color][pieceType] |= (1ULL << move.to);
+    // if any rook is moved or something moves to its square, cancel that rook's castling
+    if (move.to == 0 || move.from == 0)
+        board->castling[1] = false;
+    if (move.to == 7 || move.from == 7)
+        board->castling[0] = false;
+
+    if (move.to == 56 || move.from == 56)
+        board->castling[3] = false;
+    if (move.to == 63 || move.from == 63)
+        board->castling[2] = false;
+
+    // Check if the move is a castling move
+    if (move.special == 3)
+    {
+        // Determine the direction of the castling
+        if (move.to == move.from + 2) // King-side castling
+        {
+            // Move the rook to the appropriate square
+            int rookFrom = move.from + 3;
+            int rookTo = move.to - 1;
+            board->pieces[color][3] &= ~(1ULL << rookFrom);
+            board->pieces[color][3] |= (1ULL << rookTo);
+        }
+        else if (move.to == move.from - 2) // Queen-side castling
+        {
+            // Move the rook to the appropriate square
+            int rookFrom = move.from - 4;
+            int rookTo = move.to + 1;
+            board->pieces[color][3] &= ~(1ULL << rookFrom);
+            board->pieces[color][3] |= (1ULL << rookTo);
+        }
+    }
+
+    if (pieceType == 5)
+    {
+        if (color == 0)
+        {
+            board->castling[0] = false; // White king-side castling
+            board->castling[1] = false; // White queen-side castling
+        }
+        else
+        {
+            board->castling[2] = false; // Black king-side castling
+            board->castling[3] = false; // Black queen-side castling
+        }
+    }
+
+    if (move.special == 4)
+    {
+		board->pieces[color][4] |= toSquare;
+	}
+	else if (move.special == 5)
+	{
+		// Promote to knight
+		board->pieces[color][1] |= toSquare;
+	}
+	else if (move.special == 6)
+	{
+		// Promote to rook
+		board->pieces[color][3] |= toSquare;
+	}
+    else if (move.special == 7)
+    {
+        // Promote to bishop
+        board->pieces[color][2] |= toSquare;
+    }
+    else
+    {
+        // Place the piece on the 'to' square
+        board->pieces[color][pieceType] |= toSquare;
+    }
 
     board->en_passant = (move.enPassantSquare != -1) ? (1ULL << move.enPassantSquare) : 0;
 
@@ -349,16 +418,21 @@ void UnmakeMove(Board* board, Snapshot snap)
 {
     board->turn = snap.turn;
     memcpy(board->pieces, snap.pieces, 2 * 6 * sizeof(uint64_t));
+	memcpy(board->castling, snap.castling, 4 * sizeof(bool));
+	board->en_passant = snap.en_passant;
 
     //delete snap;
 }
 
-bool IsCheck(Board* board, bool color)
+bool IsCheck(Board* board, bool color, int square)
 {
-    int kingSquare = -1;
-    unsigned long index = 0;
-    _BitScanForward64(&index, board->pieces[color][5]);
-	kingSquare = index;
+    int kingSquare = square;
+    if (square == -1)
+    {
+        unsigned long index = 0;
+        _BitScanForward64(&index, board->pieces[color][5]);
+        kingSquare = index;
+    }
 
 	uint64_t kingMoves = GetKingMoves(board, kingSquare, color);
 	uint64_t rookMoves = GetRookMoves(board, kingSquare, color);
@@ -382,6 +456,10 @@ bool IsCheck(Board* board, bool color)
 	{
 		return true;
 	}
+    if (kingMoves & board->pieces[!color][5])
+    {
+        return true;
+    }
 
     return false;
 }
@@ -437,6 +515,20 @@ void LoadFEN(Board* board, const std::string& fen)
     board->turn = (turn == "b") ? 1 : 0;
     std::string castling;
 	iss >> castling;
+	for (int i = 0; i < 4; ++i)
+	{
+		board->castling[i] = false;
+	}
+	for (char c : castling)
+	{
+		switch (c)
+		{
+		    case 'K': board->castling[0] = true; break; // White king side
+		    case 'Q': board->castling[1] = true; break; // White queen side
+		    case 'k': board->castling[2] = true; break; // Black king side
+		    case 'q': board->castling[3] = true; break; // Black queen side
+		}
+	}
     std::string enPassant;
     iss >> enPassant;
     if (enPassant != "-")
@@ -463,6 +555,32 @@ std::string MoveToString(Move move)
 	return result;
 }
 
+bool IsMoveLegal(Board* board, Move move)
+{
+	if (move.special == 3)
+	{
+
+		if (IsCheck(board, !board->turn, move.to))
+		{
+			return false;
+		}
+        else if (IsCheck(board, !board->turn, move.from))
+        {
+            return false;
+        }
+        else if (IsCheck(board, !board->turn, (move.to + move.from) / 2))
+        {
+            return false;
+        }
+        return true;
+	}
+    else
+    {
+        return !IsCheck(board, !board->turn);
+    }
+    
+}
+
 uint64_t Perft(Board* board, int depth, bool initial)
 {
     if (depth == 0)
@@ -478,7 +596,7 @@ uint64_t Perft(Board* board, int depth, bool initial)
         Snapshot snap = MakeSnapshot(board);
         MakeMove(board, move);
 
-		if (IsCheck(board, !board->turn))
+		if (!IsMoveLegal(board, move))
 		{
 			UnmakeMove(board, snap);
 			continue;

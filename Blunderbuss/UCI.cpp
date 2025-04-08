@@ -141,7 +141,7 @@ void UCI::HandleGoCommand(std::istringstream& iss)
             if (iss >> depth)
             {
 				uint64_t nodes = Perft(board, depth, true);
-				std::cout << "info string Perft " << depth << ": " << nodes << "\n";
+				std::cout << "Nodes searched: " << depth << ": " << nodes << "\n";
 				Log("Perft " + std::to_string(depth) + ": " + std::to_string(nodes));
             }
             else
