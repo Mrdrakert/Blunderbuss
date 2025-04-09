@@ -79,74 +79,86 @@ void PrintBoard(Board* board)
     std::cout << "\n";
 }
 
+// MSVC-specific helper
+__forceinline uint64_t GetRayMovesMSVC(uint64_t ray, uint64_t occupancy, uint64_t myOccupancy, bool scanForward)
+{
+    uint64_t blockers = ray & occupancy;
+    if (!blockers)
+        return ray & ~myOccupancy;
+
+    unsigned long index;
+    uint64_t mask;
+
+    if (scanForward)
+    {
+        _BitScanForward64(&index, blockers);
+        mask = (index == 63) ? 0ULL : ~((1ULL << (index + 1)) - 1);
+    }
+    else
+    {
+        _BitScanReverse64(&index, blockers);
+        mask = (index == 63) ? ~0ULL : ((1ULL << index) - 1);
+    }
+
+    return (ray & ~mask) & ~myOccupancy;
+}
+
 uint64_t GetRookMoves(Board* board, int square, bool color)
 {
-    // Precompute occupancies.
-    uint64_t occupancy = GetOccupancy(board, 0) | GetOccupancy(board, 1);
+    uint64_t occupancy = GetOccupancy(board, false) | GetOccupancy(board, true);
     uint64_t myOccupancy = GetOccupancy(board, color);
     uint64_t moves = 0;
 
-    // Array of precomputed ray moves for left, right, down, up.
-    uint64_t* rays[] = { rook_moves_left, rook_moves_right, rook_moves_down, rook_moves_up };
+    uint64_t* rays[4] = {
+        rook_moves_left,
+        rook_moves_right,
+        rook_moves_down,
+        rook_moves_up
+    };
+    bool scanForward[4] = {
+        false, // left
+        true,  // right
+        false, // down
+        true   // up
+    };
 
     for (int i = 0; i < 4; i++)
     {
         uint64_t ray = rays[i][square];
-        uint64_t blockers = ray & occupancy;
-        uint64_t mask = 0;
-
-        if (blockers)
-        {
-            unsigned long index;
-            if ((i & 1) == 0)
-            {
-                if (_BitScanReverse64(&index, blockers))
-                    mask = (index == 63) ? ~0ULL : ((1ULL << index) - 1);
-            }
-            else
-            {
-                if (_BitScanForward64(&index, blockers))
-                    mask = (index == 63) ? 0ULL : ~((1ULL << (index + 1)) - 1);
-            }
-        }
-        moves |= (ray & ~mask) & ~myOccupancy;
+        moves |= GetRayMovesMSVC(ray, occupancy, myOccupancy, scanForward[i]);
     }
+
     return moves;
 }
 
 uint64_t GetBishopMoves(Board* board, int square, bool color)
 {
-    uint64_t occupancy = GetOccupancy(board, 0) | GetOccupancy(board, 1);
+    uint64_t occupancy = GetOccupancy(board, false) | GetOccupancy(board, true);
     uint64_t myOccupancy = GetOccupancy(board, color);
     uint64_t moves = 0;
 
-    // Array of precomputed diagonal moves.
-    uint64_t* rays[] = { bishop_moves_left, bishop_moves_right, bishop_moves_down, bishop_moves_up };
+    uint64_t* rays[4] = {
+        bishop_moves_left,
+        bishop_moves_right,
+        bishop_moves_down,
+        bishop_moves_up
+    };
+    bool scanForward[4] = {
+        false, // left-down
+        true,  // right-up
+        false, // left-up
+        true   // right-down
+    };
 
     for (int i = 0; i < 4; i++)
     {
         uint64_t diag = rays[i][square];
-        uint64_t blockers = diag & occupancy;
-        uint64_t mask = 0;
-
-        if (blockers)
-        {
-            unsigned long index;
-            if ((i & 1) == 0)
-            {
-                if (_BitScanReverse64(&index, blockers))
-                    mask = (index == 63) ? ~0ULL : ((1ULL << index) - 1);
-            }
-            else
-            {
-                if (_BitScanForward64(&index, blockers))
-                    mask = (index == 63) ? 0ULL : ~((1ULL << (index + 1)) - 1);
-            }
-        }
-        moves |= (diag & ~mask) & ~myOccupancy;
+        moves |= GetRayMovesMSVC(diag, occupancy, myOccupancy, scanForward[i]);
     }
+
     return moves;
 }
+
 
 uint64_t GetKnightMoves(Board* board, int square, bool color)
 {
@@ -273,8 +285,7 @@ std::vector<Move> GetMovesSide(Board* board, bool color)
                         move.special = 6; // promotion to rook
                         moves.push_back(move);
                         move.special = 7; // promotion to bishop
-                        // Uncomment if bishop promotion should be added:
-                        // moves.push_back(move);
+                        moves.push_back(move);
                     }
                     else if ((1ULL << toSquare) == board->en_passant)
                     {
