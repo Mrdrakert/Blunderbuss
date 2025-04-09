@@ -145,8 +145,10 @@
     <ClCompile Include="UCI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BishopMagic.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="MoveBitboards.h" />
+    <ClInclude Include="RookMagic.h" />
     <ClInclude Include="UCI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

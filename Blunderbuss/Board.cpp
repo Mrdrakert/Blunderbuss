@@ -1,5 +1,7 @@
 ﻿#include "Board.h"
 #include "MoveBitboards.h"
+#include "RookMagic.h"
+#include "BishopMagic.h"
 #include <iostream>
 #include <intrin.h>
 #include <stdlib.h>
@@ -79,82 +81,36 @@ void PrintBoard(Board* board)
     std::cout << "\n";
 }
 
-// MSVC-specific helper
-__forceinline uint64_t GetRayMovesMSVC(uint64_t ray, uint64_t occupancy, uint64_t myOccupancy, bool scanForward)
-{
-    uint64_t blockers = ray & occupancy;
-    if (!blockers)
-        return ray & ~myOccupancy;
-
-    unsigned long index;
-    uint64_t mask;
-
-    if (scanForward)
-    {
-        _BitScanForward64(&index, blockers);
-        mask = (index == 63) ? 0ULL : ~((1ULL << (index + 1)) - 1);
-    }
-    else
-    {
-        _BitScanReverse64(&index, blockers);
-        mask = (index == 63) ? ~0ULL : ((1ULL << index) - 1);
-    }
-
-    return (ray & ~mask) & ~myOccupancy;
-}
 
 uint64_t GetRookMoves(Board* board, int square, bool color)
 {
-    uint64_t occupancy = GetOccupancy(board, false) | GetOccupancy(board, true);
+    uint64_t occupancy = GetOccupancy(board, color) | GetOccupancy(board, !color);
     uint64_t myOccupancy = GetOccupancy(board, color);
     uint64_t moves = 0;
 
-    uint64_t* rays[4] = {
-        rook_moves_left,
-        rook_moves_right,
-        rook_moves_down,
-        rook_moves_up
-    };
-    bool scanForward[4] = {
-        false, // left
-        true,  // right
-        false, // down
-        true   // up
-    };
-
-    for (int i = 0; i < 4; i++)
-    {
-        uint64_t ray = rays[i][square];
-        moves |= GetRayMovesMSVC(ray, occupancy, myOccupancy, scanForward[i]);
-    }
+    occupancy = rookMagicMask[square] & occupancy;
+	uint64_t magicNumber = rookMagics[square];
+	uint64_t occupancyIndex = (occupancy * magicNumber) >> (64 - rookMagicBits);
+    
+	moves = rookMagicTable[square][occupancyIndex];
+	moves &= ~myOccupancy; // Remove squares occupied by friendly pieces
 
     return moves;
 }
 
+
 uint64_t GetBishopMoves(Board* board, int square, bool color)
 {
-    uint64_t occupancy = GetOccupancy(board, false) | GetOccupancy(board, true);
+    uint64_t occupancy = GetOccupancy(board, color) | GetOccupancy(board, !color);
     uint64_t myOccupancy = GetOccupancy(board, color);
     uint64_t moves = 0;
 
-    uint64_t* rays[4] = {
-        bishop_moves_left,
-        bishop_moves_right,
-        bishop_moves_down,
-        bishop_moves_up
-    };
-    bool scanForward[4] = {
-        false, // left-down
-        true,  // right-up
-        false, // left-up
-        true   // right-down
-    };
+    occupancy = bishopMagicMask[square] & occupancy;
+    uint64_t magicNumber = bishopMagics[square];
+    uint64_t occupancyIndex = (occupancy * magicNumber) >> (64 - bishopMagicBits);
 
-    for (int i = 0; i < 4; i++)
-    {
-        uint64_t diag = rays[i][square];
-        moves |= GetRayMovesMSVC(diag, occupancy, myOccupancy, scanForward[i]);
-    }
+    moves = bishopMagicTable[square][occupancyIndex];
+    moves &= ~myOccupancy; // Remove squares occupied by friendly pieces
 
     return moves;
 }
@@ -228,7 +184,7 @@ uint64_t GetPawnMoves(Board* board, int square, bool color, bool onlyCaptures)
 std::vector<Move> GetMovesSide(Board* board, bool color)
 {
     std::vector<Move> moves;
-    moves.reserve(50);
+    moves.reserve(100);
 
     for (int pieceType = 0; pieceType < 6; pieceType++)
     {
