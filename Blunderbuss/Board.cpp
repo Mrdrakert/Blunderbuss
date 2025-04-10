@@ -508,3 +508,83 @@ uint64_t Perft(Board* board, int depth, bool initial)
     }
     return nodes;
 }
+
+int EvaluatePos(Board* board)
+{
+	//count material, this is a simple evaluation function
+	int pieceValues[6] = { 100, 320, 330, 500, 900, 20000 }; // Pawn, Knight, Bishop, Rook, Queen, King
+	int score = 0;
+	for (int i = 0; i < 6; ++i)
+	{
+		score += __popcnt64(board->pieces[0][i]) * pieceValues[i];
+		score -= __popcnt64(board->pieces[1][i]) * pieceValues[i];
+	}
+
+    score = score * (board->turn ? -1 : 1);
+
+    return score;
+}
+
+int Search(Board* board, int depth, int alpha, int beta)
+{
+	if (depth == 0)
+	{
+        return EvaluatePos(board);
+	}
+
+    int bestScore = -1000000;
+
+	std::vector<Move> moves = GetMovesSide(board, board->turn);
+
+	for (const Move& move : moves)
+	{
+		Snapshot snap = MakeSnapshot(board);
+		MakeMove(board, move);
+		if (!IsMoveLegal(board, move))
+		{
+			UnmakeMove(board, snap);
+			continue;
+		}
+		int score = -Search(board, depth - 1, -beta, -alpha);
+        UnmakeMove(board, snap);
+        if (score > bestScore)
+        {
+			bestScore = score;
+            if (score > alpha)
+            {
+                alpha = score;
+            }
+        }
+        if (alpha >= beta)
+        {
+            return bestScore;
+        }
+	}
+
+    return bestScore;
+}
+
+MoveScore SearchRoot(Board* board, int depth)
+{
+	int bestScore = -1000000;
+	Move bestMove = { -1, -1, -1, 0, 0, -1 };
+	std::vector<Move> moves = GetMovesSide(board, board->turn);
+	for (const Move& move : moves)
+	{
+		Snapshot snap = MakeSnapshot(board);
+		MakeMove(board, move);
+		if (!IsMoveLegal(board, move))
+		{
+			UnmakeMove(board, snap);
+			continue;
+		}
+		int score = -Search(board, depth - 1, -1000000, 1000000);
+		if (score > bestScore)
+		{
+            bestMove = move;
+			bestScore = score;
+		}
+		UnmakeMove(board, snap);
+	}
+	return { bestMove, bestScore };
+}

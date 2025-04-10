@@ -149,6 +149,33 @@ void UCI::HandleGoCommand(std::istringstream& iss)
                 Log("Invalid perft depth value.");
             }
         }
+        else if (token == "depth")
+        {
+			if (iss >> value)
+			{
+				int depth = std::stoi(value);
+                MoveScore moveScore = SearchRoot(board, depth);
+				Log("Searching with depth: " + value);
+				std::cout << "bestmove " << MoveToString(moveScore.move) << " eval: " << moveScore.score << "\n";
+			}
+			else
+			{
+				Log("Invalid depth value.");
+			}
+		}
+        else if (token == "movetime")
+        {
+            if (iss >> value)
+            {
+                int movetime = std::stoi(value);
+                // Call your search function here with the specified movetime
+                Log("Searching with movetime: " + value);
+            }
+            else
+            {
+                Log("Invalid movetime value.");
+            }
+        }
     }
 }
 

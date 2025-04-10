@@ -32,6 +32,12 @@ struct Move
 	int enPassantSquare; // -1 is no en passant
 };
 
+struct MoveScore
+{
+    Move move;
+    int score;
+};
+
 // Function to initialize the board
 Board* InitBoard();
 
@@ -67,5 +73,13 @@ bool IsMoveLegal(Board* board, Move move);
 bool IsCheck(Board* board, bool color, int square = -1);
 
 int PieceTypeFromLetter(char c);
+
+std::string MoveToString(Move move);
+
+int EvaluatePos(Board* board); 
+
+int Search(Board* board, int depth, int alpha, int beta);
+
+MoveScore SearchRoot(Board* board, int depth);
 
 #endif // BOARD_H
